@@ -1,0 +1,211 @@
+## Arrays
+
+Complex data structures built in javascript.  
+Ordered collections of values.
+
+`let students = ["toto", "caco", "pepino", "roberto", "josecito"];`
+
+### Access items in array:
+
+```javascript
+let colors = ["red", "orange", "yellow", "green"];
+colors.length; // 4
+colors[colors.length - 1]; // "green"
+colors[4]; // Undefined
+colors[0]; // 'red'
+```
+
+### Modify array:
+
+Since arrays are mutable, can assign new value:
+
+```javascript
+// change value (ovewrite previous value):
+colors[0] = "purple";
+// add item:
+colors[4] = "lila";
+// add item at the end:
+colors[colors.length] = "black";
+```
+
+## Array methods
+
+[array methods full list here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
+
+- `push()` add to the end
+
+```javascript
+colors.push("onion-white");
+colors.push("gray", "darkie");
+```
+
+- `pop()` remove from end and returns the value
+
+```javascript
+colors.pop(); // "onion-white" and removes item.
+```
+
+- `unshift()` add to start
+
+```javascript
+let dishesTodo = [];
+dishesTodo.unshift("large plate");
+dishesTodo.unshift("spoon", "knife");
+```
+
+- `shift()` remove from start
+
+```javascript
+dishesTodo.shift();
+```
+
+- `concat()` merge arrays
+
+```javascript
+let fruits = ["apple", "banana"];
+let vegs = ["potato", "brussel"];
+let meat = ["stake", "chicken"];
+let all = fruits.concat(vegs, meat);
+```
+
+- `includes()`  
+  check if value exists, returns `true` or `false`
+
+```javascript
+meat.includes("chicken"); // true
+//
+if (all.includes("stake")) {
+  console.log("I'm vegetarian, can't eat that");
+}
+```
+
+- `indexOf`  
+  Checks index position of element, `-1` in case element not present.
+
+```javascript
+fruits.indexOf("apple"); // 0
+fruits.indexOf("fdffdfd"); // -1 (meaning that element doesn't exist in array)
+fruits.indexOf("banana", 2); // search from index 2 and on.
+```
+
+- `reverse()`
+  Reverses array, mind it modifies array!
+
+```javascript
+let letters = ["g", "a", "s", "t", "o", "n"];
+letters.reverse(); // letters = ["n", "o", "t", "s", "a", "g"]
+```
+
+- `join()`
+  Takes array and spits out a single string with all the elements of the string.
+
+```javascript
+letters.join(); // "g,a,s,t,o,n" (default character is `,`)
+letters.join(""); // "gaston"
+letters.join("&"); // "g&a&s&t&o&n"
+```
+
+- `slice()`
+  Takes portion of array and makes new array with it.
+
+```javascript
+let animals = ["shark", "salmon", "whale", "bear", "lizard", "tortoise"];
+let swimmers = animals.slice(0, 3); //from`0`(included), to `3`(not included)
+let mammals = animals.slice(2, 4);
+let reptiles = animals.slice(4); //from index `4` to the end of array.
+let quadruped = animals.slice(-3); // negative numbers counts from end to beginning.
+let reverse = animals.slice(-4); // last four elements
+let reverse1 = animals.slice(-3, -1); // ["bear", "lizard"]
+let duplicate = animals.slice(); // duplicates array and stores it in given variable.
+```
+
+- `splice()`
+  Modify the middle of array. Syntax:
+  `splice(startIndex, deleteCount, itemsToInsert);`
+
+```javascript
+// INSERT elements
+// "at index 1, delete 0 items and insert "octopus"'
+animals.splice(1, 0, "octopus"); // ["shark", "octopus", "salmon", "whale", "bear", "lizard", "tortoise"]
+
+// DELETE elements
+// 'at index 5, delete 2 items'
+animals.splice(5, 2); // ["shark", "octopus", "salmon", "whale", "bear"]
+
+// REPLACE elements
+// 'at index 3, delete 2 items and replace them with "orca" and "grizzly"
+animals.splice(3, 2, "orca", "grizzly"); // ["shark", "octopus", "salmon", "orca", "grizzly"]
+```
+
+- `sort()`  
+  Updates array and returns it, can capture that in a new variable. In strings, sorts alphabetically. In numbers, converts numbers to strings and sorts the according to their UTF Code. So people pass a function to tell the method how to sort. Syntax:
+  `arr.sort([compareFunction]);`
+  ```javascript
+  let people = ["beto", "carlos", "aldo", "daniel"];
+  people.sort(); // ["aldo", "beto", "carlos", "daniel"]
+  ```
+
+### Reference types
+
+`Value type variables` are stored in memory (`let color = "red";`). Javascript assigns a slot in memory for that value.
+
+```javascript
+let nums = 10;
+let pipo = nums; // meaning `10`
+nums = 11; // updated value.
+pipo; // 10 (desn't update it's value)
+```
+
+`Reference type variables`: With arrays, as they're complex, JS stores a reference to that array. JS holds a pointer to where the array is stored. Same thing happens with objects.
+
+```javascript
+let chucha = [20, 30, 40];
+let papa = chucha; // 20, 30, 40
+chucha.push(50);
+papa; // [20, 30, 40, 50] (Updates values, because arrays are stores as references pointing to the data collection, so when we modify the collection, any time we call the reference pointing to that collection we will get the modifications.)
+```
+
+Since we're not modifying the reference, we can use `const` with arrays and update it's items.
+
+```javascript
+const eggs = ["humpty", "dumpty"];
+eggs.push("carlos");
+eggs; // ["humpty", "dumpty", "carlos"]
+```
+
+Can't change the reference thoug:
+
+```javascript
+eggs = ["lila", "lola"]; // throws error because we're trying to assign another array to the already bussy reference `eggs`.
+```
+
+## Nested Arrays / Multidimensional Arrays
+
+```javascript
+const colors = [
+  ["red", "crimson"],
+  ["orange", "dark orange"],
+  ["yellow", "golden rod"],
+];
+// Access the data:
+colors[0][1]; // "crimson"
+colors[1][0]; // "orange"
+```
+
+Two dimensional array:
+
+![twoDimensionalArray](images/nested_arrays.jpg)
+
+Three lines with three elements in each line, all nested in a main array.
+
+Three dimensional array:
+
+```javascript
+const animalPairs = [
+  ["doe", ["buck", "stag"]],
+  ["ewe", "ram"],
+  ["peahen", "peacock"],
+];
+// Access nested item:
+animalPairs[0][1][0]; // "buck"
+```

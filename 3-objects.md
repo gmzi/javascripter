@@ -1,0 +1,174 @@
+# Objects
+
+Collection of related variables and functions. Inside objects, variables are called `property` and functions are called `methods`, both act as keys within objects, and each `key` is assigned a `value` in form of `key:value` pairs. Objects can content Reference Data Types and Primitive Data Types.
+
+## Object literal:
+
+Is this syntax: `{}`. The order is not important in object literals, when we nedd order-specific data we use arrays. Objects collect key value pairs in wathever order:
+
+```javascript
+//Object literal:
+const fitBitData = {
+  totalSteps: 30233,
+  totalMiles: 233.5,
+  100: true,
+  "23 roperos": false,
+};
+
+// Access property:
+// with dot syntax if key name is a string:
+fitBitData.totalMiles; // 233.5
+
+// with brackets syntax if:
+// -key name is a number or multiple word,
+fitBitData[100]; // true;
+fitBitData["23 roperos"]; // false (mind the quotations marks)
+// -Through a variable:
+let carlitosSteps = fitBitData["totalSteps"]; // 30233
+```
+
+Try to use dot notation, if not possible go for bracket.
+
+### Updating or adding properties:
+
+```javascript
+fitBitData.totalSteps = 52441;
+//
+const userReviews = {};
+//bracket
+userReviews["queenBee49"] = 4.0;
+// dot
+userReviews.mrSmith76 = 3.2;
+// add or sustract from previous values:
+userReviews["queenBee49"] += 4;
+userReviews.mrSmith76--;
+```
+
+## Arrays + Objects combination
+
+Arrays nested in object, object nested in object:
+
+```javascript
+const student = {
+  firstName: "Pepino",
+  lastName: "Salas",
+  strengths: ["hockey", "history"],
+  califications: {
+    midterm: 92,
+    final: 88,
+  },
+};
+
+let studentAverage =
+  (student.califications.midterm + student.califications.final) / 2;
+
+//access nested array:
+student.strengths[0]; // "hockey"
+```
+
+An Array of objects:
+
+```javascript
+const shoppingCart = [
+  {
+    product: "Jenga",
+    price: 4.3,
+    quantity: 1,
+  },
+  {
+    product: "Echo dot",
+    price: 54.56,
+    quantity: 3,
+  },
+  {
+    product: "Fire stick",
+    price: 121322.34,
+    quantity: 3,
+  },
+];
+//------------------
+// A tic-tac-toe game
+
+const game = {
+  player1: {
+    username: "John",
+    playinAs: "x",
+  },
+  player2: {
+    username: "stella",
+    playingAs: "o",
+  },
+  board: [
+    ["o", null, "x"],
+    ["x", "o", "x"],
+    [null, "o", "x"],
+  ],
+};
+// Access values:
+game.player1.username; // "John"
+game.board[0]; // ["o", null, "x"]
+```
+
+### Updating values and adding properties in object
+
+Since objects are Reference Data Types, and are stored as a reference pointing to a group of values, we can assign them to new variables and modify, just like with arrays:
+
+```javascript
+const palette = {
+  red: "#eb4d3d",
+  yellow: "#f9ca24",
+};
+
+const palette2 = palette; // assign object to new variable.
+
+//add key and value to object through new variable:
+palette2.green = "#ebf879";
+
+palette; // {red: "#eb4d3d", yellow: "#f9ca24", green: "#ebf879"}
+```
+
+### Equality in arrays and objects
+
+`1 === 1 // true`  
+`1 == 1 // true`  
+Not the same with reference data types:
+
+```javascript
+let nums = [1, 2, 3];
+let mystery = [1, 2, 3];
+nums === mystery; // false.
+nums == mystery; // false.
+//It's false because the reference that each variable is pointing to is different:
+// nums --> place in memory 123232132
+// mystery --> place in memory 999998989;
+```
+
+Same thing with arrays:
+`[] === []` is false, because each array have different location in memory.
+
+```javascript
+if(user.notifications === []) // this won't work.
+```
+
+Define same reference in memory so they're the same:
+
+```javascript
+let nums = [1, 2, 3];
+let mystery = nums;
+nums === mystery; // true
+```
+
+We can't compare values inside arrays nor in objects without a loop. We have to perform a loop to mannually check each value and compare it with the other object or array.
+
+Check if an array is empty:
+
+```javascript
+const user = {
+  username: "pepe",
+  notifications: [],
+};
+
+if (!user.notifications.length) {
+  console.log("no new notif");
+}
+```

@@ -1,0 +1,374 @@
+# CSS
+
+## Text properties
+
+```css
+font-size:
+10rem /* relative to the root's html elements font size */;
+10vw /* a tenth of the screen widht*/;
+10vh /*thenth of the screen height*/;
+10% /* ten percent of the parent's size*/;
+10em /* ten percent of the parent's size */;
+10px /* absolute unit*/
+
+font-family:
+text-decoration: underline dashed orange overline;
+
+text-transform:
+uppercase;
+lowercase;
+capitalize;
+
+text-shadow: 2px 5px 13px blue;
+
+font-weight
+text-align
+line-height
+letter-spacing
+text-indent
+
+/* example */
+html {
+    font-size: 2vw, 2vh;
+}
+h1 {
+    font-size: 3rem;
+}
+```
+
+---
+
+## Selectors in order of specificity (most to least)
+
+```css
+!important;
+Inline-style
+#id {
+} /* (1.0.0) */
+.class h1 {
+}
+.class {
+} /** (0.1.0) */
+h1 {
+} /* (0.0.1) */
+```
+
+In case of even specificity, the selector applied last below wins over the first applied on top.
+
+### Multiple selector syntax:
+
+```css
+h2,
+.main-section,
+#top-heading {
+  color: blue;
+}
+```
+
+### Descendant selector combinator
+
+```css
+nav a {
+  color: green;
+} /*"anchor tags nested in nav*/
+.poem p {
+  color: black;
+} /*paragraphs nested in .poem class*/
+.class1 .class2 {
+  color: red;
+} /* class2 nested in class1 */
+```
+
+### Adjacent sibling selector combinator
+
+```css
+h2 + p {
+  color: red;
+} /* p that comes inmediatly after h2*/
+.poem + img {
+  width: 10vw;
+} /* img that comes right after .poem class*/
+```
+
+### Direct children selector combinator
+
+Only direct children will be selected, not grandchildren.
+
+```css
+#works > li {
+  font-size: 1.5rem;
+} /* list items that are direct children of #works*/
+```
+
+## Pseudo classes
+
+Special state of an element.
+
+```css
+nav a:hover {
+  color: orange;
+}
+input:focus {
+  background-color: orange;
+}
+.poem section p:first-of-type {
+  color: orange;
+}
+li:nth-of-type(2) {
+  color: orange;
+}
+li:nth-of-type(2n) {
+  color: orange;
+} /* select a n range*/
+```
+
+## Pseudo elements
+
+Style a piece
+
+```css
+p::first-letter {
+  font-size: 2em;
+}
+
+.poem section p:first-of-type::first-letter {
+  font-size: 2em;
+}
+```
+
+## Atribute selectors
+
+Selects atributes and values from the html `<input type="text" placeholder="feedback">`
+
+```css
+[type="text"] {
+  color: orange;
+}
+input[placeholder="feedback"] {
+  color: red;
+}
+img[src*="pipo"] {
+  color: red;
+} /*the `*` says "any `src` atribute containing `pipo` value*/
+img[src$="pipo"] {
+  color: red;
+} /*the `$` says "any `src` atribute whose value ends with `pipo`*/
+img[src^="pipo"] {
+  color: red;
+} /*the `^` says "any `src` atribute whose value starts with `pipo`*/
+```
+
+---
+
+---
+
+## CSS box model.
+
+Elements from fartest to nearest the content:
+
+`margin`: `1rem auto;` (center element) / top right bottom left /
+
+`border`: `border: 10px solid pink`(border-width, border-style, border-color)
+
+`padding`: `padding: 0em, 3em, 2em, 3em;` (top right bottom left);
+(space between the content and the border.)
+
+`content`: width, height, min-width, min-height,
+
+---
+
+## Properties
+
+### `{ box-sizing:`
+
+Define total height of element, no matter what changes inside it. Default is content-box,
+is good to change it to `border-box`.
+
+```css
+div {
+  box-sizing: border-box;
+}
+```
+
+### `{ outline:`
+
+Outside of the margin, doesn't add to the size of the box. Hover effects and focus effects.
+
+```css
+div {
+  outline: 10px solid yellow;
+}
+```
+
+### `{ background:`
+
+```css
+div {
+  background: green; /*(containsallbackgroundproperties)*/
+  background-image: url(".../folder/archive.img"), url("external_url");
+  background-size: contain / cover / etc;
+  background-repeat: no-repeat;
+  background-position: center / top / etc;
+}
+```
+
+### `{ display:`
+
+`inline` (e.g.`<i>, <image>, <span>`)  
+-Only as much space as needed.
+-Ignores **width** and **height** properties
+-Next inline item side-by-side.  
+`block` (`e.g. <form>, <div> <section>` )  
+-100% of parent width, unless set by **width** or **max-width**.
+-can modify **width** and **height** with CSS.  
+-Next item on separate line.  
+`inline-block`  
+-side by side, like inline
+-respects width and height, like block.  
+`none`  
+-Hides the element.  
+`flex`  
+On an element with `display: flex;` we can `justify-content` along main axis (horizontal), `align-items`, along cross axis (vertical), etc.
+
+### `{ position: `
+
+default: static.  
+`relative`
+Can adjust top, sides and bottom.  
+`absolute`  
+Relative to its closest positioned ancestor.  
+(`right: 0;`)
+`fixed`  
+absolutely positioned from viewport (stays there on scroll)
+
+```css
+h1 {
+  position: relative;
+  top: 100px;
+}
+```
+
+Desn't alter other elements position.
+
+### `{ z index`
+
+`z-index: 1;` takes the element in front (1 and above) or behind (-1 and below) other elements.
+
+### `{ box-shadow `
+
+cool shadow effect for cards  
+`box-shadow: 5px 5px 5px #bbbbbb;`
+
+---
+
+---
+
+## Responsive design
+
+Different sizes of screens (tablets, phones, laptops, monitors). Single website that responds to the device where it's displayed.
+
+### Media queries
+
+Allows to display different CSS according to different conditions. Apply styles based on the width and height of the screen. Design mobile first, and then apply media queries for larger devices. Use Bootstrap for this, but the basics is this:
+
+```css
+/*default to smaller devices ("mobile first")*/
+img.headshot {
+  display: block;
+  width: 70%;
+}
+
+/*if the screen's 800px or more:*/
+@media (min-width: 800px) {
+  img.headshot {
+    display: inline-block;
+    width: 10em;
+  }
+}
+```
+
+## Transitions
+
+Simple animations in CSS. They are one property transforming into another property, or a value going to another value. Parameters:  
+`transition: property duration function delay [..];`
+
+```css
+h1 {
+  color: red;
+  transition: color 1s;
+}
+h1:hover {
+  color: blue;
+}
+
+button:hover {
+  transform: translateX(800px);
+  transition: transform 2s ease-out 5s;
+}
+
+a {
+  display: inline-block;
+  padding: 1em;
+  color: red;
+  transition: color 3s ease-in;
+}
+a:hover {
+  color: white;
+}
+```
+
+## Link css to html.
+
+Three options in the hmtl:
+
+1. External srtyle sheet:
+   Make a file `name.css`, and then in html:
+
+```html
+<link rel="stylesheet" href="style.css" />
+```
+
+2.  Style element inside the html:
+    In html header:
+
+```html
+<style>
+  h1 {
+    color: orange;
+  }
+  h2 {
+    color: beige;
+  }
+</style>
+```
+
+3. Inline styles:
+
+```html
+<h1 style="color: purple;">Main title</h1>
+```
+
+## Link external fonts to html
+
+In html doc, one link for each font you want to use, common thing
+to have one font fot the headers and other font for paragraphs.
+
+```html
+<link href="https://font.address1" rel="stylesheet" />
+<link href="https://font.address2" rel="stylesheet" />
+```
+
+---
+
+## Professional CSS best practices
+
+- Avoid `!important`
+- Prefer classes over IDs
+- "why" comments are good, don't be afraid to put them.
+- Adopt and use naming scheme.
+- "Utilities" used often get lowercase class name.
+- These are versions of BEM style rules.
+
+## SaSS, SCSS (newer version of SaSS) and LESS:
+
+CSS with extra power. Check all rules and advantages in SCSS webpage. LESS is less used.
