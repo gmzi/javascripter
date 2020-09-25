@@ -342,4 +342,59 @@ let adult = checkRange(21, 50);
 //call it:
 adult(51); //false
 adult(40); //true
+
+let isNiceOutside = checkRange(65, 90);
+isNiceOutside(78); // true
 ```
+
+## Callback functions
+
+Callbacks are functions passed as arguments into outer functions.
+
+```javascript
+function callTwice(innerFunc) {
+  innerFunc();
+  innerFunc();
+}
+
+function laugh() {
+  console.log("hahaha");
+}
+
+callTwice(laugh); // `laugh` is a callback, and `outerFunc`
+//is the outer... you get the point.
+```
+
+### named function as callback:
+
+```javascript
+function grumpus() {
+  alert("Go away!!!");
+}
+
+setTimeout(grumpus, 3000); // Browser displays alert after 3 seconds.
+```
+
+### anonymous function as callback:
+
+```javascript
+// `setTimeout` is built in the browser, ir requires us to pass a function and
+// a time, syntax:
+// setTimeout(func, miliseconds)
+
+setTimeout(function () {
+  console.log("welcome");
+}, 3000);
+//"After 3000 miliseconds console log 'welcome'".
+
+// Callback anonymous on click:
+const btn = document.querySelector("button");
+btn.addEventListener("click", function () {
+  alert("Don't click me!!");
+});
+```
+
+## Hoisting
+
+Hoist: izar, levantar, alzar.
+Avoid hoisting. Declare tha variables before using them, even if you don't assign them a value. `let` and `const` are not a hoisted variables, so we're fine there. `functions`, on the contrary, ARE HOISTED, it's like there would be written at the top of the file (JS process them first). `function expressions` ARE NOT HOISTED. `var` is hoisted.

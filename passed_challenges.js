@@ -122,3 +122,15 @@ function pickOne(f1, f2) {
   }
   return f2;
 }
+
+//--------CHECK RANGE
+function checkRange(x, y) {
+  return function (num) {
+    return num >= x && num <= y;
+  };
+}
+// Make a function:
+let teenager = checkRange(12, 20);
+// call it:
+teenager(12); // true
+teenager(22); // false
