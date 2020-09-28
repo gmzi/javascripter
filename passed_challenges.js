@@ -1,3 +1,28 @@
+//--PASSWORD FUNCTION--
+// Write a isValidPassword function
+// It accepts 2 arguments: password and username
+// Password must:
+//	- be at least 8 characters
+//  - cannot contain spaces
+//  - cannot contain the username
+// If all requirements are met, return true.
+//Otherwise: false
+
+// isValidPassword('89Fjj1nms', 'dogLuvr');  //true
+// isValidPassword('dogLuvr123!', 'dogLuvr') //false
+// isValidPassword('hello1', 'dogLuvr') //false
+
+// MY SOLUTION:
+function isValidPassword(password, username) {
+  return (
+    password.length >= 8 &&
+    !password.includes(" ") &&
+    !password.includes(username)
+  );
+}
+
+console.log(isValidPassword("he", "dogLuvr"));
+
 //---AVERAGE VALUE of array of numbers ----
 // Write a function to find the average value in an array of numbers
 //avg([0,50]) //25
@@ -134,3 +159,58 @@ let teenager = checkRange(12, 20);
 // call it:
 teenager(12); // true
 teenager(22); // false
+
+//-----INDEX OF periphrasis:
+function indexOf(arr, num) {
+  for (let i = 0; i <= arr.length; i++) {
+    if (num === arr[i]) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+// -----lastIndexOf() periphrasis:
+function lastIndexOf(arr, num) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    if (num === arr[i]) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+//------push() periphrasis:
+function push(arr, val) {
+  arr[arr.length] = val;
+  return arr.length;
+}
+
+var arr = [1, 2, 3];
+console.log(push(arr, 10)); // 4
+
+// -----pop() periphrasis:
+function pop(arr) {
+  //1. grab the index position:
+  let lastLen = arr.length - 1;
+  //2. grab the value:
+  let lastValue = arr[lastLen];
+  //3. operate over the array:
+  arr.splice(lastLen, 1);
+  //4. return the grabbed value in step 1:
+  return lastValue;
+}
+
+var emptyArr = ["a", "b", "c", "d", "e"];
+console.log(emptyArr);
+console.log(pop(emptyArr)); // undefined
+console.log(emptyArr); // 0
+
+//----unshift() periphrasis
+function unshift(arr, val) {
+  arr.splice(0, 0, val);
+  return arr.length;
+}
+var arr = [1, 2, 3];
+console.log(unshift(arr, 0)); //4
+console.log(arr); //[0, 1, 2, 3]

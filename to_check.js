@@ -1,34 +1,27 @@
-// I'd like to check if `My solution` is correct for this challenge:
+// Practice Problem 16:
+/*Write a function called reverse, which accepts an array and returns the same array with all of the values reversed. In other words, do not solve this by creating a new array.
+Note: returning the same array is called an in-place operation, since no additional space is used. https://en.wikipedia.org/wiki/In-place_algorithm 
+Do not use the built in Array.reverse() function!
 
-//--CHALLENGE--
-// Write a isValidPassword function
-// It accepts 2 arguments: password and username
-// Password must:
-//	- be at least 8 characters
-//  - cannot contain spaces
-//  - cannot contain the username
-// If all requirements are met, return true.
-//Otherwise: false
+Examples:
 
-// isValidPassword('89Fjj1nms', 'dogLuvr');  //true
-// isValidPassword('dogLuvr123!', 'dogLuvr') //false
-// isValidPassword('hello1', 'dogLuvr') //false
+reverse([5, 4, 3, 2, 1]); // [1, 2, 3, 4, 5]
+reverse([]); // []
 
-// MY SOLUTION:
-function isValidPassword(password, username) {
-  return (
-    password.length >= 8 &&
-    !password.includes(" ") &&
-    !password.includes(username)
-  );
+var arr = [1, 2, 3];
+reverse(arr); // [3, 2, 1]
+arr; // [3, 2, 1] */
+
+//Here's what I have so far, but the repl.it page throws me error:
+
+function reverse(array) {
+  for (let i = 0; i < arr.length; i++) {
+    let value = array.pop();
+    array.splice(i, 0, value);
+  }
+  return array;
 }
 
-console.log(isValidPassword("he", "dogLuvr"));
-
-// COLT'S SOLUTION:
-function isValidPassword(password, username) {
-  const tooShort = password.length < 8;
-  const hasSpace = password.indexOf(" ") !== -1;
-  const tooSimilar = password.indexOf(username) !== -1;
-  return !tooShort && !hasSpace && !tooSimilar;
-}
+var arr = [1, 2, 3, 4];
+console.log(reverse(arr));
+console.log(arr);

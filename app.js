@@ -1,10 +1,11 @@
-function removeFromString(str, startIdx, numOfChars) {
-  let converted = [];
-  for (let char of str) {
-    converted.push(char);
+function reverse(array) {
+  for (let i = 0; i < arr.length; i++) {
+    let value = array.pop();
+    array.splice(i, 0, value);
   }
-  converted.splice(startIdx, numOfChars);
-  return converted.join("");
+  return array;
 }
 
-console.log(removeFromString("Rithm School", 2, 4));
+var arr = [1, 2, 3, 4];
+console.log(reverse(arr));
+console.log(arr);
