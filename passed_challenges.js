@@ -214,3 +214,16 @@ function unshift(arr, val) {
 var arr = [1, 2, 3];
 console.log(unshift(arr, 0)); //4
 console.log(arr); //[0, 1, 2, 3]
+
+//--- reverse() periphrasis
+function reverse(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    let value = arr.pop();
+    arr.splice(i, 0, value);
+    console.log(arr);
+  }
+  return arr;
+}
+
+var arru = ["a", "b", "c", "d", "e", "f", "g"];
+console.log(reverse(arru));

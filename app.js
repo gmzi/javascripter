@@ -1,11 +1,15 @@
-function reverse(array) {
+function reverse(arr) {
   for (let i = 0; i < arr.length; i++) {
-    let value = array.pop();
-    array.splice(i, 0, value);
+    let value = arr.pop();
+    arr.splice(i, 0, value);
+    console.log(arr);
   }
-  return array;
+  return arr;
 }
 
-var arr = [1, 2, 3, 4];
+var arru = ["a", "b", "c", "d", "e", "f", "g"];
+console.log(reverse(arru));
+
+var arr = [1, 2, 3];
 console.log(reverse(arr));
 console.log(arr);

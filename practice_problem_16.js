@@ -12,14 +12,14 @@ var arr = [1, 2, 3];
 reverse(arr); // [3, 2, 1]
 arr; // [3, 2, 1] */
 
-//Here's what I have so far, but the repl.it page throws me error:
-
-function reverse(array) {
+// SOLUTION:
+function reverse(arr) {
   for (let i = 0; i < arr.length; i++) {
-    let value = array.pop();
-    array.splice(i, 0, value);
+    let value = arr.pop();
+    arr.splice(i, 0, value);
+    console.log(arr);
   }
-  return array;
+  return arr;
 }
 
 var arr = [1, 2, 3, 4];
