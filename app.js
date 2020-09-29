@@ -1,15 +1,11 @@
-function reverse(arr) {
-  for (let i = 0; i < arr.length; i++) {
-    let value = arr.pop();
-    arr.splice(i, 0, value);
-    console.log(arr);
-  }
-  return arr;
+function shift(arr) {
+  firstIdx = arr.length - arr.length;
+  let firstValue = arr[firstIdx];
+  arr.splice(firstIdx, 1);
+  return firstValue;
 }
 
-var arru = ["a", "b", "c", "d", "e", "f", "g"];
-console.log(reverse(arru));
-
-var arr = [1, 2, 3];
-console.log(reverse(arr));
-console.log(arr);
+let arri = [12, 23, 34];
+console.log(arri);
+console.log(shift(arri));
+console.log(arri);

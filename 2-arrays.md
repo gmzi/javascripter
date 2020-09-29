@@ -1,5 +1,19 @@
 ## Arrays
 
+[push()](##push) (add to the end).
+[pop()](##pop) (remove from end & return value)
+[unshift()](##unshift) (add to start).
+[shift()](##shift) (remove from start).
+
+[concat()](##concat) (merge arrays).
+[includes()](##includes) (check if value exists, returns `true` or `false`)
+[indexOf()](##indexOf) (idx pos, `-1` if not present.)
+[reverse()](##reverse) (overwrite array, reversing it).
+[join()](##join) (takes arr and spits single string).
+[slice()](##slice) (Takes portion of arr and makes new arr with it).
+[splice()](##splice) (modify middle of arr).
+[sort()](##sort) (updates arr and return it, can capture in new var).
+
 Complex data structures built in javascript.  
 Ordered collections of values.
 
@@ -32,18 +46,24 @@ colors[colors.length] = "black";
 
 [array methods full list here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
 
-- `push()` add to the end
+## `push()`
+
+Add item to end of list.
 
 ```javascript
 colors.push("onion-white");
 colors.push("gray", "darkie");
 ```
 
+## `pop()`
+
 - `pop()` remove from end and returns the value
 
 ```javascript
 colors.pop(); // "onion-white" and removes item.
 ```
+
+## `unshift()`
 
 - `unshift()` add to start
 
@@ -53,11 +73,15 @@ dishesTodo.unshift("large plate");
 dishesTodo.unshift("spoon", "knife");
 ```
 
+## `shift()`
+
 - `shift()` remove from start
 
 ```javascript
 dishesTodo.shift();
 ```
+
+## `concat()`
 
 - `concat()` merge arrays
 
@@ -67,6 +91,8 @@ let vegs = ["potato", "brussel"];
 let meat = ["stake", "chicken"];
 let all = fruits.concat(vegs, meat);
 ```
+
+## `includes()`
 
 - `includes()`  
   check if value exists, returns `true` or `false`
@@ -79,6 +105,8 @@ if (all.includes("stake")) {
 }
 ```
 
+## `indexOf()`
+
 - `indexOf`  
   Checks index position of element, `-1` in case element not present.
 
@@ -88,6 +116,8 @@ fruits.indexOf("fdffdfd"); // -1 (meaning that element doesn't exist in array)
 fruits.indexOf("banana", 2); // search from index 2 and on.
 ```
 
+## `reverse()`
+
 - `reverse()`
   Reverses array, mind it modifies array!
 
@@ -95,6 +125,8 @@ fruits.indexOf("banana", 2); // search from index 2 and on.
 let letters = ["g", "a", "s", "t", "o", "n"];
 letters.reverse(); // letters = ["n", "o", "t", "s", "a", "g"]
 ```
+
+## `join()`
 
 - `join()`
   Takes array and spits out a single string with all the elements of the string.
@@ -104,6 +136,8 @@ letters.join(); // "g,a,s,t,o,n" (default character is `,`)
 letters.join(""); // "gaston"
 letters.join("&"); // "g&a&s&t&o&n"
 ```
+
+## `slice()`
 
 - `slice()`
   Takes portion of array and makes new array with it.
@@ -118,6 +152,8 @@ let reverse = animals.slice(-4); // last four elements
 let reverse1 = animals.slice(-3, -1); // ["bear", "lizard"]
 let duplicate = animals.slice(); // duplicates array and stores it in given variable.
 ```
+
+## `splice()`
 
 - `splice()`
   Modify the middle of array. Syntax:
@@ -136,6 +172,8 @@ animals.splice(5, 2); // ["shark", "octopus", "salmon", "whale", "bear"]
 // 'at index 3, delete 2 items and replace them with "orca" and "grizzly"
 animals.splice(3, 2, "orca", "grizzly"); // ["shark", "octopus", "salmon", "orca", "grizzly"]
 ```
+
+## `sort()`
 
 - `sort()`  
   Updates array and returns it, can capture that in a new variable. In strings, sorts alphabetically. In numbers, converts numbers to strings and sorts the according to their UTF Code. So people pass a function to tell the method how to sort. Syntax:
