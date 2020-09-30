@@ -83,7 +83,8 @@ dishesTodo.shift();
 
 ## `concat()`
 
-- `concat()` merge arrays
+- `concat()`
+  `arr1.concat(arr2, arr3);`
 
 ```javascript
 let fruits = ["apple", "banana"];
@@ -176,7 +177,7 @@ animals.splice(3, 2, "orca", "grizzly"); // ["shark", "octopus", "salmon", "orca
 ## `sort()`
 
 - `sort()`  
-  Updates array and returns it, can capture that in a new variable. In strings, sorts alphabetically. In numbers, converts numbers to strings and sorts the according to their UTF Code. So people pass a function to tell the method how to sort. Syntax:
+  Updates array and returns it, can capture that in a new variable. In strings, sorts alphabetically. In numbers, converts numbers to strings and sorts them according to their UTF Code. So people pass a function to tell the method how to sort. Syntax:
   `arr.sort([compareFunction]);`
   ```javascript
   let people = ["beto", "carlos", "aldo", "daniel"];

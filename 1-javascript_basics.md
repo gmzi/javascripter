@@ -13,7 +13,7 @@
 
 In order of precedence:
 `()` Parenthesis always runs first.  
-`2 ** 2;` & `2 & 2` Exponenciation & modulo
+`2 ** 2;` & `2 % 2` Exponenciation & modulo
 `2 * 2` & `2 / 2` Multiplication and division  
 `2 + 2` & `2 - 2` Addition and substraction  
 If same precedence, execute from left to right.

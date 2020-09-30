@@ -31,6 +31,11 @@ Try to use dot notation, if not possible go for bracket.
 
 ### Updating or adding properties:
 
+In simple context:  
+`objName.newPropKey = newPropValue;`  
+In included:  
+`objName[prevObj[prevKey]] = newValue;`
+
 ```javascript
 fitBitData.totalSteps = 52441;
 //

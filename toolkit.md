@@ -1,26 +1,37 @@
 # toolkit
 
-[pwd](##password_function)
-[avg](##average)
-[pangram](##pangram_check)
-[random_itm](##PICK_RANDOM_ITEM_FROM_ARRAY:)
-[random_card](## GENERATE*CARD_WITH_RANDOM_VALUE_AND_SUIT:)
-[dupl_arr](## ARR_with_duplicate_values:)
-[calculator](## CALCULATOR*(ARRAY OF FUNCTIONS))
-[random_pick](## PICK_ONE_OF_TWO:)
-[check_range](## CHECK_RANGE)
+[pwd](##password_function)  
+[avg](##average)  
+[pangram](##pangram_check)  
+[random_itm](##PICK_RANDOM_ITEM_FROM_ARRAY:)  
+[random_card](##GENERATE_CARD_WITH_RANDOM_VALUE_AND_SUIT:)  
+[dupl_arr](##ARR_with_duplicate_values:)  
+[calculator](##CALCULATOR_ARRAY_OF_FUNCTIONS)  
+[random_pick](##PICK_ONE_OF_TWO)  
+[check_range](##CHECK_RANGE)
+[squaredEvenNumbers](###squaredEvenNumbers)
+[swapKeyValue](###swapKeyValue)
+[swapKeyAndGivenValue](###swapKeyAndGivenValue)  
+[countValueOccurence](###countValueOccurence)
+[generatePairs](###generatePairs)
 
 ---
 
-[periphrasis](##periphrasis)
-
-[indexOf](###indexOf)
-[lastIndexOf](###lastIndexOf)
-[push](###push)
-[pop](###pop)
-[unshift](###unshift)
-[shift](###shift)
+[periphrasis](##periphrasis)  
+[indexOf](###indexOf)  
+[lastIndexOf](###lastIndexOf)  
+[push](###push)  
+[pop](###pop)  
+[unshift](###unshift)  
+[shift](###shift)  
 [reverse](###reverse)
+[concat](###concat)
+[Math.max](###Math.max)
+[Math.min](###Math.min)
+[slice](###slice)
+[Object.keys](###Object.keys)
+[Object.values](###Object.values)
+[Object.entries](###Object.entries)
 
 ## password_function
 
@@ -321,4 +332,229 @@ function reverse(arr) {
 
 var arru = ["a", "b", "c", "d", "e", "f", "g"];
 console.log(reverse(arru));
+```
+
+### concat
+
+(not checked with teacher)
+
+```javascript
+function concat(arr1, arr2) {
+  let resultArr = [];
+  for (let char of arr1) {
+    resultArr.push(char);
+  }
+  for (let char of arr2) {
+    resultArr.push(char);
+  }
+  return resultArr;
+}
+
+let arri = [1, 2, 3];
+let arru = ["a", "b", "c"];
+
+console.log(concat(arru, arri));
+```
+
+### Math.max
+
+```javascript
+function max(arr) {
+  arr.sort((a, b) => a - b);
+  return arr[arr.length - 1];
+}
+
+console.log(max([5, 1, 4, 7, 1, 2]));
+```
+
+### Math.min
+
+```javascript
+function min(arr) {
+  arr.sort((a, b) => a - b);
+  return arr[0];
+}
+```
+
+### slice
+
+```javascript
+function slice(arr, num1, num2) {
+  let result = [];
+  let averga = [];
+  if (num2 > arr.length || num2 === undefined || !num2) {
+    for (let i = num1; i < arr.length; i++) {
+      result.push(arr[i]);
+    }
+    return result;
+  }
+  for (let i = num1; i < num2; i++) {
+    result.push(arr[i]);
+  }
+  return result;
+}
+
+console.log(slice([1, 2, 3, 4, 5], 0, 2));
+```
+
+### squaredEvenNumbers
+
+```javascript
+function squaredEvenNumbers(arr) {
+  let evenNums = [];
+  let squared = 0;
+  // Grab evenNums numbers from arr and store them in `evenNums`:
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] % 2 === 0) {
+      evenNums.push(arr[i]);
+    }
+  }
+  // operate over the evenNums numbers and store the result in `squared`:
+  for (let char of evenNums) {
+    squared += char * char;
+  }
+  // return one single number;
+  return squared;
+}
+```
+
+### Object.keys
+
+```javascript
+function keys(obj) {
+  let objKeys = [];
+  for (let key in obj) {
+    objKeys.push(key);
+  }
+  return objKeys;
+}
+
+var obj1 = { a: 1, b: 2, c: 3 };
+console.log(keys(obj1));
+```
+
+### Object.values
+
+```javascript
+function values(obj) {
+  let allVals = [];
+  for (const val in obj) {
+    allVals.push(obj[val]);
+  }
+  return allVals;
+}
+
+var obj = { a: 1, b: 2, c: 3 };
+console.log(values(obj)); // [1,2,3]
+```
+
+### swapKeyValue
+
+```javascript
+function swapKeyAndValue(obj) {
+  let newObj = {};
+  for (let key in obj) {
+    newObj[obj[key]] = key;
+  }
+  return newObj;
+}
+
+var instructor = { name: "Elie", job: "Instructor" };
+
+console.log(swapKeyAndValue(instructor));
+// {Elie: "name", Instructor: "job"};
+```
+
+### swapKeyAndGivenValue
+
+```javascript
+function swapKeyAndGivenValue(obj, keyVal) {
+  // Create empty object that will receive the properties:
+  let newObj = {};
+  // Loop over obj:
+  for (let key in obj) {
+    // store obj properties in newObj:
+    newObj[key] = obj[key];
+    // find the key that matches with `keyVal`
+    if (key.includes(keyVal)) {
+      // swap key and value:
+      newObj[obj[keyVal]] = keyVal;
+    }
+  }
+  // delete repeated property, accessing it by keyname:
+  delete newObj[keyVal];
+  return newObj;
+}
+
+var instructor = { name: "Elie", job: "Instructor" };
+console.log(swapKeyAndValue(instructor, "name"));
+// {Elie: "name", job: "Instructor"}
+```
+
+### Object.entries
+
+Loop over object and extract keys and values separatedly, then merge keys and values in one single array of nested properties.
+
+```javascript
+function entries(obj) {
+  // create arrays to store results:
+  let objKeys = [];
+  let objVals = [];
+  // loop over obj and store keys in nested arrays:
+  for (let key in obj) {
+    objKeys.push([key]);
+  }
+  // loop over obj and store values:
+  for (let val in obj) {
+    objVals.push(obj[val]);
+  }
+  // loop over values and push them into the keys nested arrays:
+  for (let i = 0; i < objVals.length; i++) {
+    objKeys[i].push(objVals[i]);
+  }
+  return objKeys;
+}
+
+var obj = { a: 1, b: 2, c: 3 };
+console.log(entries(obj));
+// [["a",1], ["b",2], ["c",3]]
+```
+
+### countValueOccurence
+
+Counts number of appearances of a given value in given array.
+
+```javascript
+function countValueOccurence(arr, num) {
+  let counter = [];
+  for (let char of arr) {
+    if (char === num) {
+      counter.push(char);
+    }
+  }
+  return counter.length;
+}
+
+console.log(countValues([4, 1, 4, 2, 3, 4, 4], 4)); // 4
+```
+
+### generatePairs
+
+Given an int, generate pairs in nested arrays with nested loops:
+
+```javascript
+function generatePairs(int) {
+  // variable to store the generated values:
+  let pairs = [];
+  // two loops, one for each side of the nested arrays:
+  for (let i = 0; i <= int; i++) {
+    for (let j = i; j <= int; j++) {
+      // push both values, left and right, at the same time, otherwise it would create an array for each of them:
+      pairs.push([i, j]);
+    }
+  }
+  return pairs;
+}
+
+console.log(generatePairs(1)); // [ [0, 0], [0, 1], [1,1]]
 ```
