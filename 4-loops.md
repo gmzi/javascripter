@@ -4,7 +4,6 @@
 [while](##while)  
 [for...of](#forof)  
 [for...in](##forin)
-[ex](##ex)
 
 ## for
 

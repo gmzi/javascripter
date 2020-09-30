@@ -14,6 +14,7 @@
 [swapKeyAndGivenValue](###swapKeyAndGivenValue)  
 [countValueOccurence](###countValueOccurence)
 [generatePairs](###generatePairs)
+[multiples](###multiples)
 
 ---
 
@@ -557,4 +558,19 @@ function generatePairs(int) {
 }
 
 console.log(generatePairs(1)); // [ [0, 0], [0, 1], [1,1]]
+```
+
+### multiples
+
+Returns n first multiples of x number:
+
+```javascript
+function multiples(x, n) {
+  let result = [];
+  for (let i = 1; i <= n; i++) {
+    result.push(x * i);
+  }
+  return result;
+}
+console.log(multiples(2, 5)); // [3, 6, 9, 12])
 ```
