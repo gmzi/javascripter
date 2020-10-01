@@ -15,6 +15,7 @@
 [countValueOccurence](###countValueOccurence)
 [generatePairs](###generatePairs)
 [multiples](###multiples)
+[pluck](###pluck)
 
 ---
 
@@ -30,6 +31,7 @@
 [Math.max](###Math.max)
 [Math.min](###Math.min)
 [slice](###slice)
+[sort](###twoHighest)
 [Object.keys](###Object.keys)
 [Object.values](###Object.values)
 [Object.entries](###Object.entries)
@@ -96,7 +98,7 @@ console.log(convertStringToArray("2,3,4,5,6,7,8,9,10,J,Q,K,A"));
 
 ## pangram_check
 
-// A pangram is a sentence that contains every letter of the alphabet, like:
+a sentence that contains every letter of the alphabet, like:
 //"The quick brown fox jumps over the lazy dog"
 
 // Write a function called isPangram, which checks to see if a given sentence
@@ -231,29 +233,36 @@ teenager(22); // false
 
 ### indexOf
 
+return index position of item.
+
 ```javascript
-function indexOf(arr, num) {
+function indexOf(arr, item) {
   for (let i = 0; i <= arr.length; i++) {
-    if (num === arr[i]) {
+    if (item === arr[i]) {
       return i;
     }
   }
   return -1;
 }
+
+console.log(indexOf([1, 5, 9, "a"], "a")); // 3
 ```
 
 ### lastIndexOf
 
+Return last index position of given item
+
 ```javascript
-// -----lastIndexOf() periphrasis:
-function lastIndexOf(arr, num) {
+function lastIndexOf(arr, item) {
   for (let i = arr.length - 1; i > 0; i--) {
-    if (num === arr[i]) {
+    if (item === arr[i]) {
       return i;
     }
   }
   return -1;
 }
+
+console.log(lastIndexOf(["a", "f", "h"], "h")); // 2
 ```
 
 ### push
@@ -359,6 +368,8 @@ console.log(concat(arru, arri));
 
 ### Math.max
 
+Return the highest number of an array.
+
 ```javascript
 function max(arr) {
   arr.sort((a, b) => a - b);
@@ -369,6 +380,8 @@ console.log(max([5, 1, 4, 7, 1, 2]));
 ```
 
 ### Math.min
+
+Return the lowest number of array.
 
 ```javascript
 function min(arr) {
@@ -573,4 +586,52 @@ function multiples(x, n) {
   return result;
 }
 console.log(multiples(2, 5)); // [3, 6, 9, 12])
+```
+
+### pluck
+
+Extract given key value from array of objects
+
+```javascript
+function pluck(arr, keyname) {
+  let vals = [];
+  for (let key in arr) {
+    vals.push(arr[key][keyname]);
+  }
+  return vals;
+}
+
+let alumni = [
+  { name: "Tim", school: "ffff" },
+  { name: "Matt", school: "aaaaa" },
+  { name: "Elie", school: "nnnnn" },
+];
+console.log(pluck(alumni, "name")); // ["Tim", "Matt", "Elie"]
+```
+
+### twoHighest
+
+Get the two highest numbers of array:
+
+```javascript
+function twoHighest(arr) {
+  // Loop over `arr` and copy it in variable:
+  let allIn = [];
+  for (let num of arr) {
+    allIn.push(num);
+  }
+  // now work on `arr`s copy,
+  // find and store the highest number:
+  let highest = Math.max(...allIn);
+  // find and store the idx position of highest:
+  let idxHighest = arr.indexOf(highest);
+  // remove the highest number from the array:
+  allIn.splice(idxHighest, 1);
+  // find and store the second highest number:
+  let scndHigh = Math.max(...allIn);
+  // return secondHigh and Highest:
+  return [scndHigh, highest];
+}
+
+console.log(twoHighest([1, 2, 10, 8])); // [8,10]
 ```
