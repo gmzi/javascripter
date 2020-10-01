@@ -1,3 +1,30 @@
+// QUESTION FOR YOUSSUF:
+// Bracket and dot notation, when to use each?
+// Given this object:
+let alumni = [
+  { name: "Tim", school: "bbbbb" },
+  { name: "Matt", school: "aaaaa" },
+];
+
+// I loop over `alumni` keys and return de desired values:
+function pluck(arr, keyname) {
+  let vals = [];
+  for (let key in arr) {
+    vals.push(arr[key][keyname]);
+  }
+  return vals;
+}
+pluck(alumni, "name"); // Result: ["Tim", "Matt", "Elie"]
+
+// Now if I try to console.log with bracket notation, I can't:
+console.log(alumni[0][name]); // Throws 'undefined'
+// Only can console.log with dot notation:
+console.log(alumni[0].name); // "Tim"
+
+// I don't quite get why I have to use bracket notation (`alumni[0][name]`) in
+// my function's loop and dot notation ()`alumni[0].name`), in the console.log.
+
+//--NOT HELP REQUIRED BELOW THIS LINE----------------------------------
 function generatePairs(int) {
   // variable to store the generated values:
   let pairs = [];
