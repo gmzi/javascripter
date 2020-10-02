@@ -2,6 +2,7 @@
 
 [pwd](##password_function)  
 [avg](##average)  
+[str_to_arr](###str_to_arr)  
 [pangram](##pangram_check)  
 [random_itm](##PICK_RANDOM_ITEM_FROM_ARRAY:)  
 [random_card](##GENERATE_CARD_WITH_RANDOM_VALUE_AND_SUIT:)  
@@ -10,16 +11,17 @@
 [random_pick](##PICK_ONE_OF_TWO)  
 [check_range](##CHECK_RANGE)  
 [squaredEvenNumbers](###squaredEvenNumbers)  
-[swapKeyValue](###swapKeyValue)  
-[swapKeyAndGivenValue](###swapKeyAndGivenValue)  
 [countValueOccurence](###countValueOccurence)  
 [generatePairs](###generatePairs)  
 [multiples](###multiples)  
-[pluck](###pluck)
+[twoHighest](###twoHighest)
+[countNumbers](###countNumbers)
+[totalCaps](###totalCaps)
 
 ---
 
-[periphrasis](##periphrasis)  
+#### periphrasis of methods
+
 [indexOf](###indexOf)  
 [lastIndexOf](###lastIndexOf)  
 [push](###push)  
@@ -31,10 +33,21 @@
 [Math.max](###Math.max)  
 [Math.min](###Math.min)  
 [slice](###slice)  
-[sort](###twoHighest)  
+[sort](###twoHighest)
+
+---
+
+#### Objects
+
 [Object.keys](###Object.keys)  
 [Object.values](###Object.values)  
 [Object.entries](###Object.entries)
+[swapKeyValue](###swapKeyValue)  
+[swapKeyAndGivenValue](###swapKeyAndGivenValue)  
+[minMaxKeyInObject](###minMaxKeyInObject)
+[pluckObject](###pluckObject)
+[stringFromObject](###stringFromObject)
+[objectToQueryString](###objectToQueryString)
 
 ## password_function
 
@@ -84,8 +97,11 @@ function avg(arr) {
 }
 
 console.log(avg([0, 50]));
+```
 
-//---CONVERT STRING INTO ARRAY
+### str_to_arr
+
+```javascript
 function convertStringToArray(string) {
   resultArray = [];
   for (let char of string) {
@@ -588,7 +604,7 @@ function multiples(x, n) {
 console.log(multiples(2, 5)); // [3, 6, 9, 12])
 ```
 
-### pluck
+### pluckObject
 
 Extract given key value from array of objects
 
@@ -634,4 +650,156 @@ function twoHighest(arr) {
 }
 
 console.log(twoHighest([1, 2, 10, 8])); // [8,10]
+```
+
+### minMaxKeyInObject
+
+Extract object's keynames and sorts them.
+
+```javascript
+function minMaxKeyInObject(obj) {
+  // Extract and store all keynames from object (will be already sorted from lowest to highest)
+  let allkeys = Object.keys(obj);
+  // Variable to store loop result:
+  let allArr = [];
+  // Loop over keynames and convert them to numbers:
+  for (let i = 0; i < allkeys.length; i++) {
+    allArr.push(parseInt(allkeys[i]));
+  }
+  // Work on the arr to return lowest and highes keyname only:
+  allArr.splice(1, allArr.length - 2);
+  return allArr;
+}
+
+console.log(minMaxKeyInObject({ 2: "a", 7: "b", 1: "c", 10: "d", 4: "e" }));
+// [1, 10]
+```
+
+### stringFromObject
+
+Scans object properties and returns a string literal with key and value pairs in form of string, all separated by separated commas except the last one.
+
+```javascript
+function stringFromObject(obj) {
+  let propString = "";
+  for (let prop in obj) {
+    propString += `${prop} = ${obj[prop]}, `;
+  }
+  let result = propString.slice(0, propString.length - 2);
+  return result;
+}
+
+console.log(
+  stringFromObject({ name: "Elie", job: "Instructor", isCatOwner: false })
+);
+// "name = Elie, job = Instructor, isCatOwner = false"
+```
+
+### objectToQueryString
+
+Converts object into queryString, looping over object keys and values, when value is an array, loops into the array to return the values into the string separated by "&".
+
+```javascript
+function objectToQueryString(obj) {
+  // place to store keys and values when looping:
+  let qstring = "";
+  // loop over object to extract keys and values:
+  for (let prop in obj) {
+    // Capture the array if there's one:
+    if (typeof obj[prop] === "object") {
+      // loop inside the array to extract it's values:
+      for (let num of obj[prop]) {
+        // push values into main storage with string literal:
+        qstring += `${prop}=${num}&`;
+      }
+    } else {
+      // capture the regular keys and values and store them in a string literal
+      qstring += `${prop}=${obj[prop]}&`;
+    }
+  }
+  // slice the last `&` from the string literal:
+  result = qstring.slice(0, qstring.length - 1);
+  return result;
+}
+
+console.log(objectToQueryString({ bar: [2, 3], foo: 1 }));
+// bar=2&bar=3&foo=1
+```
+
+### countNumbers
+
+In an array of strings, finds numbers as strings and convert
+them to numbers datatype, and return their quantity.
+
+```javascript
+function countNumbers(arr) {
+  let isNumber = [];
+  // loop over arr:
+  for (let char of arr) {
+    // "if char can be parsedInt, or if char is 0, push it to
+    //`isNumber`":
+    if (parseInt(char) || parseInt(char) === 0) {
+      isNumber.push(char);
+    }
+  }
+  return isNumber.length;
+}
+
+console.log(countNumbers(["4", "1", "0", "NaN"])); // 3
+```
+
+### totalCaps
+
+Nested loops that access each character in an array of words. Grabs the capitalized characters and stores them in a variable, returns the number of capitalized characters in given array.
+
+```javascript
+function totalCaps(arr) {
+  // variable to store the loop:
+  let allUppercase = [];
+  // first loop goes over each word:
+  for (let i = 0; i < arr.length; i++) {
+    // nested loop to go over each character of each word
+    for (let j = 0; j < arr[i].length; j++) {
+      // Capture capitalized characters inside words, accessing them by the index of
+      // the loops
+      if (arr[i][j] === arr[i][j].toUpperCase()) {
+        // push capitalized characters into variable for its count:
+        allUppercase.push(arr[i][j]);
+      }
+    }
+  }
+  //count total and return:
+  return allUppercase.length;
+}
+console.log(totalCaps(["AwesomE", "ThIngs", "hAppEning", "HerE"])); // 8
+```
+
+### rankingOfNumbers
+
+Returns the ranking of the numbers given in the array, in a new array.
+
+```javascript
+function rankingOfNumbers(arr) {
+  let ranked = [];
+  // make a copy of the array, so as to not alter the given order of items
+  // when sorting:
+  for (let num of arr) {
+    ranked.push(num);
+  }
+  // now sort over the copy, the index position+1 will be equivalent to
+  // the ranking of each item.
+  ranked.sort((a, b) => b - a);
+  // now loop over each item of `arr` (and therefore preserve it's order
+  // of appearance) and assign to it the index position they have in the
+  // sorted copy + 1:
+  let result = [];
+  for (let i = 0; i < arr.length; i++) {
+    result.push(ranked.indexOf(arr[i]) + 1);
+  }
+  // return the index position+1 in `ranked` of each element of `arr`,
+  // expressing the ranking of each item.
+  return result;
+}
+
+console.log(rankings([10, 5, 20])); // [2, 3, 1]
 ```

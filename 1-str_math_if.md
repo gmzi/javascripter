@@ -57,39 +57,82 @@ Every value in JS is truthy, except these, that are falsy:
 `undefined`  
 `NaN`
 
-### String methods
+## String methods
 
+1- With no arguments:  
 Textual values.  
 Every character is indexed (0,1,2,3,4, etc)
 `"hello".length` number of characters.
 Strings are inmutable.  
-With no arguments:
+To call them:
+`thing.method();`(mind the parenthesis at the end.)
+
+### toUpperCase
 
 ```javascript
-thing.method(); //mind the parenthesis at the end.
-thing.toUpperCase();
-let color = "   purple    caqui ";
+let thing = "asdfgh";
+thing.toUpperCase(); // ASDFGH
+```
+
+### trim
+
+```javascript
+let color = " purple caqui ";
 color.trim(); //removes white spaces at beginning and end of string.
+```
+
+CHAIN METHODS:
+
+```javascript
 color.trim().toUpperCase();
 ```
 
-Methods with arguments:
+- With arguments:
+
+### indexOf
 
 ```javascript
 let pipita = "hola mi nombre es Pipita";
-
-indexOf();
-
+pipita.indexOf("f"); //-1 (absence of character)
 pipita.indexOf("es"); //15
-pipita.indexOf("P"); //18
-pipita.indexOf("f"); //-1 This returned when indexOf doesn't find the character;
+```
 
-slice();
-pipita.slice(20); //"pita" (slices all the previous characters)
-pipita.slice(1, 20); // range to slice.
+### slice
 
-replace();
-pipita.replace("Pipita", "Sorete"); //"hola mi nombre es Sorete";
+Stores sliced in new variable.
+
+```javascript
+let pipita = "hola mi nombre es Pipita";
+let pip = pipita.slice(15);
+console.log(pipita); //"hola mi nombre es Pipita"
+console.log(pip); // "es Pipita"
+let pup = pipita.slice(5, 14); // "mi nombre"
+```
+
+### replace
+
+```javascript
+let sor = pipita.replace("Pipita", "Sorete"); // "hola mi nombre es Sorete"
+```
+
+### parseInt
+
+Parse strings into integer number (watch out for NaN.)
+
+```javascript
+parseInt("23"); // 23
+parseInt("23.34"); //23
+parseInt("I ate 3 ramps"); // NaN
+parseInt("33cents"); // 33
+```
+
+### parseFloat
+
+```javascript
+parseFloat("23.43"); //23.43
+parseFloat("23"); //23
+parseFloat("I ate 3 ramps"); //NaN
+parseFloat("33.2cents"); //33.2
 ```
 
 ### String escapes
@@ -144,22 +187,6 @@ Math.floor(Math.random() * 89) + 1;
 ```javascript
 const userData = 10;
 typeof userData; // number
-```
-
-### `parseInt()` & `parseFloat()`
-
-Parse strings into numbers, watch out for NaN.
-
-```javascript
-parseInt("23"); // 23
-parseInt("23.34"); //23
-parseInt("I ate 3 ramps"); // NaN
-parseInt("33cents"); // 33
-
-parseFloat("23.43"); //23.43
-parseFloat("23"); //23
-parseFloat("I ate 3 ramps"); //NaN
-parseFloat("33.2cents"); //33.2
 ```
 
 ### Comparisons
