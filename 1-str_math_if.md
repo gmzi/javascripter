@@ -111,6 +111,8 @@ let pup = pipita.slice(5, 14); // "mi nombre"
 
 ### replace
 
+`str.replace("toRemove", "toInclude");`
+
 ```javascript
 let sor = pipita.replace("Pipita", "Sorete"); // "hola mi nombre es Sorete"
 ```

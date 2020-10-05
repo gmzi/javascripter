@@ -4,6 +4,7 @@
 [avg](##average)  
 [str_to_arr](###str_to_arr)  
 [pangram](##pangram_check)  
+[isPalindrome](###isPalindrome)  
 [random_itm](##PICK_RANDOM_ITEM_FROM_ARRAY:)  
 [random_card](##GENERATE_CARD_WITH_RANDOM_VALUE_AND_SUIT:)  
 [dupl_arr](##ARR_with_duplicate_values:)  
@@ -48,23 +49,18 @@
 [pluckObject](###pluckObject)
 [stringFromObject](###stringFromObject)
 [objectToQueryString](###objectToQueryString)
+[findByValue](###findByValue)
 
 ## password_function
 
-Write a isValidPassword function
 It accepts 2 arguments: password and username
-Password must: - be at least 8 characters
+Password must:
 
+- be at least 8 characters
 - cannot contain spaces
 - cannot contain the username
   If all requirements are met, return true.
-  therwise: false
-
-isValidPassword('89Fjj1nms', 'dogLuvr'); //true
-isValidPassword('dogLuvr123!', 'dogLuvr') //false
-isValidPassword('hello1', 'dogLuvr') //false
-
-MY SOLUTION:
+  otherwise: false
 
 ```javascript
 function isValidPassword(password, username) {
@@ -75,16 +71,13 @@ function isValidPassword(password, username) {
   );
 }
 
-console.log(isValidPassword("he", "dogLuvr"));
+isValidPassword("89Fjj1nms", "dogLuvr"); //true
+isValidPassword("dogLuvr123!", "dogLuvr"); //false
 ```
 
 ## average
 
-Avg value of array of numbers
-
-// Write a function to find the average value in an array of numbers
-//avg([0,50]) //25
-//avg([75,76,80,95,100]) //85.2
+Sum numbers of arr and divide by arr.length.
 
 ```javascript
 function avg(arr) {
@@ -96,7 +89,7 @@ function avg(arr) {
   return total / arr.length;
 }
 
-console.log(avg([0, 50]));
+console.log(avg([0, 50])); // 25
 ```
 
 ### str_to_arr
@@ -109,19 +102,14 @@ function convertStringToArray(string) {
   }
   return resultArray;
 }
-console.log(convertStringToArray("2,3,4,5,6,7,8,9,10,J,Q,K,A"));
+console.log(convertStringToArray("2,3,4,5"));
+// ["2", ",", "3", ",", "4", ",", "5"]
 ```
 
 ## pangram_check
 
-a sentence that contains every letter of the alphabet, like:
-//"The quick brown fox jumps over the lazy dog"
-
-// Write a function called isPangram, which checks to see if a given sentence
-//contains every letter of the alphabet. Make sure you ignore string casing!
-
-// isPangram('The five boxing wizards jump quickly') //true
-// isPangram('The five boxing wizards jump quick') //false
+Checks to see if a given sentence contains every letter of the alphabet.
+Make sure you ignore string casing!
 
 ```javascript
 function isPangram(sentence) {
@@ -133,16 +121,50 @@ function isPangram(sentence) {
   }
   return true;
 }
-console.log(isPangram("The five boxing wizards jump quicklY"));
+console.log(isPangram("The five boxing wizards jump quicklY")); // true
+console.log(isPangram("The five boxing wizards jump quick")); //false
+```
+
+### isPalindrome
+
+Check if word of phrase is palindromic, returns true or false.
+
+```javascript
+function isPalindrome(str) {
+  let reversed = "";
+  let cleanedStr = "";
+  // loop over str in reverse order:
+  for (let i = str.length - 1; i >= 0; i--) {
+    if ("abcdefghijklmnopqrstuvwxyz".includes(str[i].toLowerCase())) {
+      // store and normalize to lowercase:
+      reversed += str[i].toLowerCase();
+    }
+  }
+  // loop over str to get rid of spaces and punctuation symbols, storing only
+  // the letters in lowercase:
+  for (let i = 0; i < str.length; i++) {
+    if ("abcdefghijklmnopqrstuvwxyz".includes(str[i].toLowerCase())) {
+      cleanedStr += str[i].toLowerCase();
+    }
+  }
+  //compare exact equality of each variable:
+  return reversed === cleanedStr;
+}
+
+console.log(isPalindrome("No lemon, no melon")); // true
+console.log(isPalindrome("No lemon, no lemon")); // false
 ```
 
 ## PICK_RANDOM_ITEM_FROM_ARRAY:
 
+Picks one random item from given array.
+
 ```javascript
 function randomPicker(arr) {
-let num = Math.floor(Math.random() \* arr.length);
-return arr[num];
+  let num = Math.floor(Math.random() * arr.length);
+  return arr[num];
 }
+console.log(randomPicker([100, "a", 3, "b"])); //"b"
 ```
 
 ## GENERATE_CARD_WITH_RANDOM_VALUE_AND_SUIT:
@@ -173,22 +195,22 @@ function getCard() {
   card.suit = randomPicker(allSuits);
   return card;
 }
-console.log(getCard());
+console.log(getCard()); // value:9 suit:"diamonds"
 ```
 
 ## ARR_with_duplicate_values:
 
-GENERATE ARRAY THAT DUPLICATES VALUES OF GIVEN ARRAY:
+Duplicate values of given array and generate new array with them:
 
 ```javascript
 function doubleArr(arr) {
-const doubled = [];
-for (let num of arr) {
-doubled.push(num \* 2);
+  const doubled = [];
+  for (let num of arr) {
+    doubled.push(num * 2);
+  }
+  return doubled;
 }
-return doubled;
-}
-console.log(doubleArr([6, 10]));
+console.log(doubleArr([6, 10])); // 12, 20
 ```
 
 ## CALCULATOR\_(ARRAY OF FUNCTIONS)
@@ -196,38 +218,42 @@ console.log(doubleArr([6, 10]));
 ```javascript
 // Declare all the functions:
 function add(x, y) {
-return x + y;
+  return x + y;
 }
 
 const substract = function (x, y) {
-return x - y;
+  return x - y;
 };
 
 function multiply(x, y) {
-return x \* y;
+  return x * y;
 }
 
 const divide = function (x, y) {
-return x / y;
+  return x / y;
 };
 
 //Store them in an array:
 const operations = [add, substract, multiply, divide];
 
 // Call a function by index position:
-operations[3](54, 3);
+operations[3](54, 3); // 18
 ```
 
 ## PICK_ONE_OF_TWO:
 
+Pick one item from two given options:
+
 ```javascript
-function pickOne(f1, f2) {
+function pickOne(item1, item2) {
   let num = Math.random();
   if (num <= 0.5) {
-    return f1;
+    return item1;
   }
-  return f2;
+  return item2;
 }
+
+console.log(pickOne("caca", "pedo")); // caca
 ```
 
 ## CHECK_RANGE
@@ -283,6 +309,8 @@ console.log(lastIndexOf(["a", "f", "h"], "h")); // 2
 
 ### push
 
+Add given item to end of array, return array's length.
+
 ```javascript
 function push(arr, val) {
   arr[arr.length] = val;
@@ -294,6 +322,8 @@ console.log(push(arr, 10)); // 4
 ```
 
 ### pop
+
+Remove item from end of array, return removed item.
 
 ```javascript
 function pop(arr) {
@@ -308,12 +338,14 @@ function pop(arr) {
 }
 
 var emptyArr = ["a", "b", "c", "d", "e"];
-console.log(emptyArr);
-console.log(pop(emptyArr)); // undefined
-console.log(emptyArr); // 0
+console.log(emptyArr); // ["a", "b", "c", "d", "e"]
+console.log(pop(emptyArr)); // "e"
+console.log(emptyArr); // ["a", "b", "c", "d"]
 ```
 
 ### unshift
+
+Add item to start of array, return resulting length of array.
 
 ```javascript
 function unshift(arr, val) {
@@ -326,6 +358,8 @@ console.log(arr); //[0, 1, 2, 3]
 ```
 
 ### shift
+
+Remove item from start of array, return removed item.
 
 ```javascript
 function shift(arr) {
@@ -340,12 +374,13 @@ function shift(arr) {
 }
 
 let arri = [12, 23, 34];
-console.log(arri);
-console.log(shift(arri));
-console.log(arri);
+console.log(shift(arri)); // 12
+console.log(arri); // [23, 34]
 ```
 
 ### reverse
+
+Reverse array.
 
 ```javascript
 function reverse(arr) {
@@ -357,11 +392,12 @@ function reverse(arr) {
 }
 
 var arru = ["a", "b", "c", "d", "e", "f", "g"];
-console.log(reverse(arru));
+console.log(reverse(arru)); // ["g", "f", "e", "d", "c", "b", "a"]
 ```
 
 ### concat
 
+Merge two arrays.
 (not checked with teacher)
 
 ```javascript
@@ -379,7 +415,7 @@ function concat(arr1, arr2) {
 let arri = [1, 2, 3];
 let arru = ["a", "b", "c"];
 
-console.log(concat(arru, arri));
+console.log(concat(arru, arri)); // ["a", "b", "c", 1, 2, 3]
 ```
 
 ### Math.max
@@ -392,7 +428,7 @@ function max(arr) {
   return arr[arr.length - 1];
 }
 
-console.log(max([5, 1, 4, 7, 1, 2]));
+console.log(max([5, 1, 4, 7, 1, 2])); // 7
 ```
 
 ### Math.min
@@ -404,14 +440,16 @@ function min(arr) {
   arr.sort((a, b) => a - b);
   return arr[0];
 }
+console.log(min([7, 230, 3])); // 3
 ```
 
 ### slice
 
+Remove items in given range, return removed items.
+
 ```javascript
-function slice(arr, num1, num2) {
+ffunction slice(arr, num1, num2) {
   let result = [];
-  let averga = [];
   if (num2 > arr.length || num2 === undefined || !num2) {
     for (let i = num1; i < arr.length; i++) {
       result.push(arr[i]);
@@ -424,7 +462,7 @@ function slice(arr, num1, num2) {
   return result;
 }
 
-console.log(slice([1, 2, 3, 4, 5], 0, 2));
+console.log(slice(["a", "b", "c", "d", "e"], 0, 2)); // ["a", "b"]
 ```
 
 ### squaredEvenNumbers
@@ -446,9 +484,13 @@ function squaredEvenNumbers(arr) {
   // return one single number;
   return squared;
 }
+console.log(squaredEvenNumbers([3, 4, 5])); // 16
 ```
 
 ### Object.keys
+
+`Object.keys(objName)`;  
+Extract keys only from object:
 
 ```javascript
 function keys(obj) {
@@ -460,10 +502,13 @@ function keys(obj) {
 }
 
 var obj1 = { a: 1, b: 2, c: 3 };
-console.log(keys(obj1));
+console.log(keys(obj1)); // ["a", "b", "c"]
 ```
 
 ### Object.values
+
+`Object.values(objName)`;  
+Extract values only from object:
 
 ```javascript
 function values(obj) {
@@ -475,7 +520,7 @@ function values(obj) {
 }
 
 var obj = { a: 1, b: 2, c: 3 };
-console.log(values(obj)); // [1,2,3]
+console.log(values(obj)); // [1, 2, 3]
 ```
 
 ### swapKeyValue
@@ -601,7 +646,7 @@ function multiples(x, n) {
   }
   return result;
 }
-console.log(multiples(2, 5)); // [3, 6, 9, 12])
+console.log(multiples(2, 5)); // [2, 4, 6, 8, 10]
 ```
 
 ### pluckObject
@@ -623,6 +668,36 @@ let alumni = [
   { name: "Elie", school: "nnnnn" },
 ];
 console.log(pluck(alumni, "name")); // ["Tim", "Matt", "Elie"]
+```
+
+### findByValue
+
+in array of objects, find objects by one of it's values, return those single objects:
+
+```javascript
+function findByValue(arr, value) {
+  let result = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (Object.values(arr[i]).includes(value)) {
+      result.push(arr[i]);
+    }
+  }
+  return result;
+}
+
+let discos = [
+  {
+    artist: "flaco",
+    name: "pescado",
+    year: 1974,
+  },
+  {
+    artist: "gordo",
+    name: "ballena",
+    year: 2010,
+  },
+];
+console.log(findByValue(discos, "fLaco")); // {artist: "flaco", name: "pescado", year: 1974}
 ```
 
 ### twoHighest
@@ -677,7 +752,7 @@ console.log(minMaxKeyInObject({ 2: "a", 7: "b", 1: "c", 10: "d", 4: "e" }));
 
 ### stringFromObject
 
-Scans object properties and returns a string literal with key and value pairs in form of string, all separated by separated commas except the last one.
+Scans object properties and returns a string literal with key and value pairs in form of string, all separated by commas except the last one.
 
 ```javascript
 function stringFromObject(obj) {
