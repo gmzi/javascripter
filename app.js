@@ -1,16 +1,19 @@
-function numOfVowels(str) {
-  // list to compare:
-  let vowels = ["a", "e", "i", "o", "u"];
-  // store the loop
-  let toCount = [];
-  for (let char of str) {
-    // compare and store if they match:
-    if (vowels.includes(char)) {
-      toCount.push(char);
-    }
-  }
-  // count and return:
-  return toCount.length;
-}
+let x = "x";
+let y = "y";
+let b = x + y;
+x = b[1];
+y = b[0];
+console.log(x);
 
-console.log(numOfVowels("The quick brown fox")); // 5
+let car = {
+  color: "red",
+  brand: "toyo",
+};
+
+let swappedCar = {};
+
+for (let key in car) {
+  swappedCar[car[key]] = key;
+}
+car = swappedCar;
+console.log(car);

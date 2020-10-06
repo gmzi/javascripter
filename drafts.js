@@ -7,12 +7,17 @@ Expected Output : d,do,dog,o,og,g
 */
 
 function allCombinations(str) {
-  let combinations = "";
+  let arrayed = [];
+  for (let char of str) {
+    arrayed.push(char);
+  }
+  console.log(arrayed);
+  let combinations = [];
   console.log(str);
-  for (let i = 0; i < str.length; i++) {
-    combinations += `,`;
+  for (let i = 0; i < arrayed.length; i++) {
     for (let j = 0; j <= i; j++) {
-      combinations += `${str[j]}`;
+      // combinations.push([arrayed[j], arrayed[i]]);
+      combinations.push([arrayed[j], arrayed[i], arrayed[j]]);
     }
   }
   return combinations;
@@ -20,9 +25,4 @@ function allCombinations(str) {
 
 console.log(allCombinations("dog"));
 
-function repeat(number) {
-  for (let i = 0; i <= number; i++) {
-    console.log("hi");
-  }
-}
-console.log(repeat(2));
+// combinations.push(arrayed[i]);
