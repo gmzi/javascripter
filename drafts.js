@@ -1,20 +1,28 @@
-// Car checks tire pressure and display alert if one of the tires is out
-// or above expected air pressure.
-function checkTirePressureCar(x, y) {
-  return function (t1, t2, t3, t4) {
-    return (
-      t1 >= x &&
-      t1 <= y &&
-      t2 >= x &&
-      t2 <= y &&
-      t3 >= x &&
-      t3 <= y &&
-      t4 >= x &&
-      t4 <= y
-    );
-  };
+/* 
+3. Write a JavaScript function that generates all combinations 
+of a string.
+Example string : 'dog' 
+Expected Output : d,do,dog,o,og,g 
+(https://www.w3resource.com/javascript-exercises/javascript-functions-exercises.php)
+*/
+
+function allCombinations(str) {
+  let combinations = "";
+  console.log(str);
+  for (let i = 0; i < str.length; i++) {
+    combinations += `,`;
+    for (let j = 0; j <= i; j++) {
+      combinations += `${str[j]}`;
+    }
+  }
+  return combinations;
 }
 
-let falcon = checkTirePressureCar(36, 41);
+console.log(allCombinations("dog"));
 
-console.log(`Falcon is: ${falcon(32, 40, 40, 40)}`); //false
+function repeat(number) {
+  for (let i = 0; i <= number; i++) {
+    console.log("hi");
+  }
+}
+console.log(repeat(2));

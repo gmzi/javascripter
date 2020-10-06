@@ -1,62 +1,3 @@
-## Primitive types
-
-- number
-  - Integer
-  - float
-  - NaN
-- String
-- Boolean
-- Null
-- Undefined
-
-### Mathematical operations
-
-In order of precedence:
-`()` Parenthesis always runs first.  
-`2 ** 2;` & `2 % 2` Exponenciation & modulo
-`2 * 2` & `2 / 2` Multiplication and division  
-`2 + 2` & `2 - 2` Addition and substraction  
-If same precedence, execute from left to right.
-
-`3 - 9 * 2 // -15`
-`(3 - 9) * 2; // -12`
-`1.5 + 1.5 * 2; // 4.5`
-`10 % 6 ** 2; //16`
-`200 + 0 / 0; // NaN`
-
-### Variables
-
-```javascript
-const numOfhens = 4; // can't reassign value.
-// Use with arrays and objects.
-let avgRating = 3; // can update value.
-// Use with numbers and strings when it's values need to update or change.
-numOfHens + avgRating;
-```
-
-### Ternary operators
-
-```javascript
-score++; // adds 1
-score--; // sustracts 1
-score *= 5;
-score += 1;
-score -= 10;
-bonusMult = 100;
-score *= bonusMult;
-```
-
-### Booleans
-
-`true` or `false` values.  
-Every value in JS is truthy, except these, that are falsy:
-`false`  
-`0`  
-`""` (empty string)  
-`null`  
-`undefined`  
-`NaN`
-
 ## String methods
 
 1- With no arguments:  
@@ -136,6 +77,65 @@ parseFloat("23"); //23
 parseFloat("I ate 3 ramps"); //NaN
 parseFloat("33.2cents"); //33.2
 ```
+
+## Primitive types
+
+- number
+  - Integer
+  - float
+  - NaN
+- String
+- Boolean
+- Null
+- Undefined
+
+### Mathematical operations
+
+In order of precedence:
+`()` Parenthesis always runs first.  
+`2 ** 2;` & `2 % 2` Exponenciation & modulo
+`2 * 2` & `2 / 2` Multiplication and division  
+`2 + 2` & `2 - 2` Addition and substraction  
+If same precedence, execute from left to right.
+
+`3 - 9 * 2 // -15`
+`(3 - 9) * 2; // -12`
+`1.5 + 1.5 * 2; // 4.5`
+`10 % 6 ** 2; //16`
+`200 + 0 / 0; // NaN`
+
+### Variables
+
+```javascript
+const numOfhens = 4; // can't reassign value.
+// Use with arrays and objects.
+let avgRating = 3; // can update value.
+// Use with numbers and strings when it's values need to update or change.
+numOfHens + avgRating;
+```
+
+### Ternary operators
+
+```javascript
+score++; // adds 1
+score--; // sustracts 1
+score *= 5;
+score += 1;
+score -= 10;
+bonusMult = 100;
+score *= bonusMult;
+```
+
+### Booleans
+
+`true` or `false` values.  
+Every value in JS is truthy, except these, that are falsy:
+`false`  
+`0`  
+`""` (empty string)  
+`null`  
+`undefined`  
+`NaN`
 
 ### String escapes
 

@@ -2,9 +2,15 @@
 
 [pwd](##password_function)  
 [avg](##average)  
-[str_to_arr](###str_to_arr)  
+[string_to_array](###string_to_array)  
+[array_to_string](###array_to_string)  
 [pangram](##pangram_check)  
-[isPalindrome](###isPalindrome)  
+[isPalindrome](###isPalindrome)
+[alphabetical](###alphabetical)
+[first_letter_uppercase](###first_letter_uppercase)
+[longest_word](###longest_word)
+[num_of_vowels](###num_of_vowels)
+
 [random_itm](##PICK_RANDOM_ITEM_FROM_ARRAY:)  
 [random_card](##GENERATE_CARD_WITH_RANDOM_VALUE_AND_SUIT:)  
 [dupl_arr](##ARR_with_duplicate_values:)  
@@ -92,18 +98,36 @@ function avg(arr) {
 console.log(avg([0, 50])); // 25
 ```
 
-### str_to_arr
+### string_to_array
+
+String to array
 
 ```javascript
-function convertStringToArray(string) {
+function stringToArray(string) {
   resultArray = [];
   for (let char of string) {
     resultArray.push(char);
   }
   return resultArray;
 }
-console.log(convertStringToArray("2,3,4,5"));
+console.log(stringToArray("2,3,4,5"));
 // ["2", ",", "3", ",", "4", ",", "5"]
+```
+
+### array_to_string
+
+array to string
+
+```javascript
+function arrayToString(arr) {
+  let result = "";
+  for (let char of arr) {
+    result += char;
+  }
+  return result;
+}
+
+console.log(arrayToString(["a", "b", "c", 123, 4])); // "abc1234"
 ```
 
 ## pangram_check
@@ -153,6 +177,100 @@ function isPalindrome(str) {
 
 console.log(isPalindrome("No lemon, no melon")); // true
 console.log(isPalindrome("No lemon, no lemon")); // false
+```
+
+### alphabetical
+
+Lopp over array and sort it's letters in alphabetical order.
+
+```javascript
+function alphabetical(str) {
+  let arrayed = [];
+  for (let char of str) {
+    arrayed.push(char);
+  }
+  let ordered = arrayed.sort();
+  let stringed = "";
+  for (let char of ordered) {
+    stringed += char;
+  }
+  return stringed;
+}
+
+console.log(alphabetical("la reputa madre")); // aaadeelmprrtu
+```
+
+### first_letter_uppercase
+
+Loop over sentence and uppercase first letter of each word.
+
+```javascript
+function firstLetterUppercase(str) {
+  let result = "";
+  // loop over str
+  for (let i = 0; i < str.length; i++) {
+    // capture spaces inside the string
+    if (str[i] === " ") {
+      // after space, replace the lower case letter for it's capitalized version:
+      str = str.replace(str[i + 1], str[i + 1].toUpperCase());
+    }
+  }
+  // capitalize first letter of sentence and return the whole thing:
+  return str.replace(str[0], str[0].toUpperCase());
+}
+
+console.log(firstLetterUppercase("the quick brown fox"));
+// "The Quick Brown Fox"
+```
+
+### longest_word
+
+Loop over string to find longest word and return it:
+
+```javascript
+function longestWordInString(str) {
+  // split str into an array:
+  let splited = str.split(" ");
+  let lengths = [];
+  // loop over `splited` and store word lengths:
+  for (let word of splited) {
+    lengths.push(word.length);
+  }
+  // sort the lengths, highest to lowest:
+  sorted = lengths.sort((a, b) => b - a);
+  // loop again over `splited` to find the word that
+  // has a length matching with the `sorted` highest:
+  for (let word of splited) {
+    if (word.length === sorted[0]) {
+      return word;
+    }
+  }
+}
+
+console.log(longestWordInString("la requetecontra contra")); // requetecontra
+```
+
+### num_of_vowels
+
+Loop over string and return number of vowels:
+
+```javascript
+function numOfVowels(str) {
+  // list to compare:
+  let vowels = ["a", "e", "i", "o", "u"];
+  // store the loop
+  let toCount = [];
+  for (let char of str) {
+    // compare and store if they match:
+    if (vowels.includes(char)) {
+      toCount.push(char);
+    }
+  }
+  // count and return:
+  return toCount.length;
+}
+
+console.log(numOfVowels("The quick brown fox")); // 5
 ```
 
 ## PICK_RANDOM_ITEM_FROM_ARRAY:
