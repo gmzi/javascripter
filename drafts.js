@@ -1,28 +1,35 @@
-/* 
-3. Write a JavaScript function that generates all combinations 
-of a string.
-Example string : 'dog' 
-Expected Output : d,do,dog,o,og,g 
-(https://www.w3resource.com/javascript-exercises/javascript-functions-exercises.php)
-*/
-
-function allCombinations(str) {
-  let arrayed = [];
-  for (let char of str) {
-    arrayed.push(char);
-  }
-  console.log(arrayed);
-  let combinations = [];
-  console.log(str);
-  for (let i = 0; i < arrayed.length; i++) {
-    for (let j = 0; j <= i; j++) {
-      // combinations.push([arrayed[j], arrayed[i]]);
-      combinations.push([arrayed[j], arrayed[i], arrayed[j]]);
+function strLetterCount(word) {
+  let singleLets = [];
+  let repeatedLets = [];
+  let result = "";
+  for (let i = 0; i < word.length; i++) {
+    if (!singleLets.includes(word[i])) {
+      singleLets.push(word[i]);
+    } else {
+      repeatedLets.push(word[i]);
     }
   }
-  return combinations;
+  console.log(singleLets);
+  console.log(repeatedLets);
+  let sortedRep = repeatedLets.sort();
+  console.log(sortedRep);
+  for (let char of word) {
+    if (!repeatedLets.includes(char)) {
+      result += `${char}1`;
+    }
+    if (repeatedLets.includes(char)) {
+      result += `${char}${sortedRep.indexOf(char) + 1}`;
+    }
+  }
+  return result;
 }
+console.log(strLetterCount("coconut")); // "c2o2n1u1t1"
 
-console.log(allCombinations("dog"));
+//  if (!count.includes(char)) {
+//   count.push(char);
+// }
 
-// combinations.push(arrayed[i]);
+// for (let i = 0; i < letters.length; i++) {
+//   count.push(letters.indexOf(letters[i]));
+// }
+// console.log(count);

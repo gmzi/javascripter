@@ -10,6 +10,7 @@
 [first_letter_uppercase](###first_letter_uppercase)
 [longest_word](###longest_word)
 [num_of_vowels](###num_of_vowels)
+[str_letter_count](###str_letter_count)
 
 [random_itm](##PICK_RANDOM_ITEM_FROM_ARRAY:)  
 [random_card](##GENERATE_CARD_WITH_RANDOM_VALUE_AND_SUIT:)  
@@ -995,4 +996,47 @@ function rankingOfNumbers(arr) {
 }
 
 console.log(rankings([10, 5, 20])); // [2, 3, 1]
+```
+
+### str_letter_count
+
+Count the number of appearances of each letter in a string. Use lopp and object. Spread the letters into an object, store their occurences as key value pairs, transform the key value pairs into string.
+
+```javascript
+function strLetterCount(word) {
+  /* The strategy will be creating an empty object, each letter
+  will be spreaded as a key, and then will capture the number
+  of occurences of each letter as values for those keys.
+  */
+  // create empty object:
+  let letters = {};
+  console.log(letters);
+  // loop over word:
+  for (let i = 0; i < word.length; i++) {
+    // with each word, create an object's key-value pair,
+    // the keys will be the letters, the values will be 0
+    // for start.
+    letters[word[i]] = 0;
+  }
+  console.log(letters);
+  // loop over word again:
+  for (let i = 0; i < word.length; i++) {
+    // each time a letter occurs, add +1 to it's corresponding
+    // key:
+    letters[word[i]] += 1;
+  }
+  console.log(letters);
+  // now transform the object in a string, so as to return the
+  // information in the form of a string.
+  // Create the storage variable for the loop:
+  let result = "";
+  // loop over object, and add it's value and pairs to the
+  // string:
+  for (let keyVal in letters) {
+    result += `${keyVal}${letters[keyVal]}`;
+  }
+  return result;
+}
+
+console.log(strLetterCount("coconut")); // "c2o2n1u1t1"
 ```
