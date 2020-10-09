@@ -2,38 +2,56 @@
 
 Collection of related variables and functions. Inside objects, variables are called `property` and functions are called `methods`, both act as keys within objects, and each `key` is assigned a `value` in form of `key:value` pairs. Objects can content Reference Data Types and Primitive Data Types.
 
-## Object literal:
+### Object literal:
 
 Is this syntax: `{}`. The order is not important in object literals, when we nedd order-specific data we use arrays. Objects collect key value pairs in wathever order:
 
 ```javascript
-//Object literal:
 const fitBitData = {
   totalSteps: 30233,
   totalMiles: 233.5,
   100: true,
   "23 roperos": false,
 };
+```
 
-// Access property:
-// with dot syntax if key name is a string:
-fitBitData.totalMiles; // 233.5
+### Access object properties:
 
-// with brackets syntax if:
-// -key name is a number or multiple word,
-fitBitData[100]; // true;
-fitBitData["23 roperos"]; // false (mind the quotations marks)
+```javascript
+let averga = {
+  name: "averga",
+  followers: 143,
+  122: "hey fucker",
+};
+averga.name; // "averga"
+averga["name"]; // "averga"
+averga[122]; // "hey fucker"
+```
+
+In array of objects:
+
+```javascript
+let achota = [
+  { name: "cara de chota", 122: "chota" },
+  { name: "cara de culo", 122: "culo" },
+  { "23 roperos": true },
+];
+achota[0].name; // "cara de chota"
+achota[0]["name"]; // "cara de chota"
+achota[1].name; // "cara de culo"
+achota[1][122]; // "culo"
+achota["23 roperos"]; // true
 // -Through a variable:
-let carlitosSteps = fitBitData["totalSteps"]; // 30233
+let carlitos = achota["name"]; // "cara de chota"
 ```
 
 Try to use dot notation, if not possible go for bracket.
 
 ### Updating or adding properties:
 
-In simple context:  
-`objName.newPropKey = newPropValue;`  
-In included:  
+In simple context:
+`objName.newPropKey = newPropValue;`
+In included:
 `objName[prevObj[prevKey]] = newValue;`
 
 ```javascript

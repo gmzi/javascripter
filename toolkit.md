@@ -25,6 +25,7 @@
 [twoHighest](###twoHighest)
 [countNumbers](###countNumbers)
 [totalCaps](###totalCaps)
+[subset_of_str](###subset_of_str)
 
 ---
 
@@ -1039,4 +1040,22 @@ function strLetterCount(word) {
 }
 
 console.log(strLetterCount("coconut")); // "c2o2n1u1t1"
+```
+
+### subset_of_str
+
+Subset of string, combination of all letters of string.
+
+```javascript
+function combineLetters(str) {
+  let result = [];
+  for (let i = 0; i < str.length; i++) {
+    for (let j = i + 1; j < str.length + 1; j++) {
+      result.push(str.slice(i, j));
+    }
+  }
+  return result;
+}
+
+console.log(combineLetters("dog")); // ["d", "do", "dog", "o", "og", "g"]
 ```
