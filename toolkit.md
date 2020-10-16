@@ -5,11 +5,11 @@
 [string_to_array](###string_to_array)  
 [array_to_string](###array_to_string)  
 [pangram](##pangram_check)  
-[isPalindrome](###isPalindrome)
-[alphabetical](###alphabetical)
-[first_letter_uppercase](###first_letter_uppercase)
-[longest_word](###longest_word)
-[num_of_vowels](###num_of_vowels)
+[isPalindrome](###isPalindrome)  
+[alphabetical](###alphabetical)  
+[first_letter_uppercase](###first_letter_uppercase)  
+[longest_word](###longest_word)  
+[num_of_vowels](###num_of_vowels)  
 [str_letter_count](###str_letter_count)
 
 [random_itm](##PICK_RANDOM_ITEM_FROM_ARRAY:)  
@@ -22,10 +22,12 @@
 [countValueOccurence](###countValueOccurence)  
 [generatePairs](###generatePairs)  
 [multiples](###multiples)  
-[twoHighest](###twoHighest)
-[countNumbers](###countNumbers)
-[totalCaps](###totalCaps)
-[subset_of_str](###subset_of_str)
+[twoHighest](###twoHighest)  
+[countNumbers](###countNumbers)  
+[totalCaps](###totalCaps)  
+[subset_of_str](###subset_of_str)  
+[multiplesOf](###multiplesOf)  
+[testPrime](###testPrime)
 
 ---
 
@@ -50,13 +52,13 @@
 
 [Object.keys](###Object.keys)  
 [Object.values](###Object.values)  
-[Object.entries](###Object.entries)
+[Object.entries](###Object.entries)  
 [swapKeyValue](###swapKeyValue)  
 [swapKeyAndGivenValue](###swapKeyAndGivenValue)  
-[minMaxKeyInObject](###minMaxKeyInObject)
-[pluckObject](###pluckObject)
-[stringFromObject](###stringFromObject)
-[objectToQueryString](###objectToQueryString)
+[minMaxKeyInObject](###minMaxKeyInObject)  
+[pluckObject](###pluckObject)  
+[stringFromObject](###stringFromObject)  
+[objectToQueryString](###objectToQueryString)  
 [findByValue](###findByValue)
 
 ## password_function
@@ -1058,4 +1060,46 @@ function combineLetters(str) {
 }
 
 console.log(combineLetters("dog")); // ["d", "do", "dog", "o", "og", "g"]
+```
+
+### multiplesOf
+
+Returns the multiples of given number from 0 to 100
+
+```javascript
+function multiplesOf(number) {
+  let result = [];
+  for (let i = 0; i <= 50; i++) {
+    if (i % number === 0) {
+      result.push(i);
+    }
+  }
+  return result;
+}
+
+console.log(multiplesOf(11)); // [0, 11, 22, 33, 44]
+```
+
+### testPrime
+
+Checks if a number is prime or not, returns true or false.
+
+```javascript
+function testPrime(n) {
+  if (n === 1) {
+    return false;
+  } else if (n === 2) {
+    return true;
+  } else {
+    for (let x = 2; x < n; x++) {
+      if (n % x === 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
+
+console.log(testPrime(36)); // false
+console.log(testPrime(37)); // true
 ```
