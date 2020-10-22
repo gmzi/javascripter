@@ -1,36 +1,20 @@
 ## String methods
 
-1- With no arguments:  
-Textual values.  
-Every character is indexed (0,1,2,3,4, etc)
-`"hello".length` number of characters.
-Strings are inmutable.  
-To call them:
-`thing.method();`(mind the parenthesis at the end.)
-
-### toUpperCase
+1. toUpperCase
 
 ```javascript
 let thing = "asdfgh";
 thing.toUpperCase(); // ASDFGH
 ```
 
-### trim
+2. trim
 
 ```javascript
 let color = " purple caqui ";
 color.trim(); //removes white spaces at beginning and end of string.
 ```
 
-CHAIN METHODS:
-
-```javascript
-color.trim().toUpperCase();
-```
-
-- With arguments:
-
-### indexOf
+3. indexOf
 
 ```javascript
 let pipita = "hola mi nombre es Pipita";
@@ -38,7 +22,7 @@ pipita.indexOf("f"); //-1 (absence of character)
 pipita.indexOf("es"); //15
 ```
 
-### slice
+4. slice
 
 Stores sliced in new variable.
 
@@ -50,7 +34,7 @@ console.log(pip); // "es Pipita"
 let pup = pipita.slice(5, 14); // "mi nombre"
 ```
 
-### replace
+5. replace
 
 `str.replace("toRemove", "toInclude");`
 
@@ -58,7 +42,7 @@ let pup = pipita.slice(5, 14); // "mi nombre"
 let sor = pipita.replace("Pipita", "Sorete"); // "hola mi nombre es Sorete"
 ```
 
-### parseInt
+6. parseInt
 
 Parse strings into integer number (watch out for NaN.)
 
@@ -69,7 +53,7 @@ parseInt("I ate 3 ramps"); // NaN
 parseInt("33cents"); // 33
 ```
 
-### parseFloat
+7. parseFloat
 
 ```javascript
 parseFloat("23.43"); //23.43
@@ -78,7 +62,15 @@ parseFloat("I ate 3 ramps"); //NaN
 parseFloat("33.2cents"); //33.2
 ```
 
-## Primitive types
+CHAIN METHODS:
+
+```javascript
+color.trim().toUpperCase();
+```
+
+---
+
+## Primitive data types
 
 - number
   - Integer
@@ -88,6 +80,8 @@ parseFloat("33.2cents"); //33.2
 - Boolean
 - Null
 - Undefined
+
+---
 
 ### Mathematical operations
 
@@ -104,16 +98,6 @@ If same precedence, execute from left to right.
 `10 % 6 ** 2; //16`
 `200 + 0 / 0; // NaN`
 
-### Variables
-
-```javascript
-const numOfhens = 4; // can't reassign value.
-// Use with arrays and objects.
-let avgRating = 3; // can update value.
-// Use with numbers and strings when it's values need to update or change.
-numOfHens + avgRating;
-```
-
 ### Ternary operators
 
 ```javascript
@@ -126,16 +110,35 @@ bonusMult = 100;
 score *= bonusMult;
 ```
 
+---
+
 ### Booleans
 
-`true` or `false` values.  
-Every value in JS is truthy, except these, that are falsy:
+`true` or `false` values.
+
+### FALSY VALUES:
+
 `false`  
 `0`  
 `""` (empty string)  
 `null`  
 `undefined`  
 `NaN`
+ALL THE REST ARE TRUTHY VALUES.
+
+Check truthyness or falsyness:
+
+```javascript
+Boolean(0); // false
+Boolean([]); // true
+
+/*the twisted way:*/
+!5; // false
+!!5; // true
+!!0; // false
+```
+
+---
 
 ### String escapes
 
@@ -143,6 +146,8 @@ Every value in JS is truthy, except these, that are falsy:
 - `\'` : single quote;
 - `\"` : double quote;
 - `\\` : backslash;
+
+---
 
 ### String template literals
 
@@ -152,8 +157,7 @@ Strings that allow embeded information, which will be evaluated and turned into 
 `You owe me ${100 + 53}`;
 let animal = "Pig";
 let sound = "oink";
-`${animal} says ${sound.toUpperCase()}!`;
-`You bought ${item}, price $${price}`;
+`${animal} says ${sound.toUpperCase()}!`; // pig says OINK!
 ```
 
 ### `null` & `Undefined`
@@ -233,6 +237,36 @@ if (rating === 3) {
 } else {
   console.log("nothing true before");
 }
+```
+
+If vs else if.
+With `else if`, one of the statements will run:
+
+```javascript
+let n = 10;
+if (n > 0) {
+  console.log("n first time");
+} else if (n < 100) {
+  console.log("n second time");
+} else {
+  console.log("not valid");
+}
+//'n first time'.
+```
+
+With `if`, all the true statements will run:
+
+```javascript
+if (n > 0) {
+  console.log("n first time");
+}
+if (n < 100) {
+  console.log("n second time");
+} else {
+  console.log("not valid");
+}
+// 'n first time'
+// 'n second time'
 ```
 
 #### Nested conditionals
@@ -353,4 +387,28 @@ let color = status === "offline" ? "red" : "green";
 
 ---
 
----
+### Include JS code into the html file
+
+Two options:
+
+1. In the html file:
+
+```html
+<script>
+  <!-- Code goes here>
+</script>
+```
+
+2. In a separate file. In html:
+
+```html
+<script src="app.js"></scriptL>
+```
+
+### Variables declaration and behavoir
+
+`var`, can reassign; can redeclare; function scope.  
+`let`, can reassign, no redeclare, block scope.
+`const`, no reassign, no redeclare, block scope.
+
+Arrays and objects can use `const` because they references in memory doesn't change, while it's inner elements can change.

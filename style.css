@@ -1,0 +1,29 @@
+body {
+  background-color: black;
+}
+
+h1 {
+  color: rgb(97, 3, 3);
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  cursor: pointer;
+  border: 2px double;
+  border-radius: 2px;
+}
+
+.display {
+  background-color: gray;
+}
+.leaf {
+  margin: 2rem 0rem;
+  border: 20px;
+  padding: 4rem;
+}
+.leaf-icon {
+  background: linear-gradient(0.9turn, #1d0101, #b52626);
+}
+
+input {
+  color: red;
+  background-color: gray;
+}

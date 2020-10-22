@@ -27,7 +27,9 @@
 [totalCaps](###totalCaps)  
 [subset_of_str](###subset_of_str)  
 [multiplesOf](###multiplesOf)  
-[testPrime](###testPrime)
+[testPrime](###testPrime)  
+[sumRows](###sumRows)
+[Guessing_game](###Guessing_game)
 
 ---
 
@@ -60,6 +62,7 @@
 [stringFromObject](###stringFromObject)  
 [objectToQueryString](###objectToQueryString)  
 [findByValue](###findByValue)
+[shoppingCart](###shoppingCart)
 
 ## password_function
 
@@ -822,6 +825,52 @@ let discos = [
 console.log(findByValue(discos, "fLaco")); // {artist: "flaco", name: "pescado", year: 1974}
 ```
 
+### shoppingCart
+
+Sum and average quantities and prices of objects.
+
+```javascript
+const shoppingCart = [
+  {
+    product: "Jenga",
+    price: 4.3,
+    quantity: 1,
+  },
+  {
+    product: "Echo dot",
+    price: 54.56,
+    quantity: 3,
+  },
+  {
+    product: "Fire stick",
+    price: 121322.34,
+    quantity: 3,
+  },
+];
+// Variables to fill with the loop:
+let productDetail = "";
+let totalItems = 0;
+let totalPrice = 0;
+// Loop over object:
+for (let i = 0; i < shoppingCart.length; i++) {
+  // store each object separatedly:
+  let items = shoppingCart[i];
+  // extract the properties of object to sum and display them:
+  productDetail += `${items.product}(${items.quantity}) `;
+  totalItems += items.quantity;
+  totalPrice += items.price;
+}
+console.log(
+  `Products: ${productDetail}.\nTotal items: ${totalItems}.\nTotal price:$${totalPrice}\nHave a good one fucker!!`
+);
+/* 
+Products: Jenga(1) Echo dot(3) Fire stick(3) . 
+Total items: 7.
+Total price:$121381.2
+Have a good one fucker!!
+*/
+```
+
 ### twoHighest
 
 Get the two highest numbers of array:
@@ -1102,4 +1151,54 @@ function testPrime(n) {
 
 console.log(testPrime(36)); // false
 console.log(testPrime(37)); // true
+```
+
+### sumRows
+
+Access each item in nested arrays and sum them:
+
+```javascript
+// Sum each row:
+const magicSquare = [
+  [2, 7, 5],
+  [9, 23, 3],
+  [4, 3, 8],
+];
+
+for (let i = 0; i < magicSquare.length; i++) {
+  let row = magicSquare[i];
+  let sum = 0;
+  for (let j = 0; j < row.length; j++) {
+    sum += row[j];
+  }
+  console.log(`Row ${row.indexOf(row[i]) + 1} summed to ${sum}`);
+}
+/*
+Row 1 summed to 14
+Row 2 summed to 35
+Row 3 summed to 15
+*/
+```
+
+### Guessing_game
+
+While loop for a game where the machine has to guess a number:
+
+```javascript
+const target = Math.floor(Math.random() * 10);
+let guess = Math.floor(Math.random() * 10);
+
+while (guess !== target) {
+  console.log(`Target: ${target} Guess: ${guess}`);
+  guess = Math.floor(Math.random() * 10);
+}
+// log machine attempts till target and guess match:
+console.log(`Target: ${target} Guess: ${guess}`);
+// log message once machine wins:
+console.log("Machine wins");
+/*
+Target: 1 Guess: 4
+Target: 1 Guess: 7
+Machine wins
+*/
 ```

@@ -47,6 +47,22 @@ let carlitos = achota["name"]; // "cara de chota"
 
 Try to use dot notation, if not possible go for bracket.
 
+Dot versus bracket notation:
+
+```javascript
+// dot modifies the key:
+let arg1 = "tete";
+let obj1 = {};
+obj1.arg1 = "caca";
+console.log(obj1); // {arg1: "caca"}
+
+//bracket modifies the value:
+let arg2 = "pipi";
+let obj2 = {};
+obj2[arg2] = "pedo";
+console.log(obj2); // {pipi: "pedo"}
+```
+
 ### Updating or adding properties:
 
 In simple context:
@@ -194,4 +210,24 @@ const user = {
 if (!user.notifications.length) {
   console.log("no new notif");
 }
+```
+
+### Add function to an object:
+
+Function as a mathod for an object, like a value for a given key.
+
+```javascript
+//define funtion:
+function greet() {
+  console.log("hiiii");
+}
+
+const persona = {
+  name: "juanca",
+  age: 23,
+  // add function as a property:
+  talk: greet,
+};
+// execute object's method:
+persona.talk(); // hiiii
 ```

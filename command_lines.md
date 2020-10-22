@@ -131,9 +131,14 @@ Pipenv
 
 ---
 
-## HTML SHORTCUTS (in VSCode)
+## VS Code cool shortcuts
 
 `! + tab`: html template  
-`.classname + tab` new div with class name given
-
----
+`.classname + tab` new div with class name given.  
+`⌘ + d` select word, press it again and select
+next occurence of that word, and so on.  
+`control + space` css context-specific options. (also `⌘ + i`)  
+`option + arrows` move entire line up or down.
+`⌘ + \` split windows.
+`control + tab` switch opened windows.
+`⌘ + 1, 2, etc` swith group of opened windows.
