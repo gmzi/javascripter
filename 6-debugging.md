@@ -7,13 +7,13 @@ Find the error and fix it.
 
 ### Syntax error
 
-Like in any language. Not logic, not library, just something bad typed.
+Javascript isn't able to parse a certain syntax.
 
 ### ReferenceError
 
 Happen when:
 
-- Try to access a variable that's not defined.
+- Try to access a variable that's out of scope, not defined, or doesn't exist.
 - Dependencie issue.
 - Scope issue.
 
@@ -21,8 +21,6 @@ Happen when:
 
 Trying to do something with a data type that cannot perform the intended task (e.g. call an array method on a string).
 `"hello".splice() // TypeError`.
-
-> Google the error message
 
 ## Errors with no message.
 
