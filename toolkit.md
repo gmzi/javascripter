@@ -33,6 +33,13 @@
 
 ---
 
+### Higher order functions
+
+[Function_picker](###Function_picker)
+[range_checker](###range_checker)
+
+---
+
 #### periphrasis of methods
 
 [indexOf](###indexOf)  
@@ -1201,4 +1208,54 @@ Target: 1 Guess: 4
 Target: 1 Guess: 7
 Machine wins
 */
+```
+
+### Function_picker
+
+Pick randomly between functions.
+
+```javascript
+function happy() {
+  return "ha ha ha";
+}
+
+function sad() {
+  return "snif snif snif";
+}
+
+function pickOne(f1, f2) {
+  let num = Math.random();
+  if (num <= 0.5) {
+    return f1();
+  }
+  return f2();
+}
+console.log(pickOne(happy, sad); // ha ha ha
+console.log(pickOne(happy, sad)); // snif snif snif
+```
+
+### range_checker
+
+With returned functions:
+
+```javascript
+// Build the function factory:
+function checkRange(x, y) {
+  return function (num) {
+    return num >= x && num <= y;
+  };
+}
+
+// Make a new instance:
+let teenager = checkRange(12, 20);
+// call it:
+teenager(12); // true
+teenager(22); // false
+
+let adult = checkRange(21, 50);
+adult(51); //false
+adult(40); //true
+
+let isNiceOutside = checkRange(65, 90);
+isNiceOutside(78); // true
 ```

@@ -1,61 +1,27 @@
-// function getMonthName(mo) {
-//   mo = mo - 1;
-//   let months = [
-//     "Jan",
-//     "Feb",
-//     "Mar",
-//     "Apr",
-//     "May",
-//     "Jun",
-//     "Jul",
-//     "Aug",
-//     "Sep",
-//     "Oct",
-//     "Nov",
-//     "Dec",
-//   ];
-//   if (months[mo] !== undefined) {
-//     return months[mo];
-//   } else {
-//     throw new Error("Month out of bounds");
-//   }
+// function changeColor() {
+//   nIntervId = setInterval(flashText, 1000);
 // }
 
-// console.log(getMonthName(0));
-function UserException(message) {
-  this.message = message;
-  this.name = "UserException";
+// function stopTextColor() {
+//   clearInterval(nIntervId);
+// }
+
+function fuck() {
+  console.log("fuck!!!!!");
 }
 
-function getMonthName(mo) {
-  mo = mo - 1; // Adjust month number for array index (1 = Jan, 12 = Dec)
-  var months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  if (months[mo] !== undefined) {
-    return months[mo];
-  } else {
-    throw new Error("InvalidMonthNo");
-  }
+function panic() {
+  console.log("The fuck is coming, oh no...");
+  intId = setInterval(fuck, 2000);
 }
 
-console.log(getMonthName(10)); // Oct
-console.log(
-  getMonthName(1)
-); /* Uncaught Error: InvalidMonthNo
-at getMonthName (app.js:49)
-at app.js:54
-getMonthName @ app.js:49
-(anonymous) @ app.js:54
-*/
+function stopIt() {
+  console.log("plaf! enough");
+  clearInterval(intId);
+}
+
+panic();
+// The fuck is coming...
+// fuck (by n times)
+stopIt();
+// plaf! enough (stops fuck)
