@@ -1,5 +1,5 @@
 body {
-  background-color: black;
+  background-color: rgb(65, 63, 63);
 }
 
 h1 {
@@ -21,9 +21,4 @@ h1 {
 }
 .leaf-icon {
   background: linear-gradient(0.9turn, #1d0101, #b52626);
-}
-
-input {
-  color: red;
-  background-color: gray;
 }

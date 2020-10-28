@@ -142,3 +142,11 @@ next occurence of that word, and so on.
 `⌘ + \` split windows.
 `control + tab` switch opened windows.
 `⌘ + 1, 2, etc` swith group of opened windows.
+
+---
+
+## Chrome cool shortcuts
+
+`opt + ⌘ + i` inspector.  
+`opt + ⌘ + j` JS console.  
+`⌘ + k` clear console.

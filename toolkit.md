@@ -1,5 +1,6 @@
 # toolkit
 
+[decimal_places](###decimal_places)  
 [pwd](##password_function)  
 [avg](##average)  
 [string_to_array](###string_to_array)  
@@ -37,6 +38,9 @@
 
 [Function_picker](###Function_picker)
 [range_checker](###range_checker)
+[timer](###timer)
+[countdown](###countdown)
+[randomGame](###randomGame)
 
 ---
 
@@ -1258,4 +1262,70 @@ adult(40); //true
 
 let isNiceOutside = checkRange(65, 90);
 isNiceOutside(78); // true
+```
+
+### timer
+
+A timer with setTimeout and an anonymous function.
+
+```javascript
+function timer(time) {
+  let measure = time * 1000;
+  setTimeout(function () {
+    console.log("time is over");
+  }, measure);
+}
+
+timer(3); // (after 3 secs) time is over
+```
+
+### countdown
+
+Timer that counts from the given number to 0 and then displays an alert. Uses setInterval and callback function.
+
+```javascript
+function countDown(number) {
+  let sustractor = setInterval(function () {
+    number--;
+    if (number > 0) {
+      console.log(number);
+    } else {
+      console.log("DONE!");
+      clearInterval(sustractor);
+    }
+  }, 1000);
+}
+
+countDown(3); // 3 2 1 DONE!
+```
+
+### decimal_places
+
+Set the quantity of decimals for a number. For 2 decimals divide by 100, 3 decimals divide by 1000.
+
+```javascript
+let num = Math.round(Math.random() * 100) / 100;
+console.log(num); // 0.93
+```
+
+### randomGame
+
+The program selects a random number between 0 and 1 every 1000 miliseconds. Each time a random number is picked, adds 1 the the counter. If the number is greater than .75, stop the timer and console.log the number of tries it took to find a number greather than .75.
+
+```javascript
+function randomGame() {
+  let counter = 0;
+  let selector = setInterval(function () {
+    let num = Math.round(Math.random() * 100) / 100;
+    console.log(num);
+    counter++;
+
+    if (num > 0.75) {
+      clearInterval(selector);
+      console.log(`It took ${counter} tries`);
+    }
+  }, 1000);
+}
+
+randomGame(); // it took 3 tries.
 ```

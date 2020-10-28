@@ -1,27 +1,13 @@
-// function changeColor() {
-//   nIntervId = setInterval(flashText, 1000);
-// }
+const h1 = document.querySelector("h1");
+h1.innerText = "new texto";
+const caps = h1.innerText.toUpperCase();
+h1.innerText = caps;
+console.log(h1);
 
-// function stopTextColor() {
-//   clearInterval(nIntervId);
-// }
+h1.textContent = "changed again";
 
-function fuck() {
-  console.log("fuck!!!!!");
-}
-
-function panic() {
-  console.log("The fuck is coming, oh no...");
-  intId = setInterval(fuck, 2000);
-}
-
-function stopIt() {
-  console.log("plaf! enough");
-  clearInterval(intId);
-}
-
-panic();
-// The fuck is coming...
-// fuck (by n times)
-stopIt();
-// plaf! enough (stops fuck)
+const list = document.querySelector(".craigs-list.first ol");
+console.log(list.innerHTML);
+// add item to list:
+list.innerHTML += "<li class='new-item'>New item</li>";
+console.log(list.innerHTML);
