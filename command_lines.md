@@ -23,7 +23,8 @@
 ### Git part:
 
 1. `cd projectname` go to project's folder.
-1. - Check or set git settings:
+2. `git init` initialize repo.
+3. - Check or set git settings:
    - `git config user.name` existing local username (none if empty)
    - `git config user.name userName` create local username
    - `git config user.email` existing local email (none if empty)
@@ -35,18 +36,19 @@
 
    - (Create github repo)
 
-1. `git init` initializes de local directory as Git repository
-1. - `git add .` (mind the dot) stages ALL files for commit.
-   - `git add filename.extension` stage ONLY that file for commit.
-1. `git commit -m "Description of commit"` Commits changes and prepares them to be pushed.
+( 4. `git init` initializes de local directory as Git repository ) 5. - `git add .` (mind the space and dot) stages ALL files for commit.
+
+- `git add filename.extension` stage ONLY that file for commit.
+
+6. `git commit -m "Description of commit"` Commits changes and prepares them to be pushed.
 
    - `git status` check status ("nothing to commit" is fine). All changes will be here, if any.
    - `git log` returns commit hash of each file with changes to commit.
 
-1. #### GO BACK IN VERSION HISORY:
+7. #### GO BACK IN VERSION HISORY:
    1. - `git log` see all the hashes with their descriptions, and pick the one you want to come back to. (Type `q` to exit log list).
    2. - `git checkout hashNumber` this will go back the project to the desired hash version.
-1. #### BRANCHES (for experiments, new ideas, trying things before putting them in master branch)
+8. #### BRANCHES (for experiments, new ideas, trying things before putting them in master branch)
    1. - `git branch` list of existing branches.
    2. - `git branch nameOfBranch` creates new branch.
       - `git branch` check what branch are you in
@@ -54,7 +56,7 @@
    4. - `git add .` & `git commit -m "xx"` changes to branch.
       - (`git push -u origin branchName` pushes branch to github)
    5. - go to master branch, then: `git merge branchName` merges branchName into Master branch.
-1. #### Remove git
+9. #### Remove git
    - `rm -rf .git` remove all git.
    - `rm -rf .git*` remove all git and metadata.
 

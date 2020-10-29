@@ -25,7 +25,28 @@ under `viewport` tag.
 
 ### CSS (good luck):
 
-4.1- See `checklist.css` in this same folder for basic CSS setup and styling.
+```css
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: linear-gradient(120deg, #f6d365, #fda085);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+}
+
+header {
+  font-size: 1.5rem;
+  min-height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
 
 ### JAVASCRIPT
 

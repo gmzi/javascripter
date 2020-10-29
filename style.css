@@ -22,3 +22,17 @@ h1 {
 .leaf-icon {
   background: linear-gradient(0.9turn, #1d0101, #b52626);
 }
+
+img {
+  margin: 1rem;
+}
+
+.slang {
+  color: chartreuse;
+  background-color: cornflowerblue;
+}
+
+.slang-modified {
+  color: blueviolet;
+  background-color: brown;
+}
