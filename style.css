@@ -51,3 +51,21 @@ img {
   color: rgb(129, 84, 129);
   text-decoration: line-through;
 }
+
+.startline h1 {
+  text-align: center;
+  transition: all 1s;
+}
+
+.big {
+  transform: scale(3);
+  color: green;
+}
+.small {
+  transform: scale(0.5);
+  color: blue;
+}
+
+.chiqui {
+  width: 22rem;
+}

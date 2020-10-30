@@ -1346,7 +1346,7 @@ Adding and removing classes to style or animate:
 <li class="todo-item">task 1</li>
 ```
 
-2. I want that, once the task is completed, change its appearance, so I style both states of the item, one before completed, and after completed:
+2. I want that once the task is completed, the element change its appearance, so I style both states of the item, one before completed, and after completed:
 
 ```css
 .todo-item {
@@ -1359,7 +1359,7 @@ Adding and removing classes to style or animate:
 }
 ```
 
-3. Now add the `completed` clase on an html event:
+3. Now add the `completed` class on the html event:
 
 ```javascript
 todoTitle.classList.add("completed"); //
