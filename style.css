@@ -36,3 +36,18 @@ img {
   color: blueviolet;
   background-color: brown;
 }
+
+.todo-item {
+  font-size: 40px;
+  color: blanchedalmond;
+}
+
+.todo-item:hover {
+  background-color: rgba(66, 66, 211, 0.938);
+  transition: all 200ms;
+}
+
+.completed {
+  color: rgb(129, 84, 129);
+  text-decoration: line-through;
+}

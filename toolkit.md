@@ -1,5 +1,7 @@
 # toolkit
 
+## Functions
+
 [decimal_places](###decimal_places)  
 [pwd](##password_function)  
 [avg](##average)  
@@ -74,6 +76,10 @@
 [objectToQueryString](###objectToQueryString)  
 [findByValue](###findByValue)
 [shoppingCart](###shoppingCart)
+
+## HTML, CSS and Javascript combined
+
+[Add_and_remove_classes.](##Add_and_remove_classes.)
 
 ## password_function
 
@@ -1328,4 +1334,39 @@ function randomGame() {
 }
 
 randomGame(); // it took 3 tries.
+```
+
+## Add_and_remove_classes.
+
+Adding and removing classes to style or animate:
+
+1. Given an HTML element:
+
+```html
+<li class="todo-item">task 1</li>
+```
+
+2. I want that, once the task is completed, change its appearance, so I style both states of the item, one before completed, and after completed:
+
+```css
+.todo-item {
+  font-size: 40px;
+  color: blanchedalmond;
+}
+.completed {
+  color: rgb(129, 84, 129);
+  text-decoration: line-through;
+}
+```
+
+3. Now add the `completed` clase on an html event:
+
+```javascript
+todoTitle.classList.add("completed"); //
+```
+
+4. This will result in the html having both classes:
+
+```html
+<li class="todo-item completed">task 1</li>
 ```

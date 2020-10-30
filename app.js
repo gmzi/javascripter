@@ -6,16 +6,16 @@ console.log(h1);
 
 h1.textContent = "changed again";
 
-const list = document.querySelector(".craigs-list.first ol");
-console.log(list.innerHTML);
-// add item to list:
-list.innerHTML += "<li class='new-item'>New item</li>";
-console.log(list.innerHTML);
+const craigsList = document.querySelector(".craigs-list.first ol");
+console.log(craigsList.innerHTML);
+// add item to craigsList:
+craigsList.innerHTML += "<li class='new-item'>New item</li>";
+console.log(craigsList.innerHTML);
 h1.style.color = "blue";
 h1.style.backgroundColor = "orange";
 
-const listItems = document.querySelectorAll("li");
-for (let listItem of listItems) {
+const craigsItem = document.querySelectorAll(".craigs-list li");
+for (let listItem of craigsItem) {
   listItem.style.color = "red";
 }
 
@@ -56,3 +56,19 @@ console.log(inputValue);
 const range = document.querySelector("input[type='range']");
 range.value = 9;
 range.value = 1;
+
+// TODO LIST
+const todoItems = document.querySelectorAll(".todo-item");
+const todoTitle = document.querySelector(".todo-title");
+for (let item of todoItems) {
+  item.addEventListener("click", function () {
+    item.classList.toggle("completed");
+  });
+}
+
+function toggleAllTodos() {
+  for (let item of todoItems) {
+    item.classList.toggle("completed");
+  }
+}
+toggleAllTodos();

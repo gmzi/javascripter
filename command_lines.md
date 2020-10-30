@@ -152,3 +152,8 @@ next occurence of that word, and so on.
 `opt + ⌘ + i` inspector.  
 `opt + ⌘ + j` JS console.  
 `⌘ + k` clear console.
+
+## mac cool shortcuts
+
+`opt + F2` display preferences
+`opt + f10` sound preferences
