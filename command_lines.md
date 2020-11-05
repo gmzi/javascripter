@@ -139,7 +139,7 @@ Pipenv
 `.classname + tab` new div with class name given.  
 `⌘ + d` select word, press it again and select
 next occurence of that word, and so on.  
-`control + space` css context-specific options. (also `⌘ + i`)  
+`⌘ + i` context-specific options (CSS, HTML and JS)  
 `option + arrows` move entire line up or down.
 `⌘ + \` split windows.
 `control + tab` switch opened windows.

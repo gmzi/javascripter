@@ -1,24 +1,28 @@
-// Select the element form document object:
-const btnTeal = document.querySelector("#teal");
-// assign the property and write the function to be executed:
-btnTeal.onclick = function () {
-  bodyColor("teal");
-};
-// callback function:
-function bodyColor(color) {
-  document.querySelector("body").style.backgroundColor = color;
-}
+const clickMe = document.querySelector(".event-object p");
+clickMe.addEventListener("click", function (event) {
+  console.log(event);
+});
+//MouseEvent {isTrusted: true, screenX: 1247, screenY: 155, clientX: 59, clientY: 66, …}
 
-const btnPink = document.querySelector("#pink");
-
-btnPink.addEventListener("mouseover", function () {
-  bodyColor("pink");
+clickMe.addEventListener("click", function (event) {
+  console.log(event.target);
+  console.log(event.pageX);
+  console.log(event.pageY);
+  console.log(event.type);
 });
 
-const btnBodyAndTitle = document.querySelector("#body-title");
-const title = document.querySelector(".events h2");
+const body = document.querySelector("body");
+// body.addEventListener("keypress", function () {
+//   body.style.backgroundColor = "teal";
+// });
 
-btnBodyAndTitle.addEventListener("click", function () {
-  bodyColor("yellow");
-  title.style.backgroundColor = "blue";
+// body.addEventListener("keypress", function (e) {
+//   console.log(e.type); // keypress
+//   console.log(e.target); // <body style="background-color: teal;>...</body>"
+// });
+
+body.addEventListener("keydown", function (e) {
+  body.style.backgroundColor = "teal";
+  console.log(e.target);
+  console.log(e.timeStamp);
 });
