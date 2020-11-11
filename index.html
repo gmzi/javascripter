@@ -10,6 +10,74 @@
   </head>
 
   <body>
+    <section class="data-attributes">
+      <h1>Data attributes</h1>
+      <ul id="cars">
+        <li data-model="crv" data-year="2018" data-color="black">Toyota</li>
+        <li data-model="focus" data-year="2015" data-color="red">Ford</li>
+        <li data-model="civic" data-year="2020" data-color="blue">Honda</li>
+      </ul>
+    </section>
+    <section class="event-delegation">
+      <h2>Event delegation</h2>
+      <h3>This is a list that listens:</h3>
+      <ul id="listen-list">
+        <li class="listen-item">Item 1<button>Remove Item</button></li>
+        <li class="listen-item">Item 2<button>Remove Item</button></li>
+        <li class="listen-item">Item 3<button>Remove Item</button></li>
+      </ul>
+      <form id="add">
+        <label>Add friend:</label>
+        <input type="text" name="friend-name" placeholder="here">
+        <input type="submit">
+      </form>
+    </section>
+
+    <section class="multiple">
+      <h2>Event listener for multiple elements</h2>
+      <ul class="friends-list">
+        <li class="friend">Jose <button>UnFriend</button></li>
+        <li class="friend">Carla <button>UnFriend</button></li>
+        <li class="friend">Robert <button>UnFriend</button></li>
+        <li class="friend">Pipo <button>UnFriend</button></li>
+        <li class="friend">Roca <button>UnFriend</button></li>
+      </ul>
+      <h4>Add new friend</h4>
+      <form id="add-friend">
+        <label for="friend-name">Friend's name:</label>
+          <input type="text" name="friend-name" placeholder="Type friend's name">
+          <button>Add friend</button>
+      </form>
+    </section>
+    <section class="key-event">
+      <h2>Key events</h2>
+    </section>
+
+    <section class="forms">
+      <H1>Forms</H1>
+      <form>
+        Name: <input id="first-name" type="text">
+       <input type="submit">
+      </form>
+
+      <a href="https://www.infobae.com/america/">Go to shit</a>
+
+      <form id="no-input">
+        <h3>The no check checkbox</h3>
+        <p>Click one of the checkboxes below:</p>
+        <input type="checkbox">
+        <input type="checkbox">
+        <input type="checkbox">
+        <input type="checkbox">
+      </form>
+      <hr>
+      <form action="/mouseMapChallenge/index.html">
+        <input type="text">
+        <input type="submit" />
+      </form>
+    </section>
+
+
     <section class="event-object">
       <h3>Event object</h3>
       <p>Click me!!!!</p>

@@ -51,8 +51,8 @@ Affects text only (no tags, no style). For single content with no nested element
 ```
 
 ```javascript
-const h1 = document.querySelector("h1"); // Old text
-h1.innerText = "new texto"; // new texto
+const h1 = document.querySelector('h1'); // Old text
+h1.innerText = 'new texto'; // new texto
 const caps = h1.innerText.toUpperCase();
 h1.innerText = caps; // NEW TEXTO
 ```
@@ -63,7 +63,7 @@ It's a bit dumber than innerText, Converts tags and CSS into text, and is unawar
 
 ```javascript
 h1.textContent; // NEW TEXTO;
-h1.textContent = "changed again"; // changed again;
+h1.textContent = 'changed again'; // changed again;
 ```
 
 ## innerHTML
@@ -73,7 +73,7 @@ Affects text and tags.
 1. Reading:
 
 ```javascript
-const list = document.querySelector(".craigs-list.first ol");
+const list = document.querySelector('.craigs-list.first ol');
 list.innerHTML;
 /* 
 <li>craig 1</li>
@@ -108,23 +108,23 @@ h1.style.color; // ""
    Sets new property inline in the html. Good for just one property.
 
 ```javascript
-h1.style.color = "blue"; // <h1 style="color: blue;">changed again</h1>
-h1.style.backgroundColor = "orange";
+h1.style.color = 'blue'; // <h1 style="color: blue;">changed again</h1>
+h1.style.backgroundColor = 'orange';
 // <h1 style="color: blue; background-color: orange;">changed again</h1>
 ```
 
 ## style_multiple_elements
 
 ```javascript
-const listItems = document.querySelectorAll("li");
+const listItems = document.querySelectorAll('li');
 for (let listItem of listItems) {
-  listItem.style.color = "red";
+  listItem.style.color = 'red';
 }
 
-const imgs = document.querySelectorAll("img");
+const imgs = document.querySelectorAll('img');
 for (let img of imgs) {
-  img.style.width = "12rem";
-  img.style.border = "1px solid blue";
+  img.style.width = '12rem';
+  img.style.border = '1px solid blue';
 }
 ```
 
@@ -135,21 +135,21 @@ for (let img of imgs) {
 Only access an attribute.
 
 ```javascript
-const firstInput = document.querySelector("input");
-firstInput.getAttribute("type"); // text
-document.querySelector("input").getAttribute("id"); // caca
+const firstInput = document.querySelector('input');
+firstInput.getAttribute('type'); // text
+document.querySelector('input').getAttribute('id'); // caca
 ```
 
 ## setAttribute
 
 Removes previous classes of the element, if any (because adds inline style, which has higher jerarquy than the CSS file ones).
-`element.setAttribute("attName", "attValue");`.
+`element.setAttribute("attName", "NewValue");`.
 
 ```javascript
-firstInput.setAttribute("placeholder", "cague allá");
+firstInput.setAttribute('placeholder', 'cague allá');
 // modify class:
-const regularQuote = document.querySelector(".regular");
-regularQuote.setAttribute("class", "slang");
+const regularQuote = document.querySelector('.regular');
+regularQuote.setAttribute('class', 'slang');
 ```
 
 ## access_attr_directly
@@ -158,7 +158,7 @@ some attributes can be accessed and modified directly:
 
 ```javascript
 firstInput.id; // caca
-firstInput.id = "new-name"; // new-name
+firstInput.id = 'new-name'; // new-name
 ```
 
 ## classList
@@ -166,12 +166,12 @@ firstInput.id = "new-name"; // new-name
 Gives an array-like object to add, remove or toggle classes.
 
 ```javascript
-const todoTitle = document.querySelector(".todo-title");
+const todoTitle = document.querySelector('.todo-title');
 todoTitle.classList; // []
-todoTitle.classList.add("completed"); // [completed]
-todoTitle.classList.remove("completed"); // []
-todoTitle.classList.toggle("completed"); // true (if it on, it turns it off, if it's off, it turns it on.)
-todoTitle.classList.contains("completed"); // true
+todoTitle.classList.add('completed'); // [completed]
+todoTitle.classList.remove('completed'); // []
+todoTitle.classList.toggle('completed'); // true (if it on, it turns it off, if it's off, it turns it on.)
+todoTitle.classList.contains('completed'); // true
 ```
 
 ## className
@@ -179,7 +179,7 @@ todoTitle.classList.contains("completed"); // true
 Give a string with the name of the class.
 
 ```javascript
-const todoTitle = document.querySelector(".todo-title");
+const todoTitle = document.querySelector('.todo-title');
 todoTitle.className; // todo-title
 ```
 
@@ -189,26 +189,26 @@ When working with forms, we care about value attribute because it contains the u
 
 ```javascript
 // grab the form input field:
-const nameInput = document.querySelector(".name input");
+const nameInput = document.querySelector('.name input');
 // read the value:
 nameInput.value; // "whatever user wrote". This will appear in browser's console, not in javascript (yet).
 // store the value:
 const userInput = nameInput.value;
 // blank the form after use:
-input.value = "";
+input.value = '';
 //[ Modify the value:
-nameInput.value = "caca"; // caca ]
+nameInput.value = 'caca'; // caca ]
 ```
 
 ## createElement
 
 ```javascript
-const newButton = document.createElement("button");
-newButton.className = "new-button";
-const newUnorderedList = document.createElement("ul");
-const newDiv = document.createElement("div");
-newDiv.innerText = "a brand new div!!";
-newDiv.style.color = "tomato";
+const newButton = document.createElement('button');
+newButton.className = 'new-button';
+const newUnorderedList = document.createElement('ul');
+const newDiv = document.createElement('div');
+newDiv.innerText = 'a brand new div!!';
+newDiv.style.color = 'tomato';
 ```
 
 ## append
@@ -217,9 +217,9 @@ It's older version is `appendChild()`.
 Places the new child element after the last child.
 
 ```javascript
-const todoList = document.querySelector(".todo-list");
-const newTodo = document.createElement("li");
-newTodo.innerText = "buy scotch";
+const todoList = document.querySelector('.todo-list');
+const newTodo = document.createElement('li');
+newTodo.innerText = 'buy scotch';
 todoList.append(newTodo); /*
 task 1
 task 2
@@ -236,11 +236,11 @@ parentElement.append(child1, child2, etc);
 Append element containing nested element (e.g. a li with a <bold> text tag):
 
 ```javascript
-const myList = document.querySelector(".my-list");
-const newTodo = document.createElement("li");
-newTodo.className = "todo-item";
-const boldClass = document.createElement("b");
-boldClass.innerText = "This is important";
+const myList = document.querySelector('.my-list');
+const newTodo = document.createElement('li');
+newTodo.className = 'todo-item';
+const boldClass = document.createElement('b');
+boldClass.innerText = 'This is important';
 // append the style to the li:
 newTodo.append(boldStyle);
 // append the li to the list:
@@ -258,9 +258,9 @@ todoList.prepend(firstTodo); /*
 • task 1
 • task 2
 */
-const newImg = document.createElement("img");
-newImg.src = "./images/dog3.jpeg";
-newImg.className = "chiqui";
+const newImg = document.createElement('img');
+newImg.src = './images/dog3.jpeg';
+newImg.className = 'chiqui';
 document.body.prepend(newImg);
 // img of a little white dog with the shape of a sausage.
 ```
@@ -270,14 +270,14 @@ document.body.prepend(newImg);
 Just select the element:
 
 ```javascript
-const doneTask = document.querySelector("#done-task");
+const doneTask = document.querySelector('#done-task');
 doneTask.remove();
 ```
 
 Older version, removeChild(), select the parent and the element:
 
 ```javascript
-const ul = document.querySelector("ul");
+const ul = document.querySelector('ul');
 ul.removeChild(doneTask);
 ```
 
@@ -288,9 +288,9 @@ ul.removeChild(doneTask);
 (remember to query select element before making the check)
 
 ```javascript
-const div1 = document.querySelector(".finder div");
+const div1 = document.querySelector('.finder div');
 div1.parentElement; // <section class="finder">...</section>
-const button = document.querySelector(".finder button");
+const button = document.querySelector('.finder button');
 button.parentElement.remove();
 ```
 
@@ -299,7 +299,7 @@ button.parentElement.remove();
 Gives a collection of children element, and two highlighted:
 
 ```javascript
-const list = document.querySelector(".finder ul");
+const list = document.querySelector('.finder ul');
 div.children; // HTMLCollection(2) [p, ul]
 list.children; // HTMLCollection(3) [li, li, li]
 list.firstElementChild; // <li>First list item</li>
@@ -309,8 +309,8 @@ list.lastElementChild; // <li>Last list item</li>
 ## previous/nextElementSibling
 
 ```javascript
-const h1 = document.querySelector(".finder h1");
-const div2 = document.querySelector(".second-div");
+const h1 = document.querySelector('.finder h1');
+const div2 = document.querySelector('.second-div');
 
 h1.previousElementSibling; // null (if nothing before)
 h1.nextElementSibling; // <div>...</div>
@@ -323,7 +323,7 @@ div2.previousElementSibling.previousElementSibling; // two siblings up (<h1>Here
 Every Element is a Node, but not every Node is an Element. Can console.dir an object and check in "**proto**" if that is a node. Nodes includes line breaks, comments, etc.
 
 ```javascript
-const ul = document.querySelector(".finder ul");
+const ul = document.querySelector('.finder ul');
 const li2 = ul.lastElementChild;
 li2.childNodes; /*
 NodeList(3) [text, button, text]
@@ -345,18 +345,18 @@ __proto__: NodeList  */
 to query: preguntar. Works with CSS selectors. Newer fancy way. Combines all the getElement functionalities. Passes a CSS selector as a string. Returns only the first element that matches.
 
 ```javascript
-document.querySelector("#content"); // id
-document.querySelector(".craigs-list"); // class
-document.querySelector(".craigs-list.first"); // class & class
-document.querySelector("input"); // tag
-document.querySelector(".craigs-list h2"); // class & tag
-document.querySelector("h2.section-title"); // tag & class
+document.querySelector('#content'); // id
+document.querySelector('.craigs-list'); // class
+document.querySelector('.craigs-list.first'); // class & class
+document.querySelector('input'); // tag
+document.querySelector('.craigs-list h2'); // class & tag
+document.querySelector('h2.section-title'); // tag & class
 document.querySelector('input[type="range"]'); // assign CSS value;
 
 // two ways to access the same element:
-document.querySelector("form button"); // the button inside the form;
-let form = document.querySelector("form");
-form.querySelector("button"); // the same button, different strategy.
+document.querySelector('form button'); // the button inside the form;
+let form = document.querySelector('form');
+form.querySelector('button'); // the same button, different strategy.
 ```
 
 ### querySelectorAll
@@ -364,13 +364,13 @@ form.querySelector("button"); // the same button, different strategy.
 returns all matching elements.
 
 ```javascript
-document.querySelectorAll("input"); // all input tags
-document.querySelectorAll("h2.section-title"); // all h2 tags inside the class
-document.querySelectorAll("h3.section-title.country"); // all h3 tags inside the class and the subclass.
-document.querySelectorAll("body > hr"); // hr direct children of body, so not nested in other tags. Periphrasis: "hr's not nested".
-document.querySelectorAll(":not(p)"); // sudo class. "Everything that's not a paragraph".
-document.querySelectorAll("h2:nth-of-type(1)"); // first h2 in the page.
-document.querySelectorAll("h2:nth-of-type(3)"); // third h2 in the page.
+document.querySelectorAll('input'); // all input tags
+document.querySelectorAll('h2.section-title'); // all h2 tags inside the class
+document.querySelectorAll('h3.section-title.country'); // all h3 tags inside the class and the subclass.
+document.querySelectorAll('body > hr'); // hr direct children of body, so not nested in other tags. Periphrasis: "hr's not nested".
+document.querySelectorAll(':not(p)'); // sudo class. "Everything that's not a paragraph".
+document.querySelectorAll('h2:nth-of-type(1)'); // first h2 in the page.
+document.querySelectorAll('h2:nth-of-type(3)'); // third h2 in the page.
 
 /*
 NodeList(5) [input, input#name, input, input.number-A, input.number-B]
@@ -391,7 +391,7 @@ The NodeList is a kind of arrayish list, but not an array.
 Older rustic way.
 
 ```javascript
-document.getElementById("par1");
+document.getElementById('par1');
 ```
 
 ```html
@@ -404,7 +404,7 @@ Depending on what we select, it can be an HTMLDivElement, or a HTMLParagraphElem
 ### getElementsByTagName
 
 ```javascript
-document.getElementsByTagName("img");
+document.getElementsByTagName('img');
 /*
 HTMLCollection(5) [li, li, li, li, li]
 0: li
@@ -422,13 +422,13 @@ __proto__: HTMLCollection
 One class selection:
 
 ```javascript
-document.getElementsByClassName("craigs-list");
+document.getElementsByClassName('craigs-list');
 ```
 
 Two classes selection:
 
 ```javascript
-document.getElementsByClassName("craigs-list second"); // mind the space between class names.
+document.getElementsByClassName('craigs-list second'); // mind the space between class names.
 ```
 
 [full_doc](https://developer.mozilla.org/en-US/docs/Web/API/Document)

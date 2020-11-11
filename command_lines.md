@@ -36,7 +36,9 @@
 
    - (Create github repo)
 
-( 4. `git init` initializes de local directory as Git repository ) 5. - `git add .` (mind the space and dot) stages ALL files for commit.
+( 4. `git init` initializes de local directory as Git repository )  
+
+ 5. - `git add .` (mind the space and dot) stages ALL files for commit.
 
 - `git add filename.extension` stage ONLY that file for commit.
 
@@ -142,8 +144,9 @@ next occurence of that word, and so on.
 `⌘ + i` context-specific options (CSS, HTML and JS)  
 `option + arrows` move entire line up or down.
 `⌘ + \` split windows.
-`control + tab` switch opened windows.
-`⌘ + 1, 2, etc` swith group of opened windows.
+`control + tab` switch opened tabs.
+`⌘ + 1, 2, etc` swith group of tabs.
+" ⌘ + `" switch windows.
 
 ---
 

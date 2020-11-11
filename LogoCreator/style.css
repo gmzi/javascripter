@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(62, 50, 20);
+}
+
+h1 {
+  margin: 1rem 0;
+}
+
+form > input {
+  margin: 1rem 0.3rem;
+}
+
+.result {
+  border: 1px solid black;
+  margin-top: 0.2rem;
+}

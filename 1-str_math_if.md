@@ -1,65 +1,100 @@
 ## String methods
 
-1. toUpperCase
+[toUpperCase](###toUpperCase)  
+[trim](###trim)  
+[indexOf](###indexOf)  
+[slice](###slice)  
+[replace](###replace)  
+[parseInt](###parseInt)  
+[parseFloat](###parseFloat)
+
+[String_escapes](###String_escapes)
+
+## Conditional_statements
+
+[conditionals](##Conditional_statements)
+
+### Ternary_operator
+
+[ternary_operator](###Ternary_operator)
+
+## data types
+
+[dataTypes](##Primitive_data_types)
+
+### Mathematical_operations
+
+[Mathematical_operations](###Mathematical_operations)
+
+### Operators
+
+[logialOperators](###Logical_operators)  
+[operatorsPrecedence](####Operators_precedence)
+
+### Booleans
+
+[Booleans](###Booleans)
+
+### toUpperCase
 
 ```javascript
-let thing = "asdfgh";
+let thing = 'asdfgh';
 thing.toUpperCase(); // ASDFGH
 ```
 
-2. trim
+### trim
 
 ```javascript
-let color = " purple caqui ";
+let color = ' purple caqui ';
 color.trim(); //removes white spaces at beginning and end of string.
 ```
 
-3. indexOf
+### indexOf
 
 ```javascript
-let pipita = "hola mi nombre es Pipita";
-pipita.indexOf("f"); //-1 (absence of character)
-pipita.indexOf("es"); //15
+let pipita = 'hola mi nombre es Pipita';
+pipita.indexOf('f'); //-1 (absence of character)
+pipita.indexOf('es'); //15
 ```
 
-4. slice
+### slice
 
 Stores sliced in new variable.
 
 ```javascript
-let pipita = "hola mi nombre es Pipita";
+let pipita = 'hola mi nombre es Pipita';
 let pip = pipita.slice(15);
 console.log(pipita); //"hola mi nombre es Pipita"
 console.log(pip); // "es Pipita"
 let pup = pipita.slice(5, 14); // "mi nombre"
 ```
 
-5. replace
+### replace
 
 `str.replace("toRemove", "toInclude");`
 
 ```javascript
-let sor = pipita.replace("Pipita", "Sorete"); // "hola mi nombre es Sorete"
+let sor = pipita.replace('Pipita', 'Sorete'); // "hola mi nombre es Sorete"
 ```
 
-6. parseInt
+### parseInt
 
 Parse strings into integer number (watch out for NaN.)
 
 ```javascript
-parseInt("23"); // 23
-parseInt("23.34"); //23
-parseInt("I ate 3 ramps"); // NaN
-parseInt("33cents"); // 33
+parseInt('23'); // 23
+parseInt('23.34'); //23
+parseInt('I ate 3 ramps'); // NaN
+parseInt('33cents'); // 33
 ```
 
-7. parseFloat
+### parseFloat
 
 ```javascript
-parseFloat("23.43"); //23.43
-parseFloat("23"); //23
-parseFloat("I ate 3 ramps"); //NaN
-parseFloat("33.2cents"); //33.2
+parseFloat('23.43'); //23.43
+parseFloat('23'); //23
+parseFloat('I ate 3 ramps'); //NaN
+parseFloat('33.2cents'); //33.2
 ```
 
 CHAIN METHODS:
@@ -70,7 +105,31 @@ color.trim().toUpperCase();
 
 ---
 
-## Primitive data types
+### Ternary_operator
+
+Ternary operator
+
+one `if` and one `else` in a single line of code.
+
+```javascript
+condition ? runIfTrue : runIfFalse;
+// if condition is true, `runIfTrue` will run, else `runIfFalse` will run.
+```
+
+```javascript
+let num = 7;
+num === 7 ? console.log('lucky') : console.log('bad');
+
+// ternary in variable value:
+let status = 'offline';
+let color;
+
+let color = status === 'offline' ? 'red' : 'green';
+```
+
+---
+
+## Primitive_data_types
 
 - number
   - Integer
@@ -83,7 +142,7 @@ color.trim().toUpperCase();
 
 ---
 
-### Mathematical operations
+### Mathematical_operations
 
 In order of precedence:
 `()` Parenthesis always runs first.  
@@ -108,6 +167,27 @@ score += 1;
 score -= 10;
 bonusMult = 100;
 score *= bonusMult;
+```
+
+### The Math Object
+
+Collection of pieces of mathematical functionallity.
+
+```javascript
+Math.PI;
+
+Math.round(4.9); // 5
+
+Math.abs(-456); // 456
+
+Math.pow(2, 5); // 32
+
+Math.floor(3.9); // 3
+
+Math.random(); // random decimal between 0 and 1.
+
+// Get a random number between 1 and 88:
+Math.floor(Math.random() * 89) + 1;
 ```
 
 ---
@@ -140,7 +220,7 @@ Boolean([]); // true
 
 ---
 
-### String escapes
+### String_escapes
 
 - `\n` : new line
 - `\'` : single quote;
@@ -155,8 +235,8 @@ Strings that allow embeded information, which will be evaluated and turned into 
 
 ```javascript
 `You owe me ${100 + 53}`;
-let animal = "Pig";
-let sound = "oink";
+let animal = 'Pig';
+let sound = 'oink';
 `${animal} says ${sound.toUpperCase()}!`; // pig says OINK!
 ```
 
@@ -167,26 +247,7 @@ let loggedUser = null; //intentional absence of value. / must be assigned.
 let user = undefined; //variables that not have an assigned value.
 ```
 
-### The Math Object
-
-Collection of pieces of mathematical functionallity.
-
-```javascript
-Math.PI;
-
-Math.round(4.9); // 5
-
-Math.abs(-456); // 456
-
-Math.pow(2, 5); // 32
-
-Math.floor(3.9); // 3
-
-Math.random(); // random decimal between 0 and 1.
-
-// Get a random number between 1 and 88:
-Math.floor(Math.random() * 89) + 1;
-```
+---
 
 ### `typeof` operator
 
@@ -210,7 +271,7 @@ Strings characters are less or greater than others according to their Unicode va
 
     REPL: "read-evaluate-print-loop"
 
-## Conditional statements
+## Conditional_statements
 
 ### `if/ else if / else`
 
@@ -219,7 +280,7 @@ Strings characters are less or greater than others according to their Unicode va
 let num = 36;
 
 if (num % 2 !== 0) {
-  console.log("Odd number");
+  console.log('Odd number');
 }
 ```
 
@@ -229,13 +290,13 @@ Will run only one of the conditions.
 ```javascript
 let rating = 2;
 if (rating === 3) {
-  console.log("Your are a star");
+  console.log('Your are a star');
 } else if (rating === 2) {
   console.log("You're not a star");
 } else if (rating === 1) {
-  console.log("Needs improvement");
+  console.log('Needs improvement');
 } else {
-  console.log("nothing true before");
+  console.log('nothing true before');
 }
 ```
 
@@ -245,11 +306,11 @@ With `else if`, one of the statements will run:
 ```javascript
 let n = 10;
 if (n > 0) {
-  console.log("n first time");
+  console.log('n first time');
 } else if (n < 100) {
-  console.log("n second time");
+  console.log('n second time');
 } else {
-  console.log("not valid");
+  console.log('not valid');
 }
 //'n first time'.
 ```
@@ -258,12 +319,12 @@ With `if`, all the true statements will run:
 
 ```javascript
 if (n > 0) {
-  console.log("n first time");
+  console.log('n first time');
 }
 if (n < 100) {
-  console.log("n second time");
+  console.log('n second time');
 } else {
-  console.log("not valid");
+  console.log('not valid');
 }
 // 'n first time'
 // 'n second time'
@@ -277,13 +338,13 @@ Nest conditionals inside conditionals
 let password;
 
 if (password.length >= 6) {
-  if (password.indexOf(" ") === -1) {
-    console.log("valid password");
+  if (password.indexOf(' ') === -1) {
+    console.log('valid password');
   } else {
-    console.log("Password is long enough, but cannot contain spaces");
+    console.log('Password is long enough, but cannot contain spaces');
   }
 } else {
-  console.log("pwd must be longer");
+  console.log('pwd must be longer');
 }
 ```
 
@@ -297,36 +358,36 @@ let day = 5;
 
 switch (day) {
   case 1:
-    console.log("Monday");
+    console.log('Monday');
     break;
   case 2:
-    console.log("Tuesday");
+    console.log('Tuesday');
     break;
   case 3:
-    console.log("Wednesday");
+    console.log('Wednesday');
     break;
   default:
-    console.log("invalid day");
+    console.log('invalid day');
 }
 // Two or more variables each:
-let emoji = "eggplant";
+let emoji = 'eggplant';
 
 switch (emoji) {
-  case "sad face":
-  case "happy face":
-    console.log("yellow");
+  case 'sad face':
+  case 'happy face':
+    console.log('yellow');
     break;
-  case "eggplant":
-    console.log("purple");
+  case 'eggplant':
+    console.log('purple');
     break;
-  case "heart":
-  case "lips":
-    console.log("red");
+  case 'heart':
+  case 'lips':
+    console.log('red');
     break;
 }
 ```
 
-### Logical operators
+### Logical_operators
 
 `&&` both sides have to be true to execute
 
@@ -350,7 +411,7 @@ if (!loggedInUser) {
 }
 ```
 
-#### Operators precedence
+#### Operators_precedence
 
 Order of execution from first to last:
 `()` parenthesis run first.  
@@ -366,24 +427,6 @@ Order of execution from first to last:
 `&&` run second
 `||` run third.  
 To alter this order of precedence, add parenthesis.
-
-### Ternary operator
-
-one `if` and one `else` in a single line of code.
-
-`condition ? expIfTrue : expIfFalse`  
-"if condition is ture, `expIfTrue` will run, else `expIfFalse` will run".
-
-```javascript
-let num = 7;
-num === 7 ? console.log("lucky") : console.log("bad");
-
-// ternary in variable value:
-let status = "offline";
-let color;
-
-let color = status === "offline" ? "red" : "green";
-```
 
 ---
 
