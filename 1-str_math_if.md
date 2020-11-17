@@ -10,7 +10,7 @@
 
 [String_escapes](###String_escapes)
 
-## Conditional_statements
+## Conditional statements
 
 [conditionals](##Conditional_statements)
 

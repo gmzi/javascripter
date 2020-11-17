@@ -1291,7 +1291,7 @@ timer(3); // (after 3 secs) time is over
 
 ### countdown
 
-Timer that counts from the given number to 0 and then displays an alert. Uses setInterval and callback function.
+ that counts from the given number to 0 and then displays an alert. Uses setInterval and callback function.
 
 ```javascript
 function countDown(number) {
