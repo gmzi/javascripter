@@ -35,7 +35,7 @@ under `viewport` tag.
 body {
   background-image: linear-gradient(120deg, #f6d365, #fda085);
   color: white;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   min-height: 100vh;
 }
 
@@ -62,3 +62,7 @@ code here.
 ```
 
 6- Go back and forth creating elements and functionalities and styling them.
+
+### Git
+
+`git init` to track versions locally.
