@@ -43,6 +43,9 @@
 [timer](###timer)
 [countdown](###countdown)
 [randomGame](###randomGame)
+[removeDuplicates](###removeDuplicates)
+[removeFromArray](###removeFromArray)
+
 
 ---
 
@@ -83,7 +86,7 @@
 
 ## Cool things
 
-[backgroundColorPicker](###backgroundColorPicker)  
+[backgroundColorPicker](###backgroundColorPicker)
 
 ## password_function
 
@@ -100,13 +103,13 @@ Password must:
 function isValidPassword(password, username) {
   return (
     password.length >= 8 &&
-    !password.includes(" ") &&
+    !password.includes(' ') &&
     !password.includes(username)
   );
 }
 
-isValidPassword("89Fjj1nms", "dogLuvr"); //true
-isValidPassword("dogLuvr123!", "dogLuvr"); //false
+isValidPassword('89Fjj1nms', 'dogLuvr'); //true
+isValidPassword('dogLuvr123!', 'dogLuvr'); //false
 ```
 
 ## average
@@ -138,7 +141,7 @@ function stringToArray(string) {
   }
   return resultArray;
 }
-console.log(stringToArray("2,3,4,5"));
+console.log(stringToArray('2,3,4,5'));
 // ["2", ",", "3", ",", "4", ",", "5"]
 ```
 
@@ -148,14 +151,14 @@ array to string
 
 ```javascript
 function arrayToString(arr) {
-  let result = "";
+  let result = '';
   for (let char of arr) {
     result += char;
   }
   return result;
 }
 
-console.log(arrayToString(["a", "b", "c", 123, 4])); // "abc1234"
+console.log(arrayToString(['a', 'b', 'c', 123, 4])); // "abc1234"
 ```
 
 ## pangram_check
@@ -166,15 +169,15 @@ Make sure you ignore string casing!
 ```javascript
 function isPangram(sentence) {
   let cleanSentence = sentence.toLowerCase();
-  for (let char of "abcdefghijklmnopqrstuvwxyz") {
+  for (let char of 'abcdefghijklmnopqrstuvwxyz') {
     if (!cleanSentence.includes(char)) {
       return false;
     }
   }
   return true;
 }
-console.log(isPangram("The five boxing wizards jump quicklY")); // true
-console.log(isPangram("The five boxing wizards jump quick")); //false
+console.log(isPangram('The five boxing wizards jump quicklY')); // true
+console.log(isPangram('The five boxing wizards jump quick')); //false
 ```
 
 ### isPalindrome
@@ -183,11 +186,11 @@ Check if word of phrase is palindromic, returns true or false.
 
 ```javascript
 function isPalindrome(str) {
-  let reversed = "";
-  let cleanedStr = "";
+  let reversed = '';
+  let cleanedStr = '';
   // loop over str in reverse order:
   for (let i = str.length - 1; i >= 0; i--) {
-    if ("abcdefghijklmnopqrstuvwxyz".includes(str[i].toLowerCase())) {
+    if ('abcdefghijklmnopqrstuvwxyz'.includes(str[i].toLowerCase())) {
       // store and normalize to lowercase:
       reversed += str[i].toLowerCase();
     }
@@ -195,7 +198,7 @@ function isPalindrome(str) {
   // loop over str to get rid of spaces and punctuation symbols, storing only
   // the letters in lowercase:
   for (let i = 0; i < str.length; i++) {
-    if ("abcdefghijklmnopqrstuvwxyz".includes(str[i].toLowerCase())) {
+    if ('abcdefghijklmnopqrstuvwxyz'.includes(str[i].toLowerCase())) {
       cleanedStr += str[i].toLowerCase();
     }
   }
@@ -203,8 +206,8 @@ function isPalindrome(str) {
   return reversed === cleanedStr;
 }
 
-console.log(isPalindrome("No lemon, no melon")); // true
-console.log(isPalindrome("No lemon, no lemon")); // false
+console.log(isPalindrome('No lemon, no melon')); // true
+console.log(isPalindrome('No lemon, no lemon')); // false
 ```
 
 ### alphabetical
@@ -218,14 +221,14 @@ function alphabetical(str) {
     arrayed.push(char);
   }
   let ordered = arrayed.sort();
-  let stringed = "";
+  let stringed = '';
   for (let char of ordered) {
     stringed += char;
   }
   return stringed;
 }
 
-console.log(alphabetical("la reputa madre")); // aaadeelmprrtu
+console.log(alphabetical('la reputa madre')); // aaadeelmprrtu
 ```
 
 ### first_letter_uppercase
@@ -234,11 +237,11 @@ Loop over sentence and uppercase first letter of each word.
 
 ```javascript
 function firstLetterUppercase(str) {
-  let result = "";
+  let result = '';
   // loop over str
   for (let i = 0; i < str.length; i++) {
     // capture spaces inside the string
-    if (str[i] === " ") {
+    if (str[i] === ' ') {
       // after space, replace the lower case letter for it's capitalized version:
       str = str.replace(str[i + 1], str[i + 1].toUpperCase());
     }
@@ -247,7 +250,7 @@ function firstLetterUppercase(str) {
   return str.replace(str[0], str[0].toUpperCase());
 }
 
-console.log(firstLetterUppercase("the quick brown fox"));
+console.log(firstLetterUppercase('the quick brown fox'));
 // "The Quick Brown Fox"
 ```
 
@@ -258,7 +261,7 @@ Loop over string to find longest word and return it:
 ```javascript
 function longestWordInString(str) {
   // split str into an array:
-  let splited = str.split(" ");
+  let splited = str.split(' ');
   let lengths = [];
   // loop over `splited` and store word lengths:
   for (let word of splited) {
@@ -275,7 +278,7 @@ function longestWordInString(str) {
   }
 }
 
-console.log(longestWordInString("la requetecontra contra")); // requetecontra
+console.log(longestWordInString('la requetecontra contra')); // requetecontra
 ```
 
 ### num_of_vowels
@@ -285,7 +288,7 @@ Loop over string and return number of vowels:
 ```javascript
 function numOfVowels(str) {
   // list to compare:
-  let vowels = ["a", "e", "i", "o", "u"];
+  let vowels = ['a', 'e', 'i', 'o', 'u'];
   // store the loop
   let toCount = [];
   for (let char of str) {
@@ -298,7 +301,7 @@ function numOfVowels(str) {
   return toCount.length;
 }
 
-console.log(numOfVowels("The quick brown fox")); // 5
+console.log(numOfVowels('The quick brown fox')); // 5
 ```
 
 ## PICK_RANDOM_ITEM_FROM_ARRAY:
@@ -310,7 +313,7 @@ function randomPicker(arr) {
   let num = Math.floor(Math.random() * arr.length);
   return arr[num];
 }
-console.log(randomPicker([100, "a", 3, "b"])); //"b"
+console.log(randomPicker([100, 'a', 3, 'b'])); //"b"
 ```
 
 ## GENERATE_CARD_WITH_RANDOM_VALUE_AND_SUIT:
@@ -318,25 +321,25 @@ console.log(randomPicker([100, "a", 3, "b"])); //"b"
 ```javascript
 function getCard() {
   let card = {
-    value: "",
-    suit: "",
+    value: '',
+    suit: '',
   };
   let allValues = [
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "J",
-    "Q",
-    "K",
-    "A",
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    'J',
+    'Q',
+    'K',
+    'A',
   ];
-  let allSuits = ["clubs", "spades", "hearts", "diamonds"];
+  let allSuits = ['clubs', 'spades', 'hearts', 'diamonds'];
   card.value = randomPicker(allValues);
   card.suit = randomPicker(allSuits);
   return card;
@@ -399,7 +402,7 @@ function pickOne(item1, item2) {
   return item2;
 }
 
-console.log(pickOne("caca", "pedo")); // caca
+console.log(pickOne('caca', 'pedo')); // caca
 ```
 
 ## CHECK_RANGE
@@ -433,7 +436,7 @@ function indexOf(arr, item) {
   return -1;
 }
 
-console.log(indexOf([1, 5, 9, "a"], "a")); // 3
+console.log(indexOf([1, 5, 9, 'a'], 'a')); // 3
 ```
 
 ### lastIndexOf
@@ -450,7 +453,7 @@ function lastIndexOf(arr, item) {
   return -1;
 }
 
-console.log(lastIndexOf(["a", "f", "h"], "h")); // 2
+console.log(lastIndexOf(['a', 'f', 'h'], 'h')); // 2
 ```
 
 ### push
@@ -483,7 +486,7 @@ function pop(arr) {
   return lastValue;
 }
 
-var emptyArr = ["a", "b", "c", "d", "e"];
+var emptyArr = ['a', 'b', 'c', 'd', 'e'];
 console.log(emptyArr); // ["a", "b", "c", "d", "e"]
 console.log(pop(emptyArr)); // "e"
 console.log(emptyArr); // ["a", "b", "c", "d"]
@@ -537,7 +540,7 @@ function reverse(arr) {
   return arr;
 }
 
-var arru = ["a", "b", "c", "d", "e", "f", "g"];
+var arru = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 console.log(reverse(arru)); // ["g", "f", "e", "d", "c", "b", "a"]
 ```
 
@@ -559,7 +562,7 @@ function concat(arr1, arr2) {
 }
 
 let arri = [1, 2, 3];
-let arru = ["a", "b", "c"];
+let arru = ['a', 'b', 'c'];
 
 console.log(concat(arru, arri)); // ["a", "b", "c", 1, 2, 3]
 ```
@@ -680,7 +683,7 @@ function swapKeyAndValue(obj) {
   return newObj;
 }
 
-var instructor = { name: "Elie", job: "Instructor" };
+var instructor = { name: 'Elie', job: 'Instructor' };
 
 console.log(swapKeyAndValue(instructor));
 // {Elie: "name", Instructor: "job"};
@@ -707,8 +710,8 @@ function swapKeyAndGivenValue(obj, keyVal) {
   return newObj;
 }
 
-var instructor = { name: "Elie", job: "Instructor" };
-console.log(swapKeyAndValue(instructor, "name"));
+var instructor = { name: 'Elie', job: 'Instructor' };
+console.log(swapKeyAndValue(instructor, 'name'));
 // {Elie: "name", job: "Instructor"}
 ```
 
@@ -809,11 +812,11 @@ function pluck(arr, keyname) {
 }
 
 let alumni = [
-  { name: "Tim", school: "ffff" },
-  { name: "Matt", school: "aaaaa" },
-  { name: "Elie", school: "nnnnn" },
+  { name: 'Tim', school: 'ffff' },
+  { name: 'Matt', school: 'aaaaa' },
+  { name: 'Elie', school: 'nnnnn' },
 ];
-console.log(pluck(alumni, "name")); // ["Tim", "Matt", "Elie"]
+console.log(pluck(alumni, 'name')); // ["Tim", "Matt", "Elie"]
 ```
 
 ### findByValue
@@ -833,17 +836,17 @@ function findByValue(arr, value) {
 
 let discos = [
   {
-    artist: "flaco",
-    name: "pescado",
+    artist: 'flaco',
+    name: 'pescado',
     year: 1974,
   },
   {
-    artist: "gordo",
-    name: "ballena",
+    artist: 'gordo',
+    name: 'ballena',
     year: 2010,
   },
 ];
-console.log(findByValue(discos, "fLaco")); // {artist: "flaco", name: "pescado", year: 1974}
+console.log(findByValue(discos, 'fLaco')); // {artist: "flaco", name: "pescado", year: 1974}
 ```
 
 ### shoppingCart
@@ -853,23 +856,23 @@ Sum and average quantities and prices of objects.
 ```javascript
 const shoppingCart = [
   {
-    product: "Jenga",
+    product: 'Jenga',
     price: 4.3,
     quantity: 1,
   },
   {
-    product: "Echo dot",
+    product: 'Echo dot',
     price: 54.56,
     quantity: 3,
   },
   {
-    product: "Fire stick",
+    product: 'Fire stick',
     price: 121322.34,
     quantity: 3,
   },
 ];
 // Variables to fill with the loop:
-let productDetail = "";
+let productDetail = '';
 let totalItems = 0;
 let totalPrice = 0;
 // Loop over object:
@@ -938,7 +941,7 @@ function minMaxKeyInObject(obj) {
   return allArr;
 }
 
-console.log(minMaxKeyInObject({ 2: "a", 7: "b", 1: "c", 10: "d", 4: "e" }));
+console.log(minMaxKeyInObject({ 2: 'a', 7: 'b', 1: 'c', 10: 'd', 4: 'e' }));
 // [1, 10]
 ```
 
@@ -948,7 +951,7 @@ Scans object properties and returns a string literal with key and value pairs in
 
 ```javascript
 function stringFromObject(obj) {
-  let propString = "";
+  let propString = '';
   for (let prop in obj) {
     propString += `${prop} = ${obj[prop]}, `;
   }
@@ -957,7 +960,7 @@ function stringFromObject(obj) {
 }
 
 console.log(
-  stringFromObject({ name: "Elie", job: "Instructor", isCatOwner: false })
+  stringFromObject({ name: 'Elie', job: 'Instructor', isCatOwner: false })
 );
 // "name = Elie, job = Instructor, isCatOwner = false"
 ```
@@ -969,11 +972,11 @@ Converts object into queryString, looping over object keys and values, when valu
 ```javascript
 function objectToQueryString(obj) {
   // place to store keys and values when looping:
-  let qstring = "";
+  let qstring = '';
   // loop over object to extract keys and values:
   for (let prop in obj) {
     // Capture the array if there's one:
-    if (typeof obj[prop] === "object") {
+    if (typeof obj[prop] === 'object') {
       // loop inside the array to extract it's values:
       for (let num of obj[prop]) {
         // push values into main storage with string literal:
@@ -1012,7 +1015,7 @@ function countNumbers(arr) {
   return isNumber.length;
 }
 
-console.log(countNumbers(["4", "1", "0", "NaN"])); // 3
+console.log(countNumbers(['4', '1', '0', 'NaN'])); // 3
 ```
 
 ### totalCaps
@@ -1038,7 +1041,7 @@ function totalCaps(arr) {
   //count total and return:
   return allUppercase.length;
 }
-console.log(totalCaps(["AwesomE", "ThIngs", "hAppEning", "HerE"])); // 8
+console.log(totalCaps(['AwesomE', 'ThIngs', 'hAppEning', 'HerE'])); // 8
 ```
 
 ### rankingOfNumbers
@@ -1102,7 +1105,7 @@ function strLetterCount(word) {
   // now transform the object in a string, so as to return the
   // information in the form of a string.
   // Create the storage variable for the loop:
-  let result = "";
+  let result = '';
   // loop over object, and add it's value and pairs to the
   // string:
   for (let keyVal in letters) {
@@ -1111,7 +1114,7 @@ function strLetterCount(word) {
   return result;
 }
 
-console.log(strLetterCount("coconut")); // "c2o2n1u1t1"
+console.log(strLetterCount('coconut')); // "c2o2n1u1t1"
 ```
 
 ### subset_of_str
@@ -1129,7 +1132,7 @@ function combineLetters(str) {
   return result;
 }
 
-console.log(combineLetters("dog")); // ["d", "do", "dog", "o", "og", "g"]
+console.log(combineLetters('dog')); // ["d", "do", "dog", "o", "og", "g"]
 ```
 
 ### multiplesOf
@@ -1216,7 +1219,7 @@ while (guess !== target) {
 // log machine attempts till target and guess match:
 console.log(`Target: ${target} Guess: ${guess}`);
 // log message once machine wins:
-console.log("Machine wins");
+console.log('Machine wins');
 /*
 Target: 1 Guess: 4
 Target: 1 Guess: 7
@@ -1282,7 +1285,7 @@ A timer with setTimeout and an anonymous function.
 function timer(time) {
   let measure = time * 1000;
   setTimeout(function () {
-    console.log("time is over");
+    console.log('time is over');
   }, measure);
 }
 
@@ -1291,7 +1294,7 @@ timer(3); // (after 3 secs) time is over
 
 ### countdown
 
- that counts from the given number to 0 and then displays an alert. Uses setInterval and callback function.
+that counts from the given number to 0 and then displays an alert. Uses setInterval and callback function.
 
 ```javascript
 function countDown(number) {
@@ -1300,7 +1303,7 @@ function countDown(number) {
     if (number > 0) {
       console.log(number);
     } else {
-      console.log("DONE!");
+      console.log('DONE!');
       clearInterval(sustractor);
     }
   }, 1000);
@@ -1366,7 +1369,7 @@ Adding and removing classes to style or animate:
 3. Now add the `completed` class on the html event:
 
 ```javascript
-todoTitle.classList.add("completed"); //
+todoTitle.classList.add('completed'); //
 ```
 
 4. This will result in the html having both classes:
@@ -1380,8 +1383,8 @@ todoTitle.classList.add("completed"); //
 Move cursor over body to change background color
 
 ```javascript
-const body = document.querySelector("body");
-body.addEventListener("mousemove", function (e) {
+const body = document.querySelector('body');
+body.addEventListener('mousemove', function (e) {
   let width = Math.round((e.pageX * 255) / window.innerWidth);
   let height = Math.round((e.pageY * 255) / window.innerHeight);
   let diagonal = Math.round(width + height / 255);
@@ -1401,4 +1404,35 @@ body.addEventListener("mousemove", function (e) {
   console.log(`height ${height}`);
   console.log(`diagonal ${diagonal}`);
 });
+```
+
+### removeDuplicates
+
+Works on strings and arrays.
+
+```javascript
+function removeDuplicates(values) {
+  const arr = [...new Set(values)];
+  if (typeof values === 'string') return arr.join('');
+  return arr;
+}
+
+let arr1 = [1, 3, 3, 45, 4, 4];
+let str1 = 'caca';
+removeDuplicates(arr1); // [1, 3, 45, 4]
+removeDuplicates(str1); // "ca"
+```
+
+### removeFromArray
+
+Removes given item from array
+
+```javascript
+function removeFromArray(arr, value) {
+  return arr.filter((el) => {
+    return el !== value;
+  });
+}
+let arr5 = [1, 2, 3];
+removeFromArray(arr5, 3); // [1, 2]
 ```

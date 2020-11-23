@@ -7,6 +7,7 @@
 [Arrays_inside_Objects](###Arrays_inside_Objects)
 [Objects_inside_Arrays](###Objects_inside_Arrays)
 [Equality](###Equality)
+[Function_to_object:](###Function_to_object:)
 
 Collection of related variables and functions. Inside objects, variables are called `property` and functions are called `methods`, both act as keys within objects, and each `key` is assigned a `value` in form of `key:value` pairs. Objects can content Reference Data Types and Primitive Data Types.
 
@@ -239,9 +240,9 @@ if (!user.notifications.length) {
 }
 ```
 
-### Add function to an object:
+### Function_to_object:
 
-Function as a mathod for an object, like a value for a given key.
+Function as a method for an object, like a value for a given key.
 
 ```javascript
 //define funtion:

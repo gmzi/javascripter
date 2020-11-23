@@ -1,5 +1,6 @@
 ## String methods
 
+[toFixed](###toFixed)  
 [toUpperCase](###toUpperCase)  
 [trim](###trim)  
 [indexOf](###indexOf)  
@@ -35,12 +36,21 @@
 
 [Booleans](###Booleans)
 
+### toFixed
+
+Transforms number into string
+
+````javascript
+let averga = (25.344444).toFixed(2);
+averga // "25.34"
+```
+
 ### toUpperCase
 
 ```javascript
 let thing = 'asdfgh';
 thing.toUpperCase(); // ASDFGH
-```
+````
 
 ### trim
 

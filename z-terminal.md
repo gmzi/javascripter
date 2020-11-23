@@ -97,7 +97,7 @@
 - `⌘ + \` split windows.
 - `control + tab` switch opened tabs.
 - `⌘ + 1, 2, etc` swith group of tabs.
-- `⌘ +` switch windows.
+- "⌘ + `" switch windows.
 - `opt + ⌘ + up/down arrows` add cursors.
 
 ---
