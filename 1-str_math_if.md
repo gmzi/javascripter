@@ -1,4 +1,4 @@
-## String methods
+1. String methods
 
 [toFixed](###toFixed)  
 [toUpperCase](###toUpperCase)  
@@ -8,41 +8,44 @@
 [replace](###replace)  
 [parseInt](###parseInt)  
 [parseFloat](###parseFloat)
+[repeat](###repeat)
 
-[String_escapes](###String_escapes)
+2. [String_escapes](###String_escapes)
 
-## Conditional statements
+3. Conditional statements
 
 [conditionals](##Conditional_statements)
 
-### Ternary_operator
+4. Ternary_operator
 
 [ternary_operator](###Ternary_operator)
 
-## data types
+5. data types
 
 [dataTypes](##Primitive_data_types)
 
-### Mathematical_operations
+6. Math
 
-[Mathematical_operations](###Mathematical_operations)
+[Math](###Math)
 
-### Operators
+7. Operators
 
-[logialOperators](###Logical_operators)  
+[logicalOperators](###Logical_operators)  
 [operatorsPrecedence](####Operators_precedence)
 
-### Booleans
+8. Booleans
 
 [Booleans](###Booleans)
+
+---
 
 ### toFixed
 
 Transforms number into string
 
-````javascript
+```javascript
 let averga = (25.344444).toFixed(2);
-averga // "25.34"
+averga; // "25.34"
 ```
 
 ### toUpperCase
@@ -50,7 +53,7 @@ averga // "25.34"
 ```javascript
 let thing = 'asdfgh';
 thing.toUpperCase(); // ASDFGH
-````
+```
 
 ### trim
 
@@ -107,6 +110,13 @@ parseFloat('I ate 3 ramps'); //NaN
 parseFloat('33.2cents'); //33.2
 ```
 
+### repeat
+
+```javascript
+'caca'.repeat(3);
+// "cacacacacaca"
+```
+
 CHAIN METHODS:
 
 ```javascript
@@ -152,7 +162,9 @@ let color = status === 'offline' ? 'red' : 'green';
 
 ---
 
-### Mathematical_operations
+### Math
+
+#### operators
 
 In order of precedence:
 `()` Parenthesis always runs first.  
@@ -166,6 +178,8 @@ If same precedence, execute from left to right.
 `1.5 + 1.5 * 2; // 4.5`
 `10 % 6 ** 2; //16`
 `200 + 0 / 0; // NaN`
+
+`0` is considered an even number.
 
 ### Ternary operators
 

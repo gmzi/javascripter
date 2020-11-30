@@ -12,8 +12,10 @@
 [alphabetical](###alphabetical)  
 [first_letter_uppercase](###first_letter_uppercase)  
 [longest_word](###longest_word)  
-[num_of_vowels](###num_of_vowels)  
+[num_of_vowels](###num_of_vowels)
+[containsVowels](###containsVowels)  
 [str_letter_count](###str_letter_count)
+[letterCount](###letterCount)
 
 [random_itm](##PICK_RANDOM_ITEM_FROM_ARRAY:)  
 [random_card](##GENERATE_CARD_WITH_RANDOM_VALUE_AND_SUIT:)  
@@ -45,7 +47,6 @@
 [randomGame](###randomGame)
 [removeDuplicates](###removeDuplicates)
 [removeFromArray](###removeFromArray)
-
 
 ---
 
@@ -79,10 +80,12 @@
 [objectToQueryString](###objectToQueryString)  
 [findByValue](###findByValue)
 [shoppingCart](###shoppingCart)
+[map](###map)
 
 ## HTML, CSS and Javascript combined
 
 [Add_and_remove_classes.](##Add_and_remove_classes.)
+[checkboxes]
 
 ## Cool things
 
@@ -304,6 +307,35 @@ function numOfVowels(str) {
 console.log(numOfVowels('The quick brown fox')); // 5
 ```
 
+### containsVowels
+
+filter array of words containing vowels. Use indexOf and filter.
+
+```javascript
+const words = ['ffff', 'aaaa', 'fafa'];
+// check word
+const containsVowel = function (word) {
+  for (let char of word) {
+    if (isVowel(char)) return true;
+  }
+  return false;
+};
+
+// check character
+const isVowel = function (char) {
+  return 'aeiou'.indexOf(char) !== -1;
+};
+
+// filter
+const yesVowels = words.filter(containsVowel);
+console.log(yesVowels); // ["aaaa", "fafa"]
+
+const noVowels = words.filter(function (word) {
+  return !containsVowel(word);
+});
+console.log(noVowels); // ["ffff"]
+```
+
 ## PICK_RANDOM_ITEM_FROM_ARRAY:
 
 Picks one random item from given array.
@@ -365,7 +397,6 @@ console.log(doubleArr([6, 10])); // 12, 20
 ## CALCULATOR\_(ARRAY OF FUNCTIONS)
 
 ```javascript
-// Declare all the functions:
 function add(x, y) {
   return x + y;
 }
@@ -382,11 +413,10 @@ const divide = function (x, y) {
   return x / y;
 };
 
-//Store them in an array:
-const operations = [add, substract, multiply, divide];
-
-// Call a function by index position:
-operations[3](54, 3); // 18
+function doMath(number1, number2, operation) {
+  return operation(number1, number2);
+}
+doMath(3, 2, multiply); // 6
 ```
 
 ## PICK_ONE_OF_TWO:
@@ -922,6 +952,19 @@ function twoHighest(arr) {
 console.log(twoHighest([1, 2, 10, 8])); // [8,10]
 ```
 
+### lowest_number
+
+Find lowest or highest number of array:
+
+```javascript
+const numbers = [2, 5, 423423423, 43, 23];
+let starter = numbers[0];
+for (let i = 1; i < numbers.length; i++) {
+  if (numbers[i] < starter) starter = numbers[i];
+}
+starter; // 2
+```
+
 ### minMaxKeyInObject
 
 Extract object's keynames and sorts them.
@@ -1115,6 +1158,54 @@ function strLetterCount(word) {
 }
 
 console.log(strLetterCount('coconut')); // "c2o2n1u1t1"
+```
+
+### letterCount
+
+```javascript
+const str = 'caca';
+
+function letterCount(str) {
+  const charCount = {};
+  for (let char of str) {
+    if (charCount[char]) {
+      charCount[char] += 1;
+    } else {
+      charCount[char] = 1;
+    }
+  }
+  return charCount;
+}
+
+letterCount(str); // {c: 2, a: 2}
+```
+
+### vowelCount
+
+Count vowels of a string. First convert the string into an array, then forEach over the array and return object with key as vowel and value as number of appearances.
+
+```javascript
+function vowelCount(str) {
+  const clean = str.toLowerCase();
+  let arrayed = [];
+  for (let char of clean) {
+    arrayed.push(char);
+  }
+  const vowels = arrayed.filter(function (char) {
+    return 'aeiou'.indexOf(char) !== -1;
+  });
+  let result = {};
+  vowels.forEach(function (char) {
+    return (result[char] = 0);
+  });
+  for (let i = 0; i < vowels.length; i++) {
+    result[vowels[i]] += 1;
+  }
+  return result;
+}
+// vowelCount('Elie') // {e:2,i:1};
+// vowelCount('Tim') // {i:1};
+// vowelCount('Matt') // {a:1})
 ```
 
 ### subset_of_str
@@ -1378,6 +1469,29 @@ todoTitle.classList.add('completed'); //
 <li class="todo-item completed">task 1</li>
 ```
 
+### checkboxes
+
+Check if all checkboxes are checked or not.
+
+```javascript
+// grab elements from html:
+const checkBoxes = document.querySelectorAll(
+  '#no-input input[type="checkbox"]'
+);
+const btnNo = document.querySelector('#no');
+
+// convert Nodelist into array so we can apply the method:
+const checks = Array.from(checkBoxes);
+
+//
+btnNo.addEventListener('click', function (e) {
+  // check if every box is checked
+  let allChecked = checks.every(function (box) {
+    return box.checked;
+  });
+}); // returns true or false
+```
+
 ### backgroundColorPicker
 
 Move cursor over body to change background color
@@ -1423,6 +1537,21 @@ removeDuplicates(arr1); // [1, 3, 45, 4]
 removeDuplicates(str1); // "ca"
 ```
 
+### hasNoDuplicates
+
+True if array has no duplicates, false if array has duplicates
+
+```javascript
+function hasNoDuplicates(arr) {
+  let noDups = arr.every(function (num) {
+    return arr.indexOf(num) === arr.lastIndexOf(num);
+  });
+  return noDups;
+}
+hasNoDuplicates([1, 2, 3, 1]); // false
+hasNoDuplicates([1, 2, 3]); // true
+```
+
 ### removeFromArray
 
 Removes given item from array
@@ -1436,3 +1565,30 @@ function removeFromArray(arr, value) {
 let arr5 = [1, 2, 3];
 removeFromArray(arr5, 3); // [1, 2]
 ```
+
+### map
+
+Map over array of objects to get one of it's properties:
+
+```javascript
+const todos = [
+  {
+    id: 3,
+    text: 'walk the dog',
+    priority: 'high',
+  },
+  {
+    id: 2,
+    text: 'park car',
+    priority: 'low',
+  },
+];
+
+const todoText = todos.map(function (todo) {
+  return todo.text;
+});
+
+todoText; // ["walk the dog", "park car"]
+```
+
+### containsVowels

@@ -23,7 +23,7 @@
   - `cd ~` change directory to home.
 - `cd ..` go one level backwards.
 - `man + commandName` manual of given command (`q` to get out of it, enter to scroll)
-- `mv ~/projects/nameOfDir ~/projects/new-name-of-dir` rename directory.
+
 
 2. Create
 
@@ -57,6 +57,7 @@
 - `mv folderName path/to/folder` move folder
 - `mv coca_cola_formula.txt folder1/formula.txt` move file and rename it.
 - `mv fileName.txt newFileName.txt` rename file
+- `mv ~/projects/nameOfDir ~/projects/new-name-of-dir` rename directory.
 
 7. copy
 
