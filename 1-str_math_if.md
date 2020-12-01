@@ -132,8 +132,8 @@ Ternary operator
 one `if` and one `else` in a single line of code.
 
 ```javascript
-condition ? runIfTrue : runIfFalse;
-// if condition is true, `runIfTrue` will run, else `runIfFalse` will run.
+a + b ? return/run some : return/run other;
+// if A is greater than B ? return this : else runOther.
 ```
 
 ```javascript

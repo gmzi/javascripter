@@ -2,6 +2,7 @@
 
 ### Array methods
 
+[split](##split) (str into array)  
 [push()](##push) (add to the end).
 [pop()](##pop) (remove from end & return value)
 [unshift()](##unshift) (add to start).
@@ -72,7 +73,38 @@ links; // [link1, link2, link3];
 
 ## reduce
 
-Take an array with multiple values and reduce them to a single value.
+Take an array with multiple values and reduce them to a single value. Whatever is returned from the callback, becomes the new value of the accumulator.
+First parameter is the accumulator, second parameter is the next value in array. Will perform callback on each parameter, and whatever is returned becomes the accumulator.
+
+One parameter:
+
+```javascript
+let evenNumbers = [2, 4, 6, 8];
+
+evenNumbers.reduce(function (accumulator, nextValue) {
+  return accumulator + nextValue;
+}); // 20
+```
+
+Second optional parameter sets the initial value of the accumulator:
+
+```javascript
+// Find smallest value in two arrays:
+
+// Min value of arr1:
+const arr1MinValue = arr1.reduce(function (accum, nextVal) {
+  return nextVal < accum ? nextVal : accum;
+});
+
+// Min value of both,
+// reduce arr2:
+const allMin = arr2.reduce(function (accum, nextVal) {
+  return nextVal < accum ? nextVal : accum;
+  // set arr1Min as initial accum value:
+}, arr1MinValue);
+
+allMin; // 1
+```
 
 ## find
 
@@ -192,7 +224,7 @@ Returns UNDEFINED always (no matter what)
 The goal of this is call some function for every item in an array.
 For of is newer and maybe better.
 
-````javascript
+```javascript
 const colors = ['teal', 'cyan', 'peach', 'purple'];
 
 colors.forEach(function (val, index, arr) {
@@ -206,14 +238,24 @@ At index 3 is color purple
 */
 ```
 
-## `push()`
+## split
+
+String to array
+
+```javascript
+let palabra = 'caca';
+let array = palabra.split('');
+array; // ["c", "a", "c", "a"]
+```
+
+## push
 
 Add item to end of list.
 
 ```javascript
 colors.push('onion-white');
 colors.push('gray', 'darkie');
-````
+```
 
 ## `pop()`
 

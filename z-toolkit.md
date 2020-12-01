@@ -13,6 +13,7 @@
 [first_letter_uppercase](###first_letter_uppercase)  
 [longest_word](###longest_word)  
 [num_of_vowels](###num_of_vowels)
+[vowelCount](###vowelCount)  
 [containsVowels](###containsVowels)  
 [str_letter_count](###str_letter_count)
 [letterCount](###letterCount)
@@ -28,6 +29,8 @@
 [generatePairs](###generatePairs)  
 [multiples](###multiples)  
 [twoHighest](###twoHighest)  
+[lowest_number](###lowest_number)
+[lowest_number_with_reduce](###lowest_number_with_reduce)  
 [countNumbers](###countNumbers)  
 [totalCaps](###totalCaps)  
 [subset_of_str](###subset_of_str)  
@@ -71,11 +74,13 @@
 
 [Object.keys](###Object.keys)  
 [Object.values](###Object.values)  
+[addKeyAndValue](###addKeyAndValue)  
 [Object.entries](###Object.entries)  
 [swapKeyValue](###swapKeyValue)  
 [swapKeyAndGivenValue](###swapKeyAndGivenValue)  
 [minMaxKeyInObject](###minMaxKeyInObject)  
 [pluckObject](###pluckObject)  
+[pluck_object_reduce](###pluck_object_reduce)  
 [stringFromObject](###stringFromObject)  
 [objectToQueryString](###objectToQueryString)  
 [findByValue](###findByValue)
@@ -305,6 +310,28 @@ function numOfVowels(str) {
 }
 
 console.log(numOfVowels('The quick brown fox')); // 5
+```
+
+### vowelCount
+
+Loop over string and return number of vowels, using reduce
+
+```javascript
+function vowelCount1(str) {
+  const letters = str.toLowerCase().split('');
+  return letters.reduce(function (accumulator, nextValue) {
+    if ('aeiou'.indexOf(nextValue) !== -1) {
+      if (accumulator[nextValue]) {
+        accumulator[nextValue]++;
+      } else {
+        accumulator[nextValue] = 1;
+      }
+    }
+    return accumulator;
+  }, {});
+}
+
+console.log(vowelCount1('Elie')); // {e: 2, i: 1}
 ```
 
 ### containsVowels
@@ -702,6 +729,34 @@ var obj = { a: 1, b: 2, c: 3 };
 console.log(values(obj)); // [1, 2, 3]
 ```
 
+### addKeyAndValue
+
+Add key and value to array of objects using reduce
+
+```javascript
+const arr = [
+  { name: 'Elie' },
+  { name: 'Tim' },
+  { name: 'Matt' },
+  { name: 'Colt' },
+];
+
+function addKeyAndValue1(arr, key, value) {
+  return arr.reduce(function (accumulator, nextValue, index) {
+    accumulator[index][key] = value;
+    return accumulator;
+  }, arr);
+}
+
+console.log(addKeyAndValue1(arr, 'title', 'Instructor'));
+/*
+{name: "Elie", title: "Instructor"}
+{name: "Tim", title: "Instructor"}
+{name: "Matt", title: "Instructor"}
+{name: "Colt", title: "Instructor"}
+*/
+```
+
 ### swapKeyValue
 
 ```javascript
@@ -849,6 +904,29 @@ let alumni = [
 console.log(pluck(alumni, 'name')); // ["Tim", "Matt", "Elie"]
 ```
 
+### pluck_object_reduce
+
+Extract values for given key from object using reduce
+
+```javascript
+const arr = [
+  { name: 'Elie', age: 23 },
+  { name: 'Tim', age: 23 },
+  { name: 'Matt', age: 23 },
+  { name: 'Colt', age: 23 },
+];
+
+function extractValue1(arr, key) {
+  const result = [];
+  arr.reduce(function (acc, next) {
+    result.push(next[key]);
+  }, arr[0]);
+  return result;
+}
+
+extractValue1(arr, 'name'); // ["Elie", "Tim", "Matt", "Colt"]
+```
+
 ### findByValue
 
 in array of objects, find objects by one of it's values, return those single objects:
@@ -963,6 +1041,34 @@ for (let i = 1; i < numbers.length; i++) {
   if (numbers[i] < starter) starter = numbers[i];
 }
 starter; // 2
+```
+
+### lowest_number_with_reduce
+
+Find lowest value in array using reduce
+
+```javascript
+const scores = [23, 34, 3, 245, 1, 5];
+
+function minValue(arr) {
+  const result = arr.reduce(function (min, nextNumber) {
+    if (nextNumber < min) {
+      return nextNumber;
+    }
+    return min;
+  });
+  return result;
+}
+
+minValue(scores); // 1
+
+// Rephrased with ternary operator:
+function minValue(arr) {
+  const result = arr.reduce(function (min, nextNumber) {
+    return nextNumber < min ? nextNumber : min;
+  });
+  return result;
+}
 ```
 
 ### minMaxKeyInObject
