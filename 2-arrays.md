@@ -89,6 +89,12 @@ evenNumbers.reduce(function (accumulator, nextValue) {
 Second optional parameter sets the initial value of the accumulator:
 
 ```javascript
+// CALCULATE AVERAGE
+const arr1 = [5, 6, 7, 8];
+const average = arr1.reduce(function (a, b) {
+  return a + b / arr1.length;
+}, 0); // 6.5
+
 // Find smallest value in two arrays:
 
 // Min value of arr1:

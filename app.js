@@ -1,26 +1,37 @@
-let evenNumbers = [2, 4, 6, 8];
+// 1.
 
-evenNumbers.reduce(function (accumulator, nextValue) {
-  return accumulator + nextValue;
-}); // 20
+function double(arr) {
+  return arr.map(function (val) {
+    return val * 2;
+  });
+}
+console.log(double([1, 2]));
 
-// Find smaller value using reduce
+// Refactor to two arrow functions, Turn it into a one-liner.
 
-const arr1 = [23, 34, 3, 245, 1, 5];
-const arr2 = [23131, 4, 654, 3, 8, 43];
+const doubleRef = (arr) => {
+  return arr.map((val) => val * 2);
+};
 
-// Find smallest value in two arrays:
+console.log(doubleRef([9, 15]));
 
-// Min value of arr1:
-const arr1MinValue = arr1.reduce(function (accum, nextVal) {
-  return nextVal < accum ? nextVal : accum;
-});
+// 2.
+function squareAndFindEvens(numbers) {
+  var squares = numbers.map(function (num) {
+    return num ** 2;
+  });
+  var evens = squares.filter(function (square) {
+    return square % 2 === 0;
+  });
+  return evens;
+}
 
-// Min value of both,
-// reduce arr2:
-const allMin = arr2.reduce(function (accum, nextVal) {
-  return nextVal < accum ? nextVal : accum;
-  // set arr1Min as initial accum value:
-}, arr1MinValue);
+console.log(squareAndFindEvens([4, 4]));
 
-allMin; // 1
+// Refactored (copied from solution) :
+
+const squareAndEvens = (numbers) => {
+  return numbers.map((val) => val ** 2).filter((square) => square % 2 === 0);
+};
+
+console.log(squareAndEvens([4, 3]));

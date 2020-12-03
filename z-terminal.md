@@ -24,7 +24,6 @@
 - `cd ..` go one level backwards.
 - `man + commandName` manual of given command (`q` to get out of it, enter to scroll)
 
-
 2. Create
 
 - `mkdir folder1 folder2 folder3` make directory/ies inside the current directory.
@@ -111,6 +110,7 @@
 
 ## mac cool shortcuts
 
+- ``⌘ + ` ` swith safari windows
 - `opt + F2` display preferences
 - `opt + f10` sound preferences
 - `⌘ + shift + .` show hidden files and folders.

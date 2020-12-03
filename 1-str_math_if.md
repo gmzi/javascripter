@@ -37,6 +37,8 @@
 
 [Booleans](###Booleans)
 
+9. [Variables](###Variables)
+
 ---
 
 ### toFixed
@@ -472,10 +474,48 @@ Two options:
 <script src="app.js"></scriptL>
 ```
 
-### Variables declaration and behavoir
+### Variables
 
-`var`, can reassign; can redeclare; function scope.  
-`let`, can reassign, no redeclare, block scope.
-`const`, no reassign, no redeclare, block scope.
+Declaration and behavoir
+
+- `var`, can reassign; can redeclare; function scope.  
+  When declared outside of a functino, var will be assigned to the window object, for this reason, can override built in objects. Can hoist like hell.
+  When compiling the code, the var declarations are runned first, for that reason
+  console.log(chickens);
+  var chickens = "pat and tim";
+  Will throw "undefined" instead of error.
+
+- `let`, can reassign, no redeclare, block scope, can leave it empty;
+  Code block is everything between {}, and included brackets are part of that scope :
+
+```javascript
+function something() {
+  let algo = 'algo';
+  if (algo) {
+    // can access to "algo" from here.
+  }
+}
+```
+
+Not hoisted when compiling. Doesn't run first.
+
+- `const`, no reassign, no redeclare, block scope, can't leave it empty;
+  Although, there are ways to reassign values:
+  - Primitive data types can be reassigned.
+  - To change a ReferenceType (array, object), can keep the same reference but mutate or upate the content of that object or array
+
+```javascript
+const myCats = [];
+myCats.push('tito');
+// ["tito"] Mutated the content of the array, not it's reference.
+```
+
+![chart](images/variables_comparison.jpeg)
 
 Arrays and objects can use `const` because they references in memory doesn't change, while it's inner elements can change.
+
+### Reccomendations:
+
+1. Don't use var.
+2. Always start with const, if it won't work change it to let. Function, object and arrays always with const.
+3.
