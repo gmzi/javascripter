@@ -67,6 +67,8 @@ colors[colors.length] = 'black';
 
 ## rest/spread
 
+(ES2015)
+
 ```javascript
 [...] // array
 {...} // object

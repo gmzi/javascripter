@@ -488,7 +488,7 @@ Declaration and behavoir
   var chickens = "pat and tim";
   Will throw "undefined" instead of error.
 
-- `let`, can reassign, no redeclare, block scope, can leave it empty;
+- `let`, (ES2015) can reassign, no redeclare, block scope, can leave it empty;
   Code block is everything between {}, and included brackets are part of that scope :
 
 ```javascript
@@ -502,7 +502,7 @@ function something() {
 
 Not hoisted when compiling. Doesn't run first.
 
-- `const`, no reassign, no redeclare, block scope, can't leave it empty;
+- `const` (ES2015), no reassign, no redeclare, block scope, can't leave it empty;
   Although, there are ways to reassign values:
   - Primitive data types can be reassigned.
   - To change a ReferenceType (array, object), can keep the same reference but mutate or upate the content of that object or array

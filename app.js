@@ -1,24 +1,78 @@
-function filterOutOdds() {
-  var nums = Array.prototype.slice.call(arguments);
-  return nums.filter(function (num) {
-    return num % 2 === 0;
-  });
+// 1.
+function createInstructor(firstName, lastName) {
+  return {
+    firstName: firstName,
+    lastName: lastName,
+  };
 }
 
-// Refactor the above function to use rest opeartor and an arrow function:
+// refactor to ES2015
 
-const filterOdds = (...rest) => {
-  return rest.filter((n) => n % 2 === 0);
+function createInstructor(firstName, lastName) {
+  return {
+    firstName,
+    lastName,
+  };
+}
+
+// 2.
+// Computed property names
+var favoriteNumber = 42;
+
+var instructor = {
+  firstName: 'Colt',
 };
 
-filterOdds(111, 112, 113); // [112]
+instructor[favoriteNumber] = 'That is my favorite!';
 
-/* findMin
-Write a function called findMin that accepts a variable number of arguments and returns the
-smallest argument. Make sure tto do this using the rest and spread operator. */
+// refactor ES2015
+const favoriteNumber2015 = 42;
 
-const findMin = (...rest) => {
-  return Math.min(...rest);
+const instructor2015 = {
+  firstName: 'Colt',
+  [favoriteNumber2015]: 'that is my favorite!',
 };
 
-findMin(23, 43, 12); // 12
+// 3.
+// Object methods
+var instructor = {
+  firstName: 'Colt',
+  sayHi: function () {
+    return 'Hi!';
+  },
+  sayBye: function () {
+    return this.firstName + ' says bye!';
+  },
+};
+
+// refactor:
+const instructorNew = {
+  firstName: 'Colt',
+  sayHi() {
+    return 'Hi!';
+  },
+  sayBye() {
+    return this.firstName + ' says bye!';
+  },
+};
+
+// 4.
+// Create animal function
+/* 
+const d = createAnimal("dog", "bark", "Woooof!")
+// {species: "dog", bark: ƒ}
+d.bark()  //"Woooof!"
+*/
+
+const createAnimal = (species, verb, noise) => {
+  return {
+    species,
+    [verb]() {
+      console.log(noise);
+    },
+  };
+};
+
+const alfred = createAnimal('cat', 'meows', 'meeeooowww');
+console.log(alfred);
+alfred.meows();

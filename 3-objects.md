@@ -1,6 +1,9 @@
 # Objects
 
 [spread](##spread)
+[key-Value_Shorthand](###key-Value_Shorthand)
+[method_in_object](###method_in_object)
+[key_names_dynamic](###computed_property_names)
 
 [Object_literal](###Object_literal)
 [object_properties](###Access_object_properties:)  
@@ -51,6 +54,71 @@ fullTea; // {name: "winter sprout", origin: "taiwan", steeptime: "20s", brewTemp
 // IN CASE OF EQUAL NAMES, LAST SPREAD OVEWRITE PREVIOUS SPREAD
 ```
 
+### key-Value_Shorthand
+
+(ES2015)
+When declaring function, no need to repeat keyName and value.
+
+```javascript
+function makeFamily(parent1, parent2, ...children) {
+  return {
+    parent1,
+    parent2,
+    children,
+  };
+}
+makeFamily('juan', 'pepe', 'josecito', 'pablito'); // {parent1: "juan", parent2: "pepe", children: Array(2)}
+```
+
+### method_in_object
+
+(ES2015)
+New syntax to declare a function inside an object:
+
+DO NOT USE ARROW FUNCTIONS INSIDE OBJECT
+
+```javascript
+const mathRobot = {
+  name: 'pipo',
+  add(a, b) {
+    return a + b;
+  },
+};
+mathRobot.add(3, 2); // 5
+mathRobot.name; // pipo
+```
+
+### computed_property_names
+
+(ES2015)
+Set key names dynamically, instead of hard coding them:
+
+```javascript
+function makeColorNew(name, hex) {
+  return {
+    [name]: hex,
+    [hex]: name,
+  };
+}
+makeColorNew('red', 'ff0000'); // {red: "ff0000", ff0000: "red"}
+
+// dynamic key name declaration:
+const mystery = {
+  [6 + 7]: "thirteen";
+}
+mystery; // {13: "thirteen"}
+
+
+// The Old way:
+function makeColor(name, hex) {
+  const color = {};
+  color[name] = hex;
+  color[hex] = name;
+  return color;
+}
+makeColor('magenta', 'FF00FF'); // {magenta: "FF00FF", FF00FF: "magenta"}
+```
+
 ### Object_literal
 
 Is this syntax: `{}`. The order is not important in object literals, when we nedd order-specific data we use arrays. Objects collect key value pairs in wathever order:
@@ -62,6 +130,16 @@ const fitBitData = {
   100: true,
   '23 roperos': false,
 };
+```
+
+Dynamic key name:
+The property name contains an operation that gets executed when the object code is run:
+
+```javascript
+const obj = {
+  [2 + 2]: 'sum',
+};
+obj; //{4: "sum"}
 ```
 
 ### Access_object_properties:
@@ -285,7 +363,17 @@ if (!user.notifications.length) {
 Function as a method for an object, like a value for a given key.
 
 ```javascript
-//define funtion:
+// declare function inside object literal:
+const mathRobot = {
+  name: 'pipo',
+  add: function (a, b) {
+    return a + b;
+  },
+};
+mathRobot.add(3, 2); // 5
+mathRobot.name; // pipo
+
+//declare function outside object and then add it to object:
 function greet() {
   console.log('hiiii');
 }
@@ -293,9 +381,8 @@ function greet() {
 const persona = {
   name: 'juanca',
   age: 23,
-  // add function as a property:
-  talk: greet,
+  greet: greet,
 };
 // execute object's method:
-persona.talk(); // hiiii
+persona.greet(); // hiiii
 ```
