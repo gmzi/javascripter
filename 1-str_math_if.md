@@ -166,6 +166,30 @@ let color = status === 'offline' ? 'red' : 'green';
 
 ### Math
 
+### The Math Object
+
+Collection of pieces of mathematical functionallity.
+
+```javascript
+Math.max(7, 3, 9); // 9
+Math.min(7, 3, 9); // 3
+
+Math.round(4.9); // 5
+Math.floor(3.9); // 3
+
+Math.abs(-456); // 456
+
+// Exponentiation
+Math.pow(2, 3); // 8
+
+Math.random(); // random decimal between 0 and 1.
+
+// Get a random number between 1 and 88:
+Math.floor(Math.random() * 89) + 1;
+
+Math.PI; // 3.141592653589793
+```
+
 #### operators
 
 In order of precedence:
@@ -193,27 +217,6 @@ score += 1;
 score -= 10;
 bonusMult = 100;
 score *= bonusMult;
-```
-
-### The Math Object
-
-Collection of pieces of mathematical functionallity.
-
-```javascript
-Math.PI;
-
-Math.round(4.9); // 5
-
-Math.abs(-456); // 456
-
-Math.pow(2, 5); // 32
-
-Math.floor(3.9); // 3
-
-Math.random(); // random decimal between 0 and 1.
-
-// Get a random number between 1 and 88:
-Math.floor(Math.random() * 89) + 1;
 ```
 
 ---

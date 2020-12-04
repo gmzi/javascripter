@@ -38,6 +38,7 @@
 [testPrime](###testPrime)  
 [sumRows](###sumRows)
 [Guessing_game](###Guessing_game)
+[filterByType](###filterByType)
 
 ---
 
@@ -1422,6 +1423,20 @@ Target: 1 Guess: 4
 Target: 1 Guess: 7
 Machine wins
 */
+```
+
+### filterByType
+
+Returns specified type of value from multiple arguments passed
+
+```javascript
+const filterByType = (type, ...values) => {
+  return values.filter((val) => typeof val === type);
+};
+
+filterByType('number', 1, 2, 3, 'caca', 6, true, 'denise', 9);
+// [1, 2, 3, 6, 9]
+filterByType('string', 1, 2, 3, 'caca', 6, true, 'denise', 9); // "caca" "denise"
 ```
 
 ### Function_picker

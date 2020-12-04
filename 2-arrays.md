@@ -1,12 +1,11 @@
 ## Arrays
 
-### Array methods
+### operators
 
-[split](##split) (str into array)  
-[push()](##push) (add to the end).
-[pop()](##pop) (remove from end & return value)
-[unshift()](##unshift) (add to start).
-[shift()](##shift) (remove from start).
+[rest](###rest) [...]
+[spread](###spread) [...]
+
+### Array methods
 
 [Array.from](##Array.from)  
 [reduce](##reduce)
@@ -27,6 +26,14 @@
 [slice()](##slice) (Takes portion of arr and makes new arr with it).
 [splice()](##splice) (modify middle of arr).
 [sort()](##sort) (updates arr and return it, can capture in new var).
+
+[split](##split) (str into array)  
+[push()](##push) (add to the end).
+[pop()](##pop) (remove from end & return value)
+[unshift()](##unshift) (add to start).
+[shift()](##shift) (remove from start).
+
+---
 
 Complex data structures built in javascript.  
 Ordered collections of values.
@@ -54,6 +61,109 @@ colors[0] = 'purple';
 colors[4] = 'lila';
 // add item at the end:
 colors[colors.length] = 'black';
+```
+
+## Operators
+
+## rest/spread
+
+```javascript
+[...] // array
+{...} // object
+```
+
+### rest
+
+Rest: "el resto", "lo que queda".
+In the FUNCTION DECLARATION or definition we call the REST operator. Collects all the arguments passed in the function call and makes an array with them. Always must be the last parameter defined, and the last argument passed, order matters here.
+
+```javascript
+// Rest only:
+function makeArr(...nums) {
+  console.log(nums);
+}
+makeArr(1, 2, 3); // [1, 2, 3]
+
+// Arg1, arg2 + rest:
+function makeArr(algo, algoMas, ...elResto) {
+  console.log(algo);
+  console.log(algoMas);
+  console.log(elResto);
+}
+
+makeArr(1001, 'odisea', 1, 2, 3, 4); // 1001 "odisea" [1, 2, 3, 4]
+
+// rest with arr method:
+function sum(...n) {
+  return n.reduce((a, b) => a + b);
+}
+sum(4, 5); // 9
+
+// rest in arrow function:
+const sumAll = (...values) => {
+  return values.reduce((a, b) => a + b, 0);
+};
+sumAll(2, 2, 2); // 6
+```
+
+The old way used the "arguments" keyword.
+
+```javascript
+function sum() {
+  const args = Array.from(arguments);
+  return args.reduce((sum, val) => {
+    return sum + val;
+  });
+}
+console.log(sum(3, 3)); // 6
+```
+
+### spread
+
+Spread: propagar, difundir, esparcir.
+In the FUNCTION CALL we apply the SPREAD operator. Spreads an iterable (array, string, NOT object) and pass each individual item to the function to execute something on them, similar to a loop. The function will be executed on each spreaded item as an individual argument. BEWARE: in nested arrays or objects nested in arrays, the copy of the object or array will be shallow, it's not a deep clone, so the original will be mutated if some change is made to the copy.
+
+0. Spread in function call:
+
+```javascript
+functionName(arg1, arg2, ...iterableName);
+
+// 2. In Math:
+const numeritos = [12, 43, 4, 5];
+Math.max(...numeritos); // 43
+```
+
+1. Spread array:
+
+```javascript
+const arr1 = ['sorete', 'conchuda'];
+
+const arr1Copy = [...arr1];
+arr1Copy; // ['sorete', 'conchuda', 'forro'];
+```
+
+2. Spread array and add values to the copy:
+
+```javascript
+const arr1 = ['sorete', 'conchuda'];
+const arr2 = [...arr1, 'forro'];
+const arrAll = ['pija', ...arr1More, 'culo'];
+arr2; // ['sorete', 'conchuda', 'forro'];
+arrAll; // ["pija", "sorete", "conchuda", "forro", "culo"]
+```
+
+3. Spread multiple arrays:
+
+```javascript
+const allArrs = [...arr1, 'algo', ...arr2, ...arr3, 'etc'];
+```
+
+4. Spread string into array:
+
+```javascript
+const palabra = 'cuore';
+const arrayed = [...palabra, 'di Panna'];
+arrayed; // ["c", "u", "o", "r", "e", "di Panna"]
 ```
 
 ## Array methods

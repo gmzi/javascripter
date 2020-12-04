@@ -1,37 +1,24 @@
-// 1.
-
-function double(arr) {
-  return arr.map(function (val) {
-    return val * 2;
+function filterOutOdds() {
+  var nums = Array.prototype.slice.call(arguments);
+  return nums.filter(function (num) {
+    return num % 2 === 0;
   });
 }
-console.log(double([1, 2]));
 
-// Refactor to two arrow functions, Turn it into a one-liner.
+// Refactor the above function to use rest opeartor and an arrow function:
 
-const doubleRef = (arr) => {
-  return arr.map((val) => val * 2);
+const filterOdds = (...rest) => {
+  return rest.filter((n) => n % 2 === 0);
 };
 
-console.log(doubleRef([9, 15]));
+filterOdds(111, 112, 113); // [112]
 
-// 2.
-function squareAndFindEvens(numbers) {
-  var squares = numbers.map(function (num) {
-    return num ** 2;
-  });
-  var evens = squares.filter(function (square) {
-    return square % 2 === 0;
-  });
-  return evens;
-}
+/* findMin
+Write a function called findMin that accepts a variable number of arguments and returns the
+smallest argument. Make sure tto do this using the rest and spread operator. */
 
-console.log(squareAndFindEvens([4, 4]));
-
-// Refactored (copied from solution) :
-
-const squareAndEvens = (numbers) => {
-  return numbers.map((val) => val ** 2).filter((square) => square % 2 === 0);
+const findMin = (...rest) => {
+  return Math.min(...rest);
 };
 
-console.log(squareAndEvens([4, 3]));
+findMin(23, 43, 12); // 12

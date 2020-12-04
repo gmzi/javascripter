@@ -1,5 +1,7 @@
 # Objects
 
+[spread](##spread)
+
 [Object_literal](###Object_literal)
 [object_properties](###Access_object_properties:)  
 [Update/add_properties:](###Update/add_properties)
@@ -10,6 +12,44 @@
 [Function_to_object:](###Function_to_object:)
 
 Collection of related variables and functions. Inside objects, variables are called `property` and functions are called `methods`, both act as keys within objects, and each `key` is assigned a `value` in form of `key:value` pairs. Objects can content Reference Data Types and Primitive Data Types.
+
+---
+
+## spread
+
+{...}
+
+Spread Object:
+To update an object we actually make a shallow copy (1 level deep) of the object into a new object, and then we make the changes. BEWARE: in nested arrays or objects nested in arrays, the copy of the object or array will be shallow, it's not a deep clone, so the original will be mutated if some change is made to the copy.
+
+```javascript
+const tea = {
+  name: 'winter sprout',
+  origin: 'taiwan',
+};
+
+// Make a copy
+const tea2 = { ...tea };
+
+// Copy and add property:
+const teaTin = { ...tea, price: 21.99 };
+teaTin; // {name: "winter sprout", origin: "taiwan", price: 21.99}
+
+// copy and overwrite property:
+const teaSummer = { ...tea, name: 'summer' };
+teaSummer; // {name: "summer", origin: "taiwan"}
+// IN CASE OF EQUAL NAMES, LAST SPREAD OVEWRITE PREVIOUS SPREAD
+
+// combine objects:
+const data = {
+  steeptime: '20s',
+  brewTemp: 175,
+};
+
+const fullTea = { ...tea, ...data };
+fullTea; // {name: "winter sprout", origin: "taiwan", steeptime: "20s", brewTemp: 175}
+// IN CASE OF EQUAL NAMES, LAST SPREAD OVEWRITE PREVIOUS SPREAD
+```
 
 ### Object_literal
 
