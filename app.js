@@ -1,78 +1,45 @@
 // 1.
-function createInstructor(firstName, lastName) {
-  return {
-    firstName: firstName,
-    lastName: lastName,
-  };
-}
-
-// refactor to ES2015
-
-function createInstructor(firstName, lastName) {
-  return {
-    firstName,
-    lastName,
-  };
-}
+const noRepeats = new Set([1, 1, 2, 2, 3, 4]);
+console.log(noRepeats); // {1, 2, 3, 4}
 
 // 2.
-// Computed property names
-var favoriteNumber = 42;
-
-var instructor = {
-  firstName: 'Colt',
-};
-
-instructor[favoriteNumber] = 'That is my favorite!';
-
-// refactor ES2015
-const favoriteNumber2015 = 42;
-
-const instructor2015 = {
-  firstName: 'Colt',
-  [favoriteNumber2015]: 'that is my favorite!',
-};
+const algo = [...new Set('referee')].join('');
+console.log(algo); // "ref"
 
 // 3.
-// Object methods
-var instructor = {
-  firstName: 'Colt',
-  sayHi: function () {
-    return 'Hi!';
-  },
-  sayBye: function () {
-    return this.firstName + ' says bye!';
-  },
+let m = new Map();
+m.set([1, 2, 3], true);
+m.set([1, 2, 3], false);
+console.log(m); // {Array(3) => true, Array (3) => false}
+
+/* 4. 
+Function hasDuplicate, accepts an array and returns true or false if 
+array contains duplicate */
+const hasDuplicate = (arr) => {
+  return new Set(arr).size !== arr.length;
 };
 
-// refactor:
-const instructorNew = {
-  firstName: 'Colt',
-  sayHi() {
-    return 'Hi!';
-  },
-  sayBye() {
-    return this.firstName + ' says bye!';
-  },
+console.log(hasDuplicate([1, 2, 3, 1])); // true
+console.log(hasDuplicate([1, 5, -1, 4])); // false
+
+/* 5.
+Function vowelCount, accepts string and returns a map where the keys
+are numbers and the values are the count of the vowels in the string. */
+
+const vowelCount = (str) => {
+  const vowOccur = new Map();
+  const lowercased = str.toLowerCase();
+  for (let char of lowercased) {
+    if ('aeiou'.includes(char)) {
+      if (vowOccur.has(char)) {
+        vowOccur.set(char, vowOccur.get(char) + 1);
+      } else {
+        vowOccur.set(char, 1);
+      }
+    }
+  }
+  return vowOccur;
 };
 
-// 4.
-// Create animal function
-/* 
-const d = createAnimal("dog", "bark", "Woooof!")
-// {species: "dog", bark: ƒ}
-d.bark()  //"Woooof!"
-*/
-
-const createAnimal = (species, verb, noise) => {
-  return {
-    species,
-    [verb]() {
-      console.log(noise);
-    },
-  };
-};
-
-const alfred = createAnimal('cat', 'meows', 'meeeooowww');
-console.log(alfred);
-alfred.meows();
+console.log(vowelCount('awesome')); // {"a" => 1, "e" => 2, "o" => 1}
+console.log(vowelCount('Ana')); // {"a" => 2}

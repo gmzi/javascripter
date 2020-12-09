@@ -13,11 +13,13 @@
 [first_letter_uppercase](###first_letter_uppercase)  
 [longest_word](###longest_word)  
 [num_of_vowels](###num_of_vowels)
-[vowelCount](###vowelCount)  
+[vowelCount](###vowelCount)
+[vowelCountWithMap](###vowelCountWithMap)  
 [containsVowels](###containsVowels)  
 [str_letter_count](###str_letter_count)
 [letterCount](###letterCount)
 
+[swap_variables](###swap_variables)  
 [random_itm](##PICK_RANDOM_ITEM_FROM_ARRAY:)  
 [random_card](##GENERATE_CARD_WITH_RANDOM_VALUE_AND_SUIT:)  
 [dupl_arr](##ARR_with_duplicate_values:)  
@@ -50,6 +52,7 @@
 [countdown](###countdown)
 [randomGame](###randomGame)
 [removeDuplicates](###removeDuplicates)
+[removeDuplicates_from_array](###removeDuplicates_from_array)  
 [removeFromArray](###removeFromArray)
 
 ---
@@ -333,6 +336,30 @@ function vowelCount1(str) {
 }
 
 console.log(vowelCount1('Elie')); // {e: 2, i: 1}
+```
+
+### vowelCountWithMap
+
+Vowel count using Map data structure.
+
+```javascript
+const vowelCount = (str) => {
+  const vowOccur = new Map();
+  const lowercased = str.toLowerCase();
+  for (let char of lowercased) {
+    if ('aeiou'.includes(char)) {
+      if (vowOccur.has(char)) {
+        vowOccur.set(char, vowOccur.get(char) + 1);
+      } else {
+        vowOccur.set(char, 1);
+      }
+    }
+  }
+  return vowOccur;
+};
+
+console.log(vowelCount('awesome')); // {"a" => 1, "e" => 2, "o" => 1}
+console.log(vowelCount('Ana')); // {"a" => 2}
 ```
 
 ### containsVowels
@@ -1333,6 +1360,19 @@ function combineLetters(str) {
 console.log(combineLetters('dog')); // ["d", "do", "dog", "o", "og", "g"]
 ```
 
+### swap_variables
+
+Swap values of variables using destructure
+
+```javascript
+let x = 'x';
+let y = 'y';
+// destructure to swap values:
+[y, x] = [x, y];
+console.log(y); // x
+console.log(x); // y
+```
+
 ### multiplesOf
 
 Returns the multiples of given number from 0 to 100
@@ -1656,6 +1696,16 @@ let arr1 = [1, 3, 3, 45, 4, 4];
 let str1 = 'caca';
 removeDuplicates(arr1); // [1, 3, 45, 4]
 removeDuplicates(str1); // "ca"
+```
+
+### removeDuplicates_from_array
+
+Removes duplicate values from array using Set
+
+```javascript
+const ages = [23, 12, 34, 23, 23, 23, 45, 32, 23, 45];
+const agesNoDups = [...new Set(ages)];
+console.log(agesNoDups); // [23, 12, 34, 45, 32]
 ```
 
 ### hasNoDuplicates

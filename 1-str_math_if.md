@@ -156,7 +156,7 @@ let color = status === 'offline' ? 'red' : 'green';
 - number
   - Integer
   - float
-  - NaN
+  - NaN (NaN === NaN // false)
 - String
 - Boolean
 - Null
