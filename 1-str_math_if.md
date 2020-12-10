@@ -10,6 +10,10 @@
 [parseFloat](###parseFloat)
 [repeat](###repeat)
 
+6. Math
+
+[Math](###Math)
+
 2. [String_escapes](###String_escapes)
 
 3. Conditional statements
@@ -23,10 +27,6 @@
 5. data types
 
 [dataTypes](##Primitive_data_types)
-
-6. Math
-
-[Math](###Math)
 
 7. Operators
 
@@ -172,21 +172,30 @@ Collection of pieces of mathematical functionallity.
 
 ```javascript
 Math.max(7, 3, 9); // 9
+
 Math.min(7, 3, 9); // 3
 
 Math.round(4.9); // 5
+
 Math.floor(3.9); // 3
 
+// Square root:
+Math.sqrt(9); // 3
+
+// Absolute value:
+// (turns negative into positive)
 Math.abs(-456); // 456
 
 // Exponentiation
 Math.pow(2, 3); // 8
 
-Math.random(); // random decimal between 0 and 1.
+// Random decimal
+Math.random(); // 0.323287457382
 
 // Get a random number between 1 and 88:
-Math.floor(Math.random() * 89) + 1;
+Math.floor(Math.random() * 89) + 1; // 32;
 
+// PI
 Math.PI; // 3.141592653589793
 ```
 
