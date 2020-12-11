@@ -1566,6 +1566,8 @@ countDown(3); // 3 2 1 DONE!
 
 ### decimal_places
 
+Decimal places
+
 Set the quantity of decimals for a number. For 2 decimals divide by 100, 3 decimals divide by 1000.
 
 ```javascript
