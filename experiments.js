@@ -1,59 +1,25 @@
-//1.
-class Vehicle {
-  constructor(a, b, c) {
-    this.make = a;
-    this.model = b;
-    this.year = c;
-  }
-  honk() {
-    return 'Beep';
-  }
-  toString() {
-    return `The vehicle is a ${this.make} ${this.model} from ${this.year}`;
-  }
-}
+const cat = {
+  name: 'blue',
+  breed: 'scotish',
+  dance(style) {
+    console.log('This = ', this);
+    console.log(`I'm ${this.name}, i'm a ${this.breed} and I dance ${style}`);
+  },
+};
 
-const myVeh = new Vehicle('toyota', 'corolla', 2011);
+console.log(cat.dance('tango')); // this = {name: blue, etc} I'm blue, i'm a scotish and I dance tango.
 
-//2.
-class Car extends Vehicle {
-  constructor(a, b, c) {
-    super(a, b, c);
-    this.numWheels = 4;
-  }
-}
+const blueDance = cat.dance;
+// this wil be set to Window:
+console.log(blueDance()); // I'm <empty str>, i'm a undefined and i dance undefined
 
-const arturo = new Car('toyota', 'corolla', 2011);
+// set "this" with call:
+blueDance.call(cat, 'jota'); // I'm blue, i'm a scottish and I dance jota
 
-//3.
-class Motorcycle extends Vehicle {
-  constructor(a, b, c) {
-    super(a, b, c);
-    this.numWheels = 2;
-  }
-  revEngine() {
-    return 'Vrooom!!!!';
-  }
-}
+const dog = {
+  breed: 'salchi',
+  name: 'astro',
+};
+blueDance.call(dog, 'tango'); // I'm astro, i'm a salchi and i dance tango
 
-const myMoto = new Motorcycle('honda', 'biz', 2009);
-
-//4.
-class Garage {
-  constructor(capacity) {
-    this.vehicles = [];
-    this.capacity = capacity;
-  }
-  add(vehicle) {
-    if (!(vehicle instanceof Vehicle)) {
-      return 'Only vehicles allowed here!';
-    }
-    if (this.vehicles.length > this.capacity) {
-      return "Sorry, we're full";
-    }
-    this.vehicles.push(vehicle);
-    return 'Vehicle added!';
-  }
-}
-
-const victoria = new Garage(5);
+console.log(cat.dance.call(window, 'salsa')); // this = Window / I'm , i'm a undefined and I dance salsa.
