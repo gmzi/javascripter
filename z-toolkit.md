@@ -99,6 +99,7 @@
 ## Cool things
 
 [backgroundColorPicker](###backgroundColorPicker)
+[colorMaker](###colorMaker)
 
 ## password_function
 
@@ -1680,6 +1681,24 @@ body.addEventListener('mousemove', function (e) {
   console.log(`width ${width}`);
   console.log(`height ${height}`);
   console.log(`diagonal ${diagonal}`);
+});
+```
+
+### colorMaker
+
+Uses jQuery. Make a color manipulating rgb values:
+
+```javascript
+function changeColor(code) {
+  $('body').css('background-color', code);
+}
+
+$('.mb-5').on('change', function (f) {
+  let $color1 = parseInt($('input').eq(0).val());
+  let $color2 = parseInt($('input').eq(1).val());
+  let $color3 = parseInt($('input').eq(2).val());
+  let code = `rgb(${$color1},${$color2},${$color3})`;
+  changeColor(code);
 });
 ```
 
