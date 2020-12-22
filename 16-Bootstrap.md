@@ -264,7 +264,48 @@ Removed from v5
 </div>
 ```
 
---
+## forms
+
+[forms](https://getbootstrap.com/docs/5.0/forms/overview/)
+
+"form-control" class styles all kind of inputs
+
+## navbar
+
+[navbar](https://getbootstrap.com/docs/5.0/components/navbar/)
+
+## tooltips
+
+Displays when hovering over an element. Uses javascript. Takes two steps:
+
+1. html from docs:
+
+```html
+<button
+  type="button"
+  class="btn btn-secondary"
+  data-bs-toggle="tooltip"
+  data-bs-placement="top"
+  title="Tooltip on top"
+>
+  Tooltip on top
+</button>
+```
+
+2. Enable it in javascript:
+
+```javascript
+var tooltipTriggerList = [].slice.call(
+  document.querySelectorAll('[data-bs-toggle="tooltip"]')
+);
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl);
+});
+```
+
+### popovers
+
+Similar ways of tooltips. Insert the html and activate it with the javascript provided in docs.
 
 # Containers
 
@@ -312,3 +353,46 @@ Margin and padding short syntax:
 ```html
 <button clas="btn p-0 m-3"></button>
 ```
+
+### display
+
+Manages the CSS "display" property. "none" hides it in certain screen sizes.
+"d-{value}" for xs.
+"d-{breakpoint}-{value}" for sm, md, lg and xl.
+
+"Hide image in sm and xs, show it in md size and above:"
+
+```html
+<div class="col d-none d-md-inline">
+  <img src="222" alt="" class="img-fluid" />
+</div>
+```
+
+# font awesome
+
+fontawesome is a library of icons.
+Setup:
+
+1.
+
+```html
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+/>
+```
+
+2. Choose icon and paste it .
+
+---
+
+# Customize bootstrap
+
+- Tools to download a ready made theme (https://bootswatch.com)
+- Tools to make your own bootstrap theme: https://themestr.app (pick your theme, download the css file at the bottom of page, save it in project folder and link that stylesheet in your html file (<link rel="stylesheet" href="theme1.css">). First work on the plain bootstrap, link this afterwards.)
+
+# Other frameworks
+
+- Foundation (https://get.foundation)
+- https://semantic-ui.com
+- https://bulma.io (newest)
