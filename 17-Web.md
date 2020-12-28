@@ -37,6 +37,8 @@ When typing a hostname, the browser checks: Computer cache -> Router -> ISP -> D
 
 ## URL
 
+[URL_docs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
+
 Universal Resource Locator. Used for web or for ftp or database. It's components:
 ![urlComponents](images/url.jpg)
 

@@ -2,17 +2,29 @@
 
 ---
 
-0. internet
-   Requests:
+0. Requests:
    - `dig website.url` IP address from hostname and DNS, if no IP, the host name is not found.
    - `dig website.url +trace` detailed IP, hostname, DNS.
    - `trace website.url` trace IP's from local to destination
-   - `curl [options] [URL...]` GET from server.
-   - `curl -d "string" [URL...]` POST with data as string. -`curl -d @file [URL...]` POST with data as file.
+
+curl --Client URL
+
+- `curl [options] [URL...]` GET response body from server.
+- `curl -d "string" [URL...]` POST data as string in URL server (ex. '{"username":"xyz","password":"xyz"}').
+- `curl -d @file [URL...]` POST data as file in url server.
+- `-X` --request to specify HTTP verb (ex. '-X POST')
+- `-H` --header to specify additional headers (ex. '"Content-Type: application/json"')
+  (ex. of larger request:
+  "curl --header "Content-Type: application/json" \
+   --request POST \
+   --data '{"username":"xyz","password":"xyz"}' \
+   https://myapplication.com/login")
+
+1. Local server
 
 - `python3 -m http.server` start server in local machine with python3.
 
-1. navigate
+1. navigate folders and directories
 
 - `/` root directory. (Macintosh HD)
 - `~` home directory (xxx)
@@ -34,32 +46,32 @@
 - `cd ..` go one level backwards.
 - `man + commandName` manual of given command (`q` to get out of it, enter to scroll)
 
-2. Create
+2. Create dir
 
 - `mkdir folder1 folder2 folder3` make directory/ies inside the current directory.
 - `touch index.html app.js style.css` create new empty file/s. (if file already exists, `touch` command will modify it's modification date and time)
 - `echo "hola caca" > caca.txt` create new file and write content in it.
 
-3. view
+3. view files
 
 - `cat fileName` shows file's content.
 - `echo "something"` repeats what's inside quotes
 - `echo "hello World" > app.js` overwrites the left hand text on the right hand file (beware it erases the previous content of the file)
 
-4. remove
+4. remove files
 
 - `rm name.ext` removes file permanently (beware there's no undo to this).
 - `rmdir folderName` removes empty folder (if there's file in it, won't delete it, not undo once deleted)
 - `rm -rf folderName` removes folder and nested files (BEWARE NO UNDO)
 
-5.  open
+5.  open files
 
 - `open file.ext` opens file with default app.
 - `open folderName` opens folder in finder.
 - `open .` opens current directory in finder.
 - `open ..` opens prior directory in finder.
 
-6. move/rename
+6. move/rename files
 
 - `mv file.txt ../` move file.txt to ../ (one level up).
 - `mv file.txt path/to/folder` move file to folder inside current dir.
@@ -68,7 +80,7 @@
 - `mv fileName.txt newFileName.txt` rename file
 - `mv ~/projects/nameOfDir ~/projects/new-name-of-dir` rename directory.
 
-7. copy
+7. copy files
 
 - `cp fileName.txt fileCopy.txt` copy file
 - `cp path/to/file.txt path/to/copiedFile.txt` copy file in different location.
