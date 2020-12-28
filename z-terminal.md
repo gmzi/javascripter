@@ -2,6 +2,16 @@
 
 ---
 
+0. internet
+   Requests:
+   - `dig website.url` IP address from hostname and DNS, if no IP, the host name is not found.
+   - `dig website.url +trace` detailed IP, hostname, DNS.
+   - `trace website.url` trace IP's from local to destination
+   - `curl [options] [URL...]` GET from server.
+   - `curl -d "string" [URL...]` POST with data as string. -`curl -d @file [URL...]` POST with data as file.
+
+- `python3 -m http.server` start server in local machine with python3.
+
 1. navigate
 
 - `/` root directory. (Macintosh HD)
