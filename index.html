@@ -12,6 +12,15 @@
   </head>
 
   <body>
+    <section class="ajax-section">
+      <div class="container border border-dark">
+        <h2>Next SpaceX launch:</h2>
+        <span id="launch-date" class="d-block"></span>
+        <span id="launch-time" class="d-block"></span>
+        <span id="countdown" class="d-block"></span>
+      </div>
+    </section>
+
     <section class="icon-section">
       <h1 class="display-6 text-danger" >Here's an icon: <i class="fas fa-key"></i></h1>
       <h1 class="display-6 text-dark" >Colored icon: <i class="fab fa-instagram text-danger"></i></h1>
@@ -318,6 +327,7 @@
         <span class="result">Result</span>
       </form>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script src="app.js"></script>
     <script src="experiments.js"></script>

@@ -2,9 +2,56 @@ Libraries to use AJAX:
 
 1. ## Axios
 
-Is a third party library that simplifies the JS syntax to make requests. The browsers built in methods are clunky, Axious simplifies the process. Can be also used on the server side with node.js.
+Setup:
 
-2. ## fetch
+- include cdn link (before the app.js file): `<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>`
+- type "axios" in console, if it doesn't throw error you're good to go.
+
+Single request:
+
+```javascript
+async function getPosition() {
+  const response = await axios.get('http://api.open-notify.org/iss-now.json');
+  console.log(response.data.iss_position);
+  console.log('this line runs after axios.get');
+}
+
+getPosition(); // {longitude: "145.0975", latitude: "28.4226"} "this line runs after axios.get"
+
+async function getStarWarsPlanets() {
+  const response = await axios.get('https://swapi.dev/api/planets');
+  for (let planet of response.data.results) {
+    console.log(planet.name);
+  }
+}
+
+getStarWarsPlanets(); // Tatoonie, Alderaan, Yavin, Hoth, Dagobah
+```
+
+Multiple requests:
+
+```javascript
+async function getPlanetsByPage() {
+  const response1 = await axios.get('https://swapi.dev/api/planets');
+  // get planets of page 1, only their names:
+  for (let planet of response1.data.results) {
+    console.log(planet.name);
+  }
+  // grab "next" property from the response, and get the planets names of the page 2:
+  const response2 = await axios.get(response1.data.next);
+  for (let planet of response2.data.results) {
+    console.log(planet.name);
+  }
+}
+
+getPlanetsByPage(); // Geonosis, Utapau, Mustafar, ....
+```
+
+Axios parses the JSON response into a JavaScript object automatically, so we can work with it right away.
+
+---
+
+2. fetch
 
 3. ## XMLHttpRequest
 
@@ -29,10 +76,13 @@ firstReq.send();
 
 4. Other libraries (jQuery, etc)
 
+---
+
 # AJAX
 
 Asynchronous Javascript And Xml.
 Start server before making requests.
+AJAX requests are asynchronous.
 
 It's a way to structure the interaction between codes.
 Why to use it:
@@ -63,6 +113,16 @@ Making requests via JavaScript, in the browser, without the page refreshing.
    - Do whatever you want with the result (in general show the data to the user)
 
 ![graphic](images/ajax-request.png)
+
+# Promises
+
+A promise is like a placeholder for a future value. Represents something that doesn't have a value at the moment but will eventually have some value or hold an error. Requests takes time, they don't happen inmediately, that's why we work with promises, so javascript don't have to pause the execution to wait, can keep executing while the promised value is being processed by the browser.
+Axios doesn't return the value inmediately, it returns a Promise. In order to access the values, we use async and await.
+
+## async_await
+
+async / await
+Pair of keywords, we use ASYNC to declare a function as asynchronous function. Use AWAIT keyword inside async functions. AWAIT will pause the execution OF THE FUNCTION ONLY, till the value is resolved, in the meantime javascript will execute the code OUTSIDE of the function, and when de awaited value is resolved by the browser, javascript will store the value in variable, and then run the rest of the code inside the function.
 
 ---
 
