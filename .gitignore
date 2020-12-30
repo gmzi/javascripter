@@ -1,5 +1,3 @@
 images/
 mocks/
-.app
-.style
-.index
+apis.js
