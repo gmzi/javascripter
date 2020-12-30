@@ -11,9 +11,9 @@
   border-radius: 2px;
 } */
 
-.display {
+/* .display {
   background-color: gray;
-}
+} */
 .leaf {
   margin: 2rem 0rem;
   border: 20px;
@@ -23,9 +23,9 @@
   background: linear-gradient(0.9turn, #1d0101, #b52626);
 }
 
-img {
+/* img {
   margin: 1rem;
-}
+} */
 
 .slang {
   color: chartreuse;
@@ -80,3 +80,16 @@ img {
   width: 40%;
   height: auto;
 }
+/* 
+.img-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.img-container img {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  outline: 2px solid black;
+} */

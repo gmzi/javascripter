@@ -3,7 +3,6 @@ async function getDateAndTime() {
   const response = await axios.get(
     'https://api.spacexdata.com/v4/launches/next'
   );
-  console.log(response);
   const dateAndTime = response.data.date_utc;
   const date = dateAndTime.slice(0, 10);
   const time = dateAndTime.slice(11, dateAndTime.length - 1);
