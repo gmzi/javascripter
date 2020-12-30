@@ -19,19 +19,29 @@ async function getDateAndTime() {
 }
 
 function countdown(time) {
-  const countDownDate = new Date(time).getTime();
+  const countDownDate = new Date(time);
   let x = setInterval(function () {
-    let now = new Date().getTime();
-    let distance = now - countDownDate;
-    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    let hours = Math.floor(
-      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    let now = Math.round(new Date().getTime() / 1000);
+    let distance = countDownDate - now;
 
+    // Create a new JavaScript Date object based on the timestamp
+    // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+    let date = new Date(distance * 1000);
+    // days part from timestamp:
+    let days = Math.floor(distance / 86400);
+    // Hours part from the timestamp
+    let hours = date.getHours();
+    // Minutes part from the timestamp
+    let minutes = '0' + date.getMinutes();
+    // Seconds part from the timestamp
+    let seconds = '0' + date.getSeconds();
+
+    // Will display time in 10:30:23 format
+    const formattedTime = `${days} days, ${hours} hours, ${minutes.substr(
+      -2
+    )} minutes and ${seconds.substr(-2)} seconds`;
     const countD = document.querySelector('#countdown');
-    countD.innerHTML = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+    countD.innerText = formattedTime;
 
     if (distance < 0) {
       clearInterval(x);
