@@ -4,25 +4,19 @@ async function getDateAndTime() {
   );
   console.log(response);
   const dateAndTime = response.data.date_utc;
-  let date = '';
-  for (let i = 0; i <= 9; i++) {
-    date += dateAndTime[i];
-  }
-  let time = '';
-  for (let i = 11; i < dateAndTime.length - 1; i++) {
-    time += dateAndTime[i];
-  }
+  const date = dateAndTime.slice(0, 10);
+  const time = dateAndTime.slice(11, dateAndTime.length - 1);
+
   const launchDate = document.querySelector('#launch-date');
   const launchTime = document.querySelector('#launch-time');
+  const missionName = document.querySelector('#mission-name');
+
   launchDate.innerText = `Date: ${date}`;
   launchTime.innerText = `UTC time: ${time}`;
+  missionName.innerText = `Mission name: ${response.data.name}`;
 
-  // countdown:
-  console.log(response.data.date_unix);
   countdown(response.data.date_unix);
 }
-
-console.log(getDateAndTime());
 
 function countdown(time) {
   const countDownDate = new Date(time).getTime();
@@ -45,3 +39,5 @@ function countdown(time) {
     }
   }, 1000);
 }
+
+getDateAndTime();
