@@ -59,18 +59,6 @@ async function getCrewedMissions() {
   }
 }
 
-function getCrewMembers(crewMembers) {
-  console.log(crewMembers);
-
-  console.log(member);
-  // crewMembers.forEach(async function (val) {
-  //   const member = await axios.get('https://api.spacexdata.com/v4/crew/' + val);
-  //   console.log(member.data.image);
-
-  //   // renderCrew(val);
-  // });
-}
-
 function renderCrew(response) {
   const cardDiv = document.createElement('div');
   cardDiv.classList.add('card');
@@ -98,9 +86,10 @@ function renderCrew(response) {
   const cardGroup = document.createElement('div');
   cardGroup.append(cardDiv);
 
-  const cardBody = document.querySelector('.card-body');
   cardGroup.classList.add('card-group');
-  cardBody.append(cardGroup);
+
+  const parent = document.querySelector('.card-title');
+  parent.append(cardGroup);
 }
 
 function renderMission(response) {
@@ -143,21 +132,9 @@ function renderMission(response) {
   missDiv.append(cardBody);
   crewedMissions.append(missDiv);
 
-  console.log(crewMembers);
-
   crewMembers.forEach(async function (val) {
     const member = await axios.get('https://api.spacexdata.com/v4/crew/' + val);
-    console.log(member);
   });
-
-  // for (let i = 0; i < crewMembers.length; i++) {
-  //   const member = await axios.get(
-  //     'https://api.spacexdata.com/v4/crew/' + crewMembers[i]
-  //   );
-  //   console.log(member)
-  // }
-
-  console.log('mission done');
 }
 
 getCrewedMissions();
