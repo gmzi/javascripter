@@ -52,86 +52,112 @@ async function getCrewedMissions() {
   const response = await axios.get(
     'https://api.spacexdata.com/v4/launches/upcoming'
   );
-  const crewedMissions = document.querySelector('#crewed-missions');
   for (let i = 0; i < response.data.length; i++) {
-    if (response.data[i].name.includes('Crew')) {
-      const name = response.data[i].name;
-      const date = response.data[i].date_local;
-      const crewMembers = response.data[i].crew;
-      const countDown = 'TODO COUNTDOWN';
-
-      const missDiv = document.createElement('div');
-      missDiv.classList.add('card');
-      missDiv.setAttribute('style', 'width: 100%;');
-
-      const cardBody = document.createElement('div');
-      cardBody.classList.add('card-body');
-
-      const missionName = document.createElement('h5');
-      missionName.classList.add('card-title');
-      missionName.classList.add('text-center');
-      missionName.innerText = name;
-
-      const missionDate = document.createElement('p');
-      missionDate.classList.add('card-text');
-      missionDate.innerText = date;
-
-      const missionCountdown = document.createElement('a');
-      missionCountdown.setAttribute('id', 'crewed-countdown');
-      missionCountdown.classList.add('btn');
-      missionCountdown.classList.add('btn-dark');
-      missionCountdown.classList.add('btn-sm');
-      missionCountdown.classList.add('d-block');
-      countdown(response.data[i].date_unix, 'crewed-countdown');
-
-      const crewTitle = document.createElement('h4');
-      crewTitle.innerText = 'Crew memebers';
-
-      crewTitle.append(missionCountdown);
-      missionDate.append(missionCountdown);
-      missionName.append(missionDate);
-      cardBody.append(missionName);
-      missDiv.append(cardBody);
-      crewedMissions.append(missDiv);
-
-      // const cardGroup = document.createElement('div');
-      // cardGroup.classList.add('card-group');
-
-      crewMembers.forEach(async function (val) {
-        const response = await axios.get(
-          `https://api.spacexdata.com/v4/crew/${val}`
-        );
-
-        const cardDiv = document.createElement('div');
-        cardDiv.classList.add('card');
-
-        const image = document.createElement('img');
-        image.classList.add('card-img-top');
-        image.setAttribute('src', response.data.image);
-
-        const groupCardBody = document.createElement('div');
-        groupCardBody.classList.add('card-body');
-
-        const groupCardName = document.createElement('h5');
-        groupCardName.classList.add('card-title');
-        groupCardName.innerText = response.data.name;
-
-        const groupCardAgency = document.createElement('h6');
-        groupCardAgency.classList.add('card-title');
-        groupCardAgency.innerText = `Agency: ${response.data.agency}`;
-
-        cardDiv.append(image);
-        groupCardBody.append(groupCardName);
-        groupCardBody.append(groupCardAgency);
-        cardDiv.append(groupCardBody);
-
-        cardGroup.append(cardDiv);
-      });
-      const cardGroup = document.createElement('div');
-      cardGroup.classList.add('card-group');
-      cardBody.append(cardGroup);
+    if (response.data[i].crew.length > 0) {
+      renderMission(response.data[i]);
     }
   }
+}
+
+function getCrewMembers(crewMembers) {
+  console.log(crewMembers);
+
+  console.log(member);
+  // crewMembers.forEach(async function (val) {
+  //   const member = await axios.get('https://api.spacexdata.com/v4/crew/' + val);
+  //   console.log(member.data.image);
+
+  //   // renderCrew(val);
+  // });
+}
+
+function renderCrew(response) {
+  const cardDiv = document.createElement('div');
+  cardDiv.classList.add('card');
+
+  const image = document.createElement('img');
+  image.classList.add('card-img-top');
+  image.setAttribute('src', response.data.image);
+
+  const groupCardBody = document.createElement('div');
+  groupCardBody.classList.add('card-body');
+
+  const groupCardName = document.createElement('h5');
+  groupCardName.classList.add('card-title');
+  groupCardName.innerText = response.data.name;
+
+  const groupCardAgency = document.createElement('h6');
+  groupCardAgency.classList.add('card-title');
+  groupCardAgency.innerText = `Agency: ${response.data.agency}`;
+
+  cardDiv.append(image);
+  groupCardBody.append(groupCardName);
+  groupCardBody.append(groupCardAgency);
+  cardDiv.append(groupCardBody);
+
+  const cardGroup = document.createElement('div');
+  cardGroup.append(cardDiv);
+
+  const cardBody = document.querySelector('.card-body');
+  cardGroup.classList.add('card-group');
+  cardBody.append(cardGroup);
+}
+
+function renderMission(response) {
+  const crewedMissions = document.querySelector('#crewed-missions');
+  const name = response.name;
+  const date = response.date_local;
+  const crewMembers = response.crew;
+
+  const missDiv = document.createElement('div');
+  missDiv.classList.add('card');
+  missDiv.setAttribute('style', 'width: 100%;');
+
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
+
+  const missionName = document.createElement('h5');
+  missionName.classList.add('card-title');
+  missionName.classList.add('text-center');
+  missionName.innerText = name;
+
+  const missionDate = document.createElement('p');
+  missionDate.classList.add('card-text');
+  missionDate.innerText = date;
+
+  const missionCountdown = document.createElement('a');
+  missionCountdown.setAttribute('id', 'crewed-countdown');
+  missionCountdown.classList.add('btn');
+  missionCountdown.classList.add('btn-dark');
+  missionCountdown.classList.add('btn-sm');
+  missionCountdown.classList.add('d-block');
+  countdown(response.date_unix, 'crewed-countdown');
+
+  const crewTitle = document.createElement('h4');
+  crewTitle.innerText = 'Crew memebers';
+
+  crewTitle.append(missionCountdown);
+  missionDate.append(missionCountdown);
+  missionName.append(missionDate);
+  cardBody.append(missionName);
+  missDiv.append(cardBody);
+  crewedMissions.append(missDiv);
+
+  console.log(crewMembers);
+
+  crewMembers.forEach(async function (val) {
+    const member = await axios.get('https://api.spacexdata.com/v4/crew/' + val);
+    console.log(member);
+  });
+
+  // for (let i = 0; i < crewMembers.length; i++) {
+  //   const member = await axios.get(
+  //     'https://api.spacexdata.com/v4/crew/' + crewMembers[i]
+  //   );
+  //   console.log(member)
+  // }
+
+  console.log('mission done');
 }
 
 getCrewedMissions();
