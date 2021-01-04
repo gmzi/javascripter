@@ -59,39 +59,6 @@ async function getCrewedMissions() {
   }
 }
 
-function renderCrew(response) {
-  const cardDiv = document.createElement('div');
-  cardDiv.classList.add('card');
-
-  const image = document.createElement('img');
-  image.classList.add('card-img-top');
-  image.setAttribute('src', response.data.image);
-
-  const groupCardBody = document.createElement('div');
-  groupCardBody.classList.add('card-body');
-
-  const groupCardName = document.createElement('h5');
-  groupCardName.classList.add('card-title');
-  groupCardName.innerText = response.data.name;
-
-  const groupCardAgency = document.createElement('h6');
-  groupCardAgency.classList.add('card-title');
-  groupCardAgency.innerText = `Agency: ${response.data.agency}`;
-
-  cardDiv.append(image);
-  groupCardBody.append(groupCardName);
-  groupCardBody.append(groupCardAgency);
-  cardDiv.append(groupCardBody);
-
-  const cardGroup = document.createElement('div');
-  cardGroup.append(cardDiv);
-
-  cardGroup.classList.add('card-group');
-
-  const parent = document.querySelector('.card-title');
-  parent.append(cardGroup);
-}
-
 function renderMission(response) {
   const crewedMissions = document.querySelector('#crewed-missions');
   const name = response.name;
@@ -159,6 +126,9 @@ function renderMission(response) {
 
     cardGroup.append(cardDiv);
   });
+  const cardGroup = document.createElement('div');
+  cardGroup.classList.add('card-group');
+  cardBody.append(cardGroup);
 }
 
 getCrewedMissions();
