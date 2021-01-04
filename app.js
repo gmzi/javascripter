@@ -134,6 +134,30 @@ function renderMission(response) {
 
   crewMembers.forEach(async function (val) {
     const member = await axios.get('https://api.spacexdata.com/v4/crew/' + val);
+    const cardDiv = document.createElement('div');
+    cardDiv.classList.add('card');
+
+    const image = document.createElement('img');
+    image.classList.add('card-img-top');
+    image.setAttribute('src', member.data.image);
+
+    const groupCardBody = document.createElement('div');
+    groupCardBody.classList.add('card-body');
+
+    const groupCardName = document.createElement('h5');
+    groupCardName.classList.add('card-title');
+    groupCardName.innerText = member.data.name;
+
+    const groupCardAgency = document.createElement('h6');
+    groupCardAgency.classList.add('card-title');
+    groupCardAgency.innerText = `Agency: ${member.data.agency}`;
+
+    cardDiv.append(image);
+    groupCardBody.append(groupCardName);
+    groupCardBody.append(groupCardAgency);
+    cardDiv.append(groupCardBody);
+
+    cardGroup.append(cardDiv);
   });
 }
 
