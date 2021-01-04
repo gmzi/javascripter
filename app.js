@@ -166,10 +166,10 @@ const countdown = (time, id) => {
     countD.innerText = formattedTime;
 
     // appendTo.append(placeholder);
-    // if (distance < 0) {
-    //   clearInterval(x);
-    //   countD.innerText = 'launched';
-    // }
+    if (distance < 0) {
+      clearInterval(x);
+      countD.innerText = 'launched';
+    }
   }, 1000);
 };
 
