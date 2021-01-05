@@ -1,61 +1,3 @@
-// dogs div
-async function getRandomDog() {
-  const res = await axios.get('https://dog.ceo/api/breeds/image/random');
-  document.querySelector('#dogs').setAttribute('src', res.data.message);
-}
-
-getRandomDog();
-
-const form = document.querySelector('#dogSearchform');
-
-async function getDogByBreed(breed) {
-  try {
-    const url = `https://dog.ceo/api/breed/${breed}/images/random`;
-    const res = await axios.get(url);
-    const linkImage = res.data.message;
-    document.querySelector('#dog-by-breed').setAttribute('src', linkImage);
-  } catch (e) {
-    console.log(e);
-    alert('breed not found');
-  }
-}
-
-form.addEventListener('submit', function (e) {
-  e.preventDefault();
-  const breedInput = document.querySelector('#breed');
-  const searchTerm = breedInput.value.trim();
-  getDogByBreed(searchTerm);
-  breedInput.value = '';
-});
-
-// ---------------------------------------------------------------------------
-
-// Nasa image of the day
-async function getNasaImg() {
-  let key = apis.nasa;
-  const response = await axios.get(
-    'https://api.nasa.gov/planetary/apod?' + key
-  );
-  const nasaDiv = document.querySelector('#nasa');
-  const videoSource = document.querySelector('#video');
-  if (response.data.media_type === 'video') {
-    const iframe = document.createElement('iframe');
-    iframe.setAttribute('id', 'nasa-video');
-    iframe.setAttribute('src', response.data.url);
-    nasaDiv.append(iframe);
-  } else {
-    const image = document.createElement('img');
-    image.setAttribute('id', 'nasa-image');
-    image.setAttribute('class', 'img-thumbnail rounded mx-auto d-block');
-    image.setAttribute('src', response.data.url);
-    nasaDiv.append(image);
-  }
-  const description = document.querySelector('#description');
-  description.innerText = response.data.title;
-}
-
-getNasaImg();
-
 // Next Xspace Launch:
 async function getNextLaunch() {
   const response = await axios.get(
@@ -203,17 +145,3 @@ const countdown = (time, id) => {
 };
 
 getNextLaunch();
-
-// canvas
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
-ctx.fillStyle = 'green';
-ctx.fillRect(10, 10, 150, 500);
-
-ctx.beginPath();
-ctx.moveTo(50, 140);
-ctx.lineTo(150, 60);
-ctx.lineTo(250, 140);
-ctx.closePath();
-ctx.stroke();

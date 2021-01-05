@@ -2,12 +2,12 @@ Libraries to use AJAX:
 
 1. ## Axios
 
-Setup:
+1. Setup:
 
 - include cdn link (before the app.js file): `<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>`
 - type "axios" in console, if it doesn't throw error you're good to go.
 
-Single request:
+2. Single request:
 
 ```javascript
 async function getPosition() {
@@ -28,7 +28,7 @@ async function getStarWarsPlanets() {
 getStarWarsPlanets(); // Tatoonie, Alderaan, Yavin, Hoth, Dagobah
 ```
 
-Multiple requests:
+3. Multiple requests:
 
 ```javascript
 async function getPlanetsByPage() {
@@ -49,7 +49,44 @@ getPlanetsByPage(); // Geonosis, Utapau, Mustafar, ....
 
 Axios parses the JSON response into a JavaScript object automatically, so we can work with it right away.
 
----
+4. Error Handling
+   If a request doesn't work, or if an API is down or doesn't respond,
+   use try/catch:
+
+```javascript
+async function getDogByBreed(breed) {
+  try {
+    const url = `https://dog.ceo/api/breed/${breed}/images/random`;
+    const res = await axios.get(url);
+    const linkImage = res.data.message;
+    document.querySelector('#dog-by-breed').setAttribute('src', linkImage);
+  } catch (e) {
+    console.log(e);
+    alert('breed not found');
+  }
+}
+```
+
+5. Axios Methods
+
+- params:
+
+```javascript
+// Syntax:
+axios.get('http://ApiURL', { params: { param1: value1, param2: value2 } });
+
+// Example:
+// API: http://api.icndb.com/jokes/random?firstName=John&lastName=Doe
+async function getJoke(firstName, lastName) {
+  const res = await axios.get('http://api.icndb.com/jokes/random', {
+    params: { firstName, lastName },
+  });
+  console.log(res.data.value.joke);
+}
+getJoke('Juan', 'Domingo'); // Juan Domingo can read from an input stream.
+```
+
+- ***
 
 2. fetch
 
