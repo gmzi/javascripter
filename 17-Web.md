@@ -86,11 +86,13 @@ The browser and the server communicates through HTTP. A protocl is a set of rule
      - Any caching information
      - more (full list of headers in "network" tab of chrome console.)
 
-Response codes:
+Response status codes:
 
 - 200: ok
+- 201: created
 - 301: moved permanently (all 3 hundreds are Redirect)
 - 304: not modified
+- 400: Bad request (client error)
 - 404: not found
 - 500: server had internal problem.
 

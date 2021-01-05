@@ -7,7 +7,7 @@ Libraries to use AJAX:
 - include cdn link (before the app.js file): `<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>`
 - type "axios" in console, if it doesn't throw error you're good to go.
 
-2. Single request:
+2. Single GET request:
 
 ```javascript
 async function getPosition() {
@@ -28,7 +28,7 @@ async function getStarWarsPlanets() {
 getStarWarsPlanets(); // Tatoonie, Alderaan, Yavin, Hoth, Dagobah
 ```
 
-3. Multiple requests:
+3. Multiple GET requests:
 
 ```javascript
 async function getPlanetsByPage() {
@@ -67,7 +67,7 @@ async function getDogByBreed(breed) {
 }
 ```
 
-5. Axios Methods
+5. GET params
 
 - params:
 
@@ -86,7 +86,31 @@ async function getJoke(firstName, lastName) {
 getJoke('Juan', 'Domingo'); // Juan Domingo can read from an input stream.
 ```
 
-- ***
+6. POST requests
+
+```javascript
+// Syntax:
+axios.post(url, [data], [config]);
+
+// Example:
+// API: reqres.in
+async function createUser() {
+  const res = await axios.post('https://reqres.in/api/users', {
+    userNickName: 'Sorongo',
+    email: 'caca@caca.com',
+    age: 21,
+  });
+}
+
+createUser(); /* 
+status: 201,
+data:
+    age: 21
+    createdAt: "2021-01-05T15:31:15.606Z"
+    email: "caca@caca.com"
+    id: "850"
+    userNickName: "Sorongo" */
+```
 
 2. fetch
 
