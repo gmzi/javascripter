@@ -36,7 +36,31 @@ async function getCrewedMissions() {
 function renderMission(response, id) {
   const crewedMissions = document.querySelector('#crewed-missions');
   const name = response.name;
-  const date = response.date_local;
+  // const date = response.date_utc;
+  const dateAndTime = response.date_utc;
+  const date = dateAndTime.slice(0, 10);
+  const time = 'TODO';
+  console.log(response);
+  console.log(response.date_unix);
+
+  // convert unix timestamp into time:
+
+  let unix_timestamp = response.date_unix;
+  // Create a new JavaScript Date object based on the timestamp
+  // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+  const dateUnix = new Date(unix_timestamp * 1000);
+  // Hours part from the timestamp
+  const hours = dateUnix.getHours();
+  // Minutes part from the timestamp
+  const minutes = '0' + dateUnix.getMinutes();
+  // Seconds part from the timestamp
+  const seconds = '0' + dateUnix.getSeconds();
+
+  // Will display time in 10:30:23 format
+  const formattedTime =
+    hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+  console.log(formattedTime);
+
   const crewMembers = response.crew;
 
   const missDiv = document.createElement('div');
@@ -53,7 +77,7 @@ function renderMission(response, id) {
 
   const missionDate = document.createElement('p');
   missionDate.classList.add('card-text');
-  missionDate.innerText = date;
+  missionDate.innerText = `date: ${date} | time: ${formattedTime}`;
 
   const missionCountdown = document.createElement('a');
   missionCountdown.setAttribute('id', `crewed-countdown-${id}`);
@@ -111,7 +135,6 @@ const countdown = (time, id, timer) => {
   placeholder.setAttribute('id', 'countdown');
 
   let x = setInterval(function () {
-    console.log(id);
     let now = Math.round(new Date().getTime() / 1000);
     let distance = countDownDate - now;
 
