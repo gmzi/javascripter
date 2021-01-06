@@ -28,12 +28,12 @@ async function getCrewedMissions() {
   );
   for (let i = 0; i < response.data.length; i++) {
     if (response.data[i].crew.length > 0) {
-      renderMission(response.data[i]);
+      renderMission(response.data[i], i);
     }
   }
 }
 
-function renderMission(response) {
+function renderMission(response, id) {
   const crewedMissions = document.querySelector('#crewed-missions');
   const name = response.name;
   const date = response.date_local;
@@ -56,17 +56,17 @@ function renderMission(response) {
   missionDate.innerText = date;
 
   const missionCountdown = document.createElement('a');
-  missionCountdown.setAttribute('id', 'crewed-countdown');
+  missionCountdown.setAttribute('id', `crewed-countdown-${id}`);
   missionCountdown.classList.add('btn');
   missionCountdown.classList.add('btn-dark');
   missionCountdown.classList.add('btn-sm');
   missionCountdown.classList.add('d-block');
-  countdown(response.date_unix, 'crewed-countdown');
+  countdown(response.date_unix, `crewed-countdown-${id}`);
 
-  const crewTitle = document.createElement('h4');
-  crewTitle.innerText = 'Crew memebers';
+  // const crewTitle = document.createElement('h4');
+  // crewTitle.innerText = 'Crew members';
+  // crewTitle.append(missionCountdown);
 
-  crewTitle.append(missionCountdown);
   missionDate.append(missionCountdown);
   missionName.append(missionDate);
   cardBody.append(missionName);
@@ -105,12 +105,13 @@ function renderMission(response) {
   cardBody.append(cardGroup);
 }
 
-const countdown = (time, id) => {
+const countdown = (time, id, timer) => {
   const countDownDate = new Date(time);
   const placeholder = document.createElement('h3');
   placeholder.setAttribute('id', 'countdown');
 
   let x = setInterval(function () {
+    console.log(id);
     let now = Math.round(new Date().getTime() / 1000);
     let distance = countDownDate - now;
 
