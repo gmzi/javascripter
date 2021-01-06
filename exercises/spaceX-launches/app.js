@@ -105,8 +105,6 @@ function renderMission(response) {
   cardBody.append(cardGroup);
 }
 
-getCrewedMissions();
-
 const countdown = (time, id) => {
   const countDownDate = new Date(time);
   const placeholder = document.createElement('h3');
@@ -145,3 +143,4 @@ const countdown = (time, id) => {
 };
 
 getNextLaunch();
+getCrewedMissions();
