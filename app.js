@@ -86,15 +86,39 @@ async function getCrewedMissions() {
   );
   for (let i = 0; i < response.data.length; i++) {
     if (response.data[i].crew.length > 0) {
-      renderMission(response.data[i]);
+      renderMission(response.data[i], i);
     }
   }
 }
 
-function renderMission(response) {
+function renderMission(response, id) {
   const crewedMissions = document.querySelector('#crewed-missions');
   const name = response.name;
-  const date = response.date_local;
+  // const date = response.date_utc;
+  const dateAndTime = response.date_utc;
+  const date = dateAndTime.slice(0, 10);
+  const time = 'TODO';
+  console.log(response);
+  console.log(response.date_unix);
+
+  // convert unix timestamp into time:
+
+  let unix_timestamp = response.date_unix;
+  // Create a new JavaScript Date object based on the timestamp
+  // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+  const dateUnix = new Date(unix_timestamp * 1000);
+  // Hours part from the timestamp
+  const hours = dateUnix.getHours();
+  // Minutes part from the timestamp
+  const minutes = '0' + dateUnix.getMinutes();
+  // Seconds part from the timestamp
+  const seconds = '0' + dateUnix.getSeconds();
+
+  // Will display time in 10:30:23 format
+  const formattedTime =
+    hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+  console.log(formattedTime);
+
   const crewMembers = response.crew;
 
   const missDiv = document.createElement('div');
@@ -111,20 +135,20 @@ function renderMission(response) {
 
   const missionDate = document.createElement('p');
   missionDate.classList.add('card-text');
-  missionDate.innerText = date;
+  missionDate.innerText = `date: ${date} | time: ${formattedTime}`;
 
   const missionCountdown = document.createElement('a');
-  missionCountdown.setAttribute('id', 'crewed-countdown');
+  missionCountdown.setAttribute('id', `crewed-countdown-${id}`);
   missionCountdown.classList.add('btn');
   missionCountdown.classList.add('btn-dark');
   missionCountdown.classList.add('btn-sm');
   missionCountdown.classList.add('d-block');
-  countdown(response.date_unix, 'crewed-countdown');
+  countdown(response.date_unix, `crewed-countdown-${id}`);
 
-  const crewTitle = document.createElement('h4');
-  crewTitle.innerText = 'Crew memebers';
+  // const crewTitle = document.createElement('h4');
+  // crewTitle.innerText = 'Crew members';
+  // crewTitle.append(missionCountdown);
 
-  crewTitle.append(missionCountdown);
   missionDate.append(missionCountdown);
   missionName.append(missionDate);
   cardBody.append(missionName);
@@ -163,9 +187,7 @@ function renderMission(response) {
   cardBody.append(cardGroup);
 }
 
-getCrewedMissions();
-
-const countdown = (time, id) => {
+const countdown = (time, id, timer) => {
   const countDownDate = new Date(time);
   const placeholder = document.createElement('h3');
   placeholder.setAttribute('id', 'countdown');
@@ -203,6 +225,7 @@ const countdown = (time, id) => {
 };
 
 getNextLaunch();
+getCrewedMissions();
 
 // canvas
 const canvas = document.getElementById('canvas');

@@ -16,19 +16,23 @@
       }
  */
 async function searchShows(query) {
-  // TODO: Make an ajax request to the searchShows api.  Remove
-  // hard coded data.
-
-  return [
-    {
-      id: 1767,
-      name: 'The Bletchley Circle',
-      summary:
-        '<p><b>The Bletchley Circle</b> follows the journey of four ordinary women with extraordinary skills that helped to end World War II.</p><p>Set in 1952, Susan, Millie, Lucy and Jean have returned to their normal lives, modestly setting aside the part they played in producing crucial intelligence, which helped the Allies to victory and shortened the war. When Susan discovers a hidden code behind an unsolved murder she is met by skepticism from the police. She quickly realises she can only begin to crack the murders and bring the culprit to justice with her former friends.</p>',
-      image:
-        'http://static.tvmaze.com/uploads/images/medium_portrait/147/369403.jpg',
-    },
-  ];
+  const results = [];
+  const response = await axios.get(
+    'http://api.tvmaze.com/search/shows?q=' + query
+  );
+  response.data.forEach(function (show) {
+    if (!show.show.image) {
+    } else {
+      const obj = {
+        id: show.show.id,
+        name: show.show.name,
+        summary: show.show.summary,
+        image: show.show.image.original,
+      };
+      results.push(obj);
+    }
+  });
+  return results;
 }
 
 /** Populate shows list:
@@ -38,14 +42,15 @@ async function searchShows(query) {
 function populateShows(shows) {
   const $showsList = $('#shows-list');
   $showsList.empty();
-
   for (let show of shows) {
     let $item = $(
       `<div class="col-md-6 col-lg-3 Show" data-show-id="${show.id}">
          <div class="card" data-show-id="${show.id}">
            <div class="card-body">
+             <img class="card-img-top" src="${show.image}">
              <h5 class="card-title">${show.name}</h5>
              <p class="card-text">${show.summary}</p>
+             <button type="button" class="btn-episodes btn btn-primary" data-bs-toggle="modal" data-bs-target="#epismodal">Episodes</button>
            </div>
          </div>
        </div>
@@ -53,6 +58,23 @@ function populateShows(shows) {
     );
 
     $showsList.append($item);
+  }
+
+  const btnEpisodes = document.getElementsByClassName('btn-episodes');
+  for (let btn of btnEpisodes) {
+    btn.addEventListener('click', function () {
+      const showId = btn.parentElement.parentElement.parentElement.getAttribute(
+        'data-show-id'
+      );
+      populateEpisodes(getEpisodes(showId));
+      const epismodal = new bootstrap.Modal(
+        document.querySelector('#epismodal')
+      );
+      epismodal.show();
+      document.querySelector('#close').addEventListener('click', function () {
+        epismodal.hide();
+      });
+    });
   }
 }
 
@@ -67,11 +89,10 @@ $('#search-form').on('submit', async function handleSearch(evt) {
   let query = $('#search-query').val();
   if (!query) return;
 
-  $('#episodes-area').hide();
-
   let shows = await searchShows(query);
-
   populateShows(shows);
+
+  query = $('#search-query').val('');
 });
 
 /** Given a show ID, return list of episodes:
@@ -79,8 +100,35 @@ $('#search-form').on('submit', async function handleSearch(evt) {
  */
 
 async function getEpisodes(id) {
-  // TODO: get episodes from tvmaze
-  //       you can get this by making GET request to
-  //       http://api.tvmaze.com/shows/SHOW-ID-HERE/episodes
-  // TODO: return array-of-episode-info, as described in docstring above
+  const results = [];
+  const response = await axios.get(
+    `http://api.tvmaze.com/shows/${id}/episodes`
+  );
+  response.data.forEach(function (episode) {
+    const obj = {
+      id: episode.id,
+      name: episode.name,
+      season: episode.season,
+      number: episode.number,
+    };
+    results.push(obj);
+  });
+  return results;
+}
+
+async function populateEpisodes(list) {
+  const array = await list;
+  const episodesList = document.querySelector('#episodes-list');
+  // remove existing items from list:
+  const erasure = Array.from(episodesList.children);
+  for (let item of erasure) {
+    item.remove();
+  }
+
+  // add episodes to list:
+  array.forEach(function (episode) {
+    const li = document.createElement('li');
+    li.innerText = `${episode.name} (season ${episode.season}, number ${episode.number})`;
+    episodesList.append(li);
+  });
 }
