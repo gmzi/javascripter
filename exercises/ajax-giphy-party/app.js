@@ -13,7 +13,11 @@ function giphyParty() {
       },
     });
     const num = Math.floor(Math.random() * 19) + 1;
-    renderGif(res.data.data[num].embed_url);
+    if (res.data.data.length === 0) {
+      alert('nothing found, try other keyword');
+    } else {
+      renderGif(res.data.data[num].embed_url);
+    }
   }
 
   function renderGif(url) {
@@ -39,7 +43,6 @@ function giphyParty() {
     gifs.forEach(function (val) {
       val.remove();
     });
-    return;
   });
 }
 
