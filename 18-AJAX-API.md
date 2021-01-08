@@ -1,13 +1,28 @@
+1. axios
+
+   - [setup](##setup)
+   - [single_get_req](##single_get_req)
+   - [multiple_get_req](##multiple_get_req)
+   - [error_handling](##error_handling)
+   - [params](##params)
+   - [post_req](##post_req)
+
+2. Old formats:
+   - [XMLHttpRequest](##XMLHttpRequest)
+   - [XML](###XML)
+
 Libraries to use AJAX:
 
 1. ## Axios
 
-1. Setup:
+## setup
 
 - include cdn link (before the app.js file): `<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>`
 - type "axios" in console, if it doesn't throw error you're good to go.
 
 2. Single GET request:
+
+## single_get_req
 
 ```javascript
 async function getPosition() {
@@ -30,6 +45,8 @@ getStarWarsPlanets(); // Tatoonie, Alderaan, Yavin, Hoth, Dagobah
 
 3. Multiple GET requests:
 
+## multiple_get_req
+
 ```javascript
 async function getPlanetsByPage() {
   const response1 = await axios.get('https://swapi.dev/api/planets');
@@ -50,8 +67,11 @@ getPlanetsByPage(); // Geonosis, Utapau, Mustafar, ....
 Axios parses the JSON response into a JavaScript object automatically, so we can work with it right away.
 
 4. Error Handling
-   If a request doesn't work, or if an API is down or doesn't respond,
-   use try/catch:
+
+## error_handling
+
+If a request doesn't work, or if an API is down or doesn't respond,
+use try/catch:
 
 ```javascript
 async function getDogByBreed(breed) {
@@ -68,6 +88,8 @@ async function getDogByBreed(breed) {
 ```
 
 5. GET params
+
+## params
 
 - params:
 
@@ -87,6 +109,8 @@ getJoke('Juan', 'Domingo'); // Juan Domingo can read from an input stream.
 ```
 
 6. POST requests
+
+## post_req
 
 ```javascript
 // Syntax:
@@ -115,6 +139,8 @@ data:
 2. fetch
 
 3. ## XMLHttpRequest
+
+## XMLHttpRequest
 
 Uses callbacks, just as a setTimeout.
 (XHR for short)
