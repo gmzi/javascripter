@@ -98,8 +98,6 @@ function renderMission(response, id) {
   const dateAndTime = response.date_utc;
   const date = dateAndTime.slice(0, 10);
   const time = 'TODO';
-  console.log(response);
-  console.log(response.date_unix);
 
   // convert unix timestamp into time:
 
@@ -117,7 +115,6 @@ function renderMission(response, id) {
   // Will display time in 10:30:23 format
   const formattedTime =
     hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-  console.log(formattedTime);
 
   const crewMembers = response.crew;
 

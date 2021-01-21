@@ -214,3 +214,21 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
 ### folder naming
 
 `mkdir "folder name"` for a folder name with a space (don't do it).
+
+---
+
+---
+
+# PYTHON
+
+- `which python3` python version;
+- `which packageName` library version
+- `ctrl + d` quit python;
+- `q` to quit from places;
+- `python3` runs the python3 repl (read-evaluate-print-loop). It's like the JS console, but more powerful.
+- `help()` list of help topics.
+
+- `pip3 install packageName` installs package
+- `pip3 uninstall packageName` uninstalls package
+
+- `type(value)` same as typeof in JS.
