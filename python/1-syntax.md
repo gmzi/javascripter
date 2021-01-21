@@ -1,8 +1,20 @@
 # Python
 
-- [string_methods](##strings)
+1. Data types:
+
+   1. - Strings
+   2. - Numbers
+   3. - Booleans
+
+2. Methods:
+
+- [index](##index)
+- [len](##len)
+- [in](##in)
+
+1. numbers / boolenas / if / comparisons/ ternary
+
 - [numbers](##numbers)
-- [lists](##lists)
 - [boolean](##boolean)
 - [comparisons](##comparisons)
 - [conditionals](##conditionals)
@@ -19,17 +31,17 @@
 - [range]
 - [range(more)](##rangemore)
 
-3.
+3. functions
 
 - [functions](##functions)
 - [arguments](##arguments)
 
-4.
+4. help
 
 - [help](##help)
 - [dir](##dir)
 
-5.
+5. falsy / scope / docstrings / ipython / variables
 
 - [falsy_values](##falsy)
 - [scope](##scope)
@@ -37,40 +49,58 @@
 - [ipython](##ipython)
 - [variables](##variables)
 
-## strings
+## in
+
+the `in` operator
 
 ```python
-str1 = 'hello'
-str2 = "hello"
-str3 = '''
-hello for multiple line strings
-adds backslash
-to long stuff'''
+43 in alpha # True
+42 in alpha # False
+#---------
+special_chars = '$%#&'
+'$' in special_chars # true
+#---------
+vegan_no_nos = ['eggs', 'meat', 'milk']
+tart = ['flour', 'apples', 'meat', 'eggs']
+cake = ['salad', 'onion', 'carrot']
 
-#interpolated string:
-str4 = 'cheese'
-print(f"I love {str4}") #"I love cheese"
 
-# spacing
-print('hi \n hello') ''' hi
-                            hello '''
-print('hi \t hello') """ hi       hello """
-print("it's showtime") # it's showtime
+def check_if_vegan(recipe):
+    for item in recipe:
+        if item in vegan_no_nos:
+            return 'not vegan'
+    return 'vegan'
 
+
+print(check_if_vegan(cake)) # vegan
+print(check_if_vegan(tart)) # not vegan
 ```
 
-String methods:
+## index
 
 ```python
-course = "programming"
-print(course.upper())
-print(course.lower())
-print(course.title())
-print(course.rstrip())
-print(course.find("pro"))
-print(course.replace("p", "j"))  # replace a character with another
-print("pro" in course)  # True
-print("swift" not in course)  # False
+vegan_no_nos = ['eggs', 'meat', 'milk']
+vegan_no_nos[-1]  # milk
+vegan_no_nos[-2]  # meat
+
+# update element:
+vegan_no_nos[1] = 'dairy'
+print(vegan_no_nos)  # ['eggs', 'dairy', 'milk']
+
+# can't add element at index out of range:
+vegan_no_nos[3] = 'some'  # ERROR
+#use .append for this
+```
+
+## len
+
+In python is a function, not a property of the element. len() goes and figures out the length of the given object.
+
+```python
+len('abc') #3
+len([]) #0
+len([1, 2, 3]) #3
+
 ```
 
 ## numbers
@@ -109,15 +139,6 @@ complex(re, im) # complex num with real part `re` and imaginary part `im`.
 4.000.is_integer() #True
 
 32123.21.hex() #hexadecimal representation: 0x1.f5ecd70a3d70ap+14
-```
-
-## lists
-
-Are the python analog to JS arrays.
-
-```python
-loco = [1, 2, 'corta', 2]
-type(loco) # list
 ```
 
 ## boolean
