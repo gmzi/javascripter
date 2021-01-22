@@ -1,53 +1,47 @@
 # Python
 
-1. Data types:
+1. Tools:
 
-   1. - Strings
-   2. - Numbers
-   3. - Booleans
-
-2. Methods:
-
-- [index](##index)
-- [len](##len)
-- [in](##in)
+   - [index](##index)
+   - [len](##len)
+   - [in](##in)
 
 1. numbers / boolenas / if / comparisons/ ternary
 
-- [numbers](##numbers)
-- [boolean](##boolean)
-- [comparisons](##comparisons)
-- [conditionals](##conditionals)
-- [ternary_operator](###ternary)
-- [boolean_operations](###operations)
+   - [numbers](##numbers)
+   - [boolean](##boolean)
+   - [comparisons](##comparisons)
+   - [conditionals](##conditionals)
+   - [ternary_operator](###ternary)
+   - [boolean_operations](###operations)
 
-2. loops
+1. loops
 
-- [while_loops](##while)
-- [break_keyword]
-- [input_keyword]
+   - [while_loops](##while)
+   - [break_keyword]
+   - [input_keyword]
 
-- [for_loops](##for)
-- [range]
-- [range(more)](##rangemore)
+   - [for_loops](##for)
+   - [range]
+   - [range(more)](##rangemore)
 
-3. functions
+1. functions
 
-- [functions](##functions)
-- [arguments](##arguments)
+   - [functions](##functions)
+   - [arguments](##arguments)
 
-4. help
+1. help
 
-- [help](##help)
-- [dir](##dir)
+   - [help](##help)
+   - [dir](##dir)
 
-5. falsy / scope / docstrings / ipython / variables
+1. falsy / scope / docstrings / ipython / variables
 
-- [falsy_values](##falsy)
-- [scope](##scope)
-- [docstrings](##docstrings)
-- [ipython](##ipython)
-- [variables](##variables)
+   - [falsy_values](##falsy)
+   - [scope](##scope)
+   - [docstrings](##docstrings)
+   - [ipython](##ipython)
+   - [variables](##variables)
 
 ## in
 

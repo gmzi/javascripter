@@ -1,7 +1,4 @@
-Data structures:
-
-1. [Lists](#lists)
-
+1. [Lists](#Lists)
    1. [list()](##list)
    2. [slice](##slice)
    3. [splice](##splice)
@@ -17,16 +14,102 @@ Data structures:
       - 'remove',
       - 'reverse',
       - 'sort'
+2. [Tuples](#Tuples)('single',)
+   1. [tuple_methods](##tuple_methods)
+      - 'count',
+      - 'index',
+3. [Dictionaries](#Dictionaries)
+   1. [unpack](##unpack)
+   2. [dict_methods](##dict_methods)
+      - 'clear',
+      - 'copy',
+      - 'fromkeys',
+      - 'get',
+      - [items](##dict.items)
+      - [keys](##dict.keys)
+      - 'pop',
+      - 'popitem',
+      - 'setdefault',
+      - 'update',
+      - [values](##dict.values)
+4. [Sets](#Sets)
+   1. [set_methods](##set_methods)
+      - 'add',
+      - 'clear',
+      - 'copy',
+      - [difference](##set.difference)(`-`)
+      - 'difference_update',
+      - 'discard',
+      - [intersection](##set.intersection)(`&`)
+      - 'intersection_update',
+      - 'isdisjoint',
+      - 'issubset',
+      - 'issuperset',
+      - 'pop',
+      - 'remove',
+      - [symmetric_difference](##symmetric_difference)(`^`)
+      - 'symmetric_difference_update',
+      - [union](##set.union)(`|`)
+      - 'update'
+   1. [loop_set](##loop_set)
+5. [Strings](#Strings)
+   1. [str_methods](##str_methods)
+      - 'capitalize',
+      - 'casefold',
+      - 'center',
+      - 'count',
+      - 'encode',
+      - 'endswith',
+      - 'expandtabs',
+      - 'find',
+      - 'format',
+      - 'format_map',
+      - 'index',
+      - 'isalnum',
+      - 'isalpha',
+      - 'isascii',
+      - 'isdecimal',
+      - 'isdigit',
+      - 'isidentifier',
+      - 'islower',
+      - 'isnumeric',
+      - 'isprintable',
+      - 'isspace',
+      - 'istitle',
+      - 'isupper',
+      - 'join',
+      - 'ljust',
+      - 'lower',
+      - 'lstrip',
+      - 'maketrans',
+      - 'partition',
+      - 'replace',
+      - 'rfind',
+      - 'rindex',
+      - 'rjust',
+      - 'rpartition',
+      - 'rsplit',
+      - 'rstrip',
+      - 'split',
+      - 'splitlines',
+      - 'startswith',
+      - 'strip',
+      - 'swapcase',
+      - 'title',
+      - 'translate',
+      - 'upper',
+      - 'zfill'
+6. [comprehension](#Comprehension)
+   1. [list_comprehension](##list_comprehension)
 
-2. [Tuples](#tuples)
-3. [Dictionaries](#dictionaries)
-4. [Sets](#sets)
-5. [strings](#strings)
+---
 
-# lists
+# Lists
 
 Ordered collection of values. Mutable. Equivalent to JS arrays.
 Lists are reference types
+
+Constructor function: `list(some)`
 
 ```python
 alpha = [1, 2, 3]
@@ -136,6 +219,8 @@ alpha[::2] = ['LOL', 'LOL', 'LOL', 'LOL', 'LOL']
 ## list_methods
 
 `dir(list)` full list methods
+`dir(str)` full str methods
+`dir(dict)` full dict methods
 
 ```python
 alpha = [1, 2, 3, 4, 5, 'ca', 432, 2131, 'id']
@@ -169,7 +254,318 @@ nums.sort() # 1,2, 3, 4
 words.sort() # a, b, c
 ```
 
-# strings
+---
+
+# Tuples
+
+Ordered sequence of values. Like a list, but inmutable. Once we create a tuple, we can't change it (no add, no remove, no update).
+We can use them as keys in dictionaries.
+
+```python
+t1 = (1, 2, 3, True, (1, 2), ['ay', 'aua'])
+t2 = ()
+t3 = ('single item',)
+# single items with comma, otherwise python won't recongnize it as tuple
+
+
+# ACCESS:
+t1[0]  # 1
+len(t1)  # 3
+t1[0] = 'new'  # ERROR
+
+# AS KEY IN A DICT:
+board = {
+    (0, 0): 'X',
+    (0, 1): None,
+    (0, 2): 'O',
+    (1, 0): 'X',
+    (1, 1): 'O'
+}
+board[(0, 0)]  # 'X'
+board[(0, 2)]  # 'O'
+```
+
+## tuple_methods
+
+```python
+t1.count(True) #2
+
+t1.index(2) #1
+
+```
+
+---
+
+# Dictionaries
+
+Key-value pair data structures. They are a type of Object in python. They're ordered by insertion order (since python 3.6). Are mutable.
+
+Constructor function: `dict({})`
+
+```python
+my_dict = {
+    'ok': 'yes',
+    42: 'all good',
+    True: 23,
+    100: 'awesome',
+    'has_food': {
+        'M': True,
+        'T': True,
+        'W': False,
+    },
+    'mates': ['stanley', 'mitch', 'stella']
+    [1, 2] : 'NO' #ERROR HERE, mutable data structures not allowed as keys.
+}
+
+#IN
+'name' in my_dict # False
+42 in my_dict # True
+
+#ACCESS VALUE:
+my_dict['ok'] # 'yes'
+my_dict[42] # 'all good'
+
+#GET
+my_dict.get('ok') #'yes'
+my_dict.get('sarasa', 'sorolo') #'sorolo' (if 'sarasa' key not found, will return 'sorolo' as default value)
+
+#UPDATE VALUE:
+my_dict[42] = 'new value'
+
+#CREATE NEW DICTIONARY:
+dict() # {}
+trilce = dict([[True, 0], [False, 11]]) #trilce {True: 0, False: 11}
+```
+
+## unpack
+
+```python
+# SEPARATE KEYS AND VALUES:
+for (k, v) in chicken.items():
+    print(k, '-->', v)
+""" name --> Lady
+    breed --> silkie
+    has_food --> {'M': True, 'T': True, 'W': False}
+    coop_mates --> ['mitch', 'stella', 'stanley'] """
+```
+
+## dict.keys
+
+```python
+chicken = {
+    'name': 'Lady',
+    'breed': 'silkie',
+    'has_food': {
+        'M': True,
+        'T': True,
+        'W': False,
+    },
+    'coop_mates': ['mitch', 'stella', 'stanley']
+}
+
+chicken.keys()
+# dict_keys(['name', 'breed', 'has_food', 'coop-mates'])
+
+for key in chicken.keys():
+    print(key)
+""" name
+    breed
+    has_food
+    coop_mates """
+```
+
+## dict.values
+
+```python
+chicken.values()
+#dict_values(['Lady', 'silkie', {'M': True, 'T': True, 'W': False}, ['mitch', 'stella', 'stanley']])
+
+for value in chicken.values():
+    print(value)
+""" Lady
+    silkie
+    {'M': True, 'T': True, 'W': False}
+    ['mitch', 'stella', 'stanley'] """
+```
+
+## dict.items
+
+```python
+chicken.items()
+#dict_items([('name', 'Lady'), ('breed', 'silkie'), ('has_food', {'M': True, 'T': True, 'W': False}), ('coop_mates', ['mitch', 'stella', 'stanley'])])
+
+for key_val in chicken.items():
+    print(key_val)
+""" ('name', 'Lady')
+    ('breed', 'silkie')
+    ('has_food', {'M': True, 'T': True, 'W': False})
+    ('coop_mates', ['mitch', 'stella', 'stanley'])"""
+```
+
+## dict_methods
+
+```python
+# copy()
+chick_copy = chicken.copy()
+
+print(chick_copy is chicken)  # False
+print(chick_copy == chicken)  # True
+
+# pop()
+'''removes key and value, returns value'''
+print(chicken.pop('name'))
+""" Lady / and the object now is mutated without 'name' prop:
+{'breed': 'silkie', 'has_food': {'M': True, 'T': True, 'W': False}, 'coop_mates': ['mitch', 'stella', 'stanley']} """
+
+# popitem()
+'''picks key and value randomly return a pair:'''
+print(chicken.popitem())  # ('coop_mates', ['mitch', 'stella', 'stanley'])
+
+# fromkeys()
+{}.fromkeys('12345', True)
+''' {'1': True, '2': True, '3': True, '4': True, '5': True} '''
+
+# clear()
+""" removes all items from dict"""
+chicken.clear()  # chicken{}
+```
+
+---
+
+# Sets
+
+Unordered collection of unique items. Are faster than lists.
+constructor function: `set(some)`
+
+```python
+languages = {2, True, 'ruby', 'ruby', 'python', 'ruby', 'javascript'}
+# {2, True, 'javascript', 'python', 'ruby'}
+
+# LIST INTO SET:
+repairs = ['wheels', 'driver', 'wheels']
+non_dups = set(repairs)
+non_dups  # {'driver', 'wheels'}
+
+# SET from string:
+calaca_sin_dups = set('la calaca feliz')
+print(calaca_sin_dups)  # {'i', 'c', 'f', 'l', 'z', ' ', 'a', 'e'}
+
+# IN
+'scala' in languages #False
+'ruby' in languages #True
+
+# LEN
+len(languages) #7
+
+```
+
+## set_methods
+
+```python
+# add()
+languages.add('scala')
+
+# pop()
+"""remove and returns random item"""
+languages.pop()
+
+# remove()
+languages.remove('python')
+
+languages.add('c')
+print(languages)
+
+# copy()
+lan_2 = languages.copy()
+lan_2 == languages  # True
+lan_2 is languages  # False
+
+# clear()
+languages.clear()  # languages {}
+```
+
+## set.union
+
+Returns the union of sets as a new set.
+
+```python
+lemon = {'sour', 'yellow', 'fruit', 'bumpy'}
+banana = {'fruit', 'smooth', 'sweet', 'yellow'}
+berry = {'fruit', 'red'}
+orange = ['fruit', 'bumpy']
+
+# for only sets:
+all_adjs = lemon | banana | berry
+# all_adjs {'red', 'fruit', 'sour', 'sweet', 'smooth', 'yellow', 'bumpy'}
+
+# for any iterable:
+banana.union(orange)
+#{'fruit', 'sour', 'sweet', 'smooth', 'yellow', 'bumpy'}
+```
+
+## set.intersection
+
+Returns new set with intersections.
+
+```python
+# for only sets:
+intersect = lemon & banana
+# {'fruit', 'yellow'}
+
+# for any iterable:
+banana.intersection(orange)
+```
+
+## set.difference
+
+Takes first set, compares to the second set, return new set containing the values that are in the first but not in the second.
+
+```python
+# for only sets:
+diff = lemon - banana
+# diff {'bumpy', 'sour'}
+diff1 = banana - lemon
+# diff1 {'smooth', 'sweet'}
+
+# for any iterable:
+lemon.difference(banana)
+banana.difference(lemon)
+
+```
+
+## symmetric_difference
+
+Returns all elements that are in exactly one of the sets and not in the other.
+
+```python
+# for only sets:
+sym = banana ^ lemon
+# sym {'smooth', 'sweet', 'sour', 'bumpy'}
+
+# for any iterable:
+lemon.symmetric_difference(orange)
+```
+
+## loop_set
+
+```python
+for adj in banana | lemon | set(orange):
+    print(adj)
+""""fruit
+    sweet
+    smooth
+    sour
+    yellow
+    bumpy"""
+```
+
+--
+
+# Strings
+
+Are iterable. Are inmutable.
+
+Constructor function: `str(some)`
 
 Tricks:
 
@@ -190,39 +586,119 @@ cut # 'parale'
 # REPEAT
 'jor' * 3 # jorjorjor
 
-
-
-
-str1 = 'hello'
-str2 = "hello"
-str3 = '''
-hello for multiple line strings
-adds backslash
-to long stuff'''
-
 #interpolated string:
 price = 23.43
 qtty = 3
 print(f"Total is {round(price * qtty, 2)}")  # total is $70.29
 
-# spacing
+# QUOTES SIGN:
+str1 = 'hello'
+str2 = "hello it's me"
+str3 = '''
+hello for multiple line strings
+adds backslash
+to long stuff'''
+
+# SPACING:
 print('hi \n hello') ''' hi
                             hello '''
 print('hi \t hello') """ hi       hello """
 print("it's showtime") # it's showtime
 
+# INDEX
+msg = 'caramelo'
+msg[3] 'a'
+msg[3:6] 'ame'
 ```
 
-String methods:
+## str_methods
+
+String methods
 
 ```python
-course = "programming"
-print(course.upper())
-print(course.lower())
-print(course.title())
-print(course.rstrip())
-print(course.find("pro"))
-print(course.replace("p", "j"))  # replace a character with another
-print("pro" in course)  # True
-print("swift" not in course)  # False
+msg = 'paraleologramo'
+names = ['jorge', 'pepe', 'carlos']
+
+msg.endswith('a')#False
+msg.find('a')#1 ('-1' if not found)
+'hello4'.isdigit() #False
+'4'.isdigit()#True
+'33213'.isdigit()#True
+
+'.'.join(msg) #'p.a.r.a.l.e.l.o.g.r.a.m.o'
+'|'.join(names)#'jorge|pepe|carlos'
+''.join(names)#jorgepepecarlos
+
+'LOL'.lower()#lol
+'lol'.uppeer()#LOL
+'las runflas'.capitalize()#Las runflas
+
+'LOL'.isupper()#True
+
+places = 'london-paris-rio'
+places.replace('london', 'berlin', 1) #'berlin-paris-rio'
+
+animals= "goats, chickens, ducks"
+animals.split(',')# ['goats', 'chickens', 'ducks']
+
+"""
+Hello
+I
+Love
+""".splitlines()#['', 'Hello', 'I', 'Love']
+
+usr_input = ' some dd '
+user_input.strip() #'some dd' (Removes white spaces at beginning and end, like trim in JS)
+```
+
+# Comprehension
+
+Loop and conditional in one line.
+
+```python
+#Syntax 1:
+[what_to_do for thing in things]
+#Syntax 2:
+[what_to_do for thing in things if condition]
+# Syntax 3:
+[do_this if condition else do_that for thing in things]
+```
+
+## list_comprehension
+
+```python
+""" filter hens over roosters in list:"""
+chickens = [
+    {"name": "Henry", 'sex': "rooster"},
+    {"name": "Lucy", 'sex': "hen"},
+    {"name": "Pat", 'sex': "hen"},
+]
+
+hens = [bird['name'] for bird in chickens if bird['sex'] == 'hen']
+print(hens)  # ['Lucy', 'Pat']
+
+"""filter scores: """
+scores = [100, 89, 43, 21, 100, 98, 90]
+pass_grades = ['pass' if score >= 70 else 'fail' for score in scores]
+print(pass_grades)  # ['pass', 'pass', 'fail', 'fail', 'pass', 'pass', 'pass']
+
+"""a function inside the comprehension phrase"""
+
+
+def get_letter_in_morse(ltr):
+    morse_lookup = {
+        "a": ".-",
+        "b": "-...",
+        "c": "-.-.",
+        "d": "-..",
+        "e": ".",
+        "f": "..-.",
+    }
+    return morse_lookup[ltr]
+
+
+print(get_letter_in_morse('a'))  # .-
+
+letters_to_morse = [get_letter_in_morse(char) for char in 'caca']
+print(letters_to_morse)  # ['-.-.', '.-', '-.-.', '.-']
 ```
