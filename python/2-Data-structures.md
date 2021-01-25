@@ -1,8 +1,6 @@
 1. [Lists](#Lists)
    1. [list()](##list)
-   2. [slice](##slice)
-   3. [splice](##splice)
-   4. [list_methods](##list_methods)
+   2. [list_methods](##list_methods)
       - 'append',
       - 'clear',
       - 'copy',
@@ -13,7 +11,9 @@
       - 'pop',
       - 'remove',
       - 'reverse',
+      - [slice](##slice)
       - 'sort'
+      - [splice](##splice)
 2. [Tuples](#Tuples)('single',)
    1. [tuple_methods](##tuple_methods)
       - 'count',
@@ -93,7 +93,7 @@
       - 'split',
       - 'splitlines',
       - 'startswith',
-      - 'strip',
+      - 'strip', (removes white spaces)
       - 'swapcase',
       - 'title',
       - 'translate',
@@ -101,6 +101,8 @@
       - 'zfill'
 6. [comprehension](#Comprehension)
    1. [list_comprehension](##list_comprehension)
+   2. [dictionary_comprehension](##dictionary_comprehension)
+   3. [set_comprehension](##set_comprehension)
 
 ---
 
@@ -662,6 +664,52 @@ Loop and conditional in one line.
 [what_to_do for thing in things if condition]
 # Syntax 3:
 [do_this if condition else do_that for thing in things]
+
+# Examples:
+days = [1, 2, 3, 1, 3, 543, 23, 56, 22]
+
+""" double each number of list:"""
+doubles = [num * 2 for num in days]
+print(doubles)  # [2, 4, 6, 2, 6, 1086, 46, 112, 44]
+
+"""" get even numbser only: """
+evens_comp = [num for num in days if num % 2 == 0]
+print(evens_comp)  # [2, 56, 22]
+
+"""want to get even numbers only, so traditionally would do like this:"""
+evens = []
+
+for num in days:
+    if num % 2 == 0:
+        evens.append(num)
+
+print(evens)  # [2, 56, 22]
+
+lala = [2, 4, 6, 8]
+sqared = [num ** 2 for num in lala]
+print(sqared)
+
+# STRING TO LIST WITH COMPREHENSION:
+[char.upper() for char in 'lmfao']  # ['L', 'M', 'F', 'A', 'O']
+
+# ITERATE OVER   RANGE:
+[num for num in range(10, 20)]
+#[10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+
+
+# GENERATE A BOARD USING NESTED COMPREHENSION:
+
+def gen_board(size, initial_value=None):
+    return [[initial_value for x in range(size)] for y in range(size)]
+
+
+print(gen_board(3, 'X'))
+# [['X', 'X', 'X'], ['X', 'X', 'X'], ['X', 'X', 'X']]
+
+""" vowel occurence in word"""
+vowels = {'a', 'e', 'i', 'o', 'u'}
+word = 'apple'
+vows_occurence = [ltr for ltr in word if ltr in vowels]
 ```
 
 ## list_comprehension
@@ -701,4 +749,49 @@ print(get_letter_in_morse('a'))  # .-
 
 letters_to_morse = [get_letter_in_morse(char) for char in 'caca']
 print(letters_to_morse)  # ['-.-.', '.-', '-.-.', '.-']
+```
+
+## dictionary_comprehension
+
+```python
+# Syntax 1:
+{key_or_action : value_or_action for thing in things if condition}
+# Syntax 2:
+{key_or_action: value_or_action if condition else value_or_action1 for thing in things}
+
+#Examples:
+nums = [12, 13, 14, 15, 16]
+double_evens_only = {n: n*2 for n in nums if n % 2 == 0} #{12: 24, 14: 28, 16: 32}
+
+'''Sqare evens or assign 'not even' as value:'''
+{num: num*num if num % 2 == 0 else 'not even' for num in range(1, 5)}
+#{1: 'not even', 2: 4, 3: 'not even', 4: 16}
+
+'''a dict with 0 assigned to each day of week:'''
+{day: 0 for day in 'MTWRFSU'}
+# {'M': 0, 'T': 0, 'W': 0, 'R': 0, 'F': 0, 'S': 0, 'U': 0}
+
+''' a dict with a number as key and its square as value:'''
+{num: num * num for num in range(1, 5)}
+# {1: 1, 2: 4, 3: 9, 4: 16}
+
+''' dict with even nums sqared only:'''
+{num: num * num for num in range(1, 5) if num % 2 == 0}
+# {2: 4, 4: 16}
+```
+
+## set_comprehension
+
+```python
+#Syntax 1:
+{unique_value for thing in things if condition}
+#Syntax2:
+{unique_value if condition else unique_value1 for thing in things}
+
+words = ['alma', 'bobo', 'aleluya']
+a_words = {w for w in words if w.startswith('a')} #{'aleluya', 'alma'}
+
+not_vows = {char for char in 'hello my friend' if char not in 'aeiou'}
+# {' ', 'd', 'f', 'h', 'l', 'm', 'n', 'r', 'y'}
+
 ```
