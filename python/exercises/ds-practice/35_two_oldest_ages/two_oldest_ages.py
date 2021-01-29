@@ -13,11 +13,24 @@ def two_oldest_ages(ages):
         >>> two_oldest_ages([1, 5, 5, 2])
         (2, 5)
     """
+    ordered_ages = sorted(ages)
+    max_value = max(ordered_ages)
+    for i in reversed(ordered_ages):
+        if i != max_value:
+            return tuple((i, max_value))
 
-    # NOTE: don't worry about an optimized runtime here; it's fine if
-    # you have a runtime worse than O(n)
 
-    # NOTE: you can sort lists with lst.sort(), which works in place (mutates);
-    # you may find it helpful to research the `sorted(iter)` function, which
-    # can take *any* type of list-like-thing, and returns a new, sorted list
-    # from it.
+print(two_oldest_ages([1, 2, 10, 10, 8]))  # (8, 10)
+
+""" REFACTOR """
+
+
+def two_oldest_ages_solution(ages):
+    uniq_ages = set(ages)
+    print(uniq_ages)
+    oldest = sorted(uniq_ages)[-2:]
+    print(oldest)
+    return tuple(oldest)
+
+
+print(two_oldest_ages_solution([1, 2, 10, 10, 8]))  # (8, 10)

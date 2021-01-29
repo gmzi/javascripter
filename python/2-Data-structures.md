@@ -24,7 +24,7 @@
       - 'clear',
       - 'copy',
       - 'fromkeys',
-      - 'get',
+      - [get](##dict.get)
       - [items](##dict.items)
       - [keys](##dict.keys)
       - 'pop',
@@ -95,7 +95,7 @@
       - 'startswith',
       - 'strip', (removes white spaces)
       - 'swapcase',
-      - 'title',
+      - 'title', (capitalizes first letter and rest lower)
       - 'translate',
       - 'upper',
       - 'zfill'
@@ -103,6 +103,18 @@
    1. [list_comprehension](##list_comprehension)
    2. [dictionary_comprehension](##dictionary_comprehension)
    3. [set_comprehension](##set_comprehension)
+7. Built in functions:
+   - [range](##range)
+   - [sorted](##sorted)
+   - [sum](##sum)
+   - [enumerate](##enumerate)
+   - [isinstance](##isinstance)
+   - [max](##max)
+   - [min]
+   - [index](##index)
+   - [len](##len)
+   - [in](##in)
+   - [full_list](https://docs.python.org/3/library/functions.html)
 
 ---
 
@@ -182,7 +194,7 @@ alpha[::5]  # 0 to end at a pace of 5
 [1, 'ca']
 
 # REVERSE
-alpha[::-1]  # 0 to end starting from the end
+alpha[::-1]  # end to 0 starting from the end
 ['id', 2131, 432, 'ca', 5, 4, 3, 2, 1]
 
 alpha[:-4: -1]  # reverse to idx-4 (from the end)
@@ -327,10 +339,6 @@ my_dict = {
 my_dict['ok'] # 'yes'
 my_dict[42] # 'all good'
 
-#GET
-my_dict.get('ok') #'yes'
-my_dict.get('sarasa', 'sorolo') #'sorolo' (if 'sarasa' key not found, will return 'sorolo' as default value)
-
 #UPDATE VALUE:
 my_dict[42] = 'new value'
 
@@ -349,6 +357,15 @@ for (k, v) in chicken.items():
     breed --> silkie
     has_food --> {'M': True, 'T': True, 'W': False}
     coop_mates --> ['mitch', 'stella', 'stanley'] """
+```
+
+## dict.get
+
+```python
+#GET (returns value of key)
+my_dict.get('ok') #'yes'
+# GET if key not found:
+my_dict.get('sarasa', 'sorolo') #'sorolo' (if 'sarasa' key not found, will return 'sorolo' as default value)
 ```
 
 ## dict.keys
@@ -407,6 +424,9 @@ for key_val in chicken.items():
 ## dict_methods
 
 ```python
+
+# get()
+
 # copy()
 chick_copy = chicken.copy()
 
@@ -793,5 +813,118 @@ a_words = {w for w in words if w.startswith('a')} #{'aleluya', 'alma'}
 
 not_vows = {char for char in 'hello my friend' if char not in 'aeiou'}
 # {' ', 'd', 'f', 'h', 'l', 'm', 'n', 'r', 'y'}
+
+```
+
+## range
+
+```python
+datatype(range(start, stop, step))
+# Example:
+nums = [1, 2, 3]
+result = 0
+    for i in range(len(nums)):
+        for j in range(i + 1, len(nums)):
+            if nums[j] > nums[i]:
+                result += 1
+    return result # 3
+```
+
+## sorted
+
+```python
+sorted(iterable, /, *, key=None, reverse=False)
+    """Return a new list containing all items from the iterable in ascending order.
+
+    A custom key function can be supplied to customize the sort order, and the
+    reverse flag can be set to request the result in descending order."""
+```
+
+## sum
+
+```python
+sum(iterable, /, start=0)
+```
+
+## enumerate
+
+```python
+seasons = ['Spring', 'Summer', 'Fall', 'Winter']
+list(enumerate(seasons))
+[(0, 'Spring'), (1, 'Summer'), (2, 'Fall'), (3, 'Winter')]
+list(enumerate(seasons, start=1))
+[(1, 'Spring'), (2, 'Summer'), (3, 'Fall'), (4, 'Winter')]
+```
+
+## isinstance
+
+isinstance(obj, class_or_tuple, /)
+Return whether an object is an instance of a class or of a subclass thereof.
+
+```python
+isinstance([], list) #True
+isinstance(3.4, float) #True
+```
+
+## max
+
+Return highest value
+
+```python
+max(1, 2, 3, 4) #4
+max('fdsfsd', 'tretrete', 'bvcbcvbcv') #'tretrete'
+```
+
+## in
+
+the `in` operator
+
+```python
+43 in alpha # True
+42 in alpha # False
+#---------
+special_chars = '$%#&'
+'$' in special_chars # true
+#---------
+vegan_no_nos = ['eggs', 'meat', 'milk']
+tart = ['flour', 'apples', 'meat', 'eggs']
+cake = ['salad', 'onion', 'carrot']
+
+
+def check_if_vegan(recipe):
+    for item in recipe:
+        if item in vegan_no_nos:
+            return 'not vegan'
+    return 'vegan'
+
+
+print(check_if_vegan(cake)) # vegan
+print(check_if_vegan(tart)) # not vegan
+```
+
+## index
+
+```python
+vegan_no_nos = ['eggs', 'meat', 'milk']
+vegan_no_nos[-1]  # milk
+vegan_no_nos[-2]  # meat
+
+# update element:
+vegan_no_nos[1] = 'dairy'
+print(vegan_no_nos)  # ['eggs', 'dairy', 'milk']
+
+# can't add element at index out of range:
+vegan_no_nos[3] = 'some'  # ERROR
+#use .append for this
+```
+
+## len
+
+In python is a function, not a property of the element. len() goes and figures out the length of the given object.
+
+```python
+len('abc') #3
+len([]) #0
+len([1, 2, 3]) #3
 
 ```

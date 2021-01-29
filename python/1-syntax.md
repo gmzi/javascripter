@@ -1,12 +1,17 @@
 # Python
 
-1. Tools:
+```python
 
-   - [index](##index)
-   - [len](##len)
-   - [in](##in)
+int
+float
+list
+tuple
+dict
+set
+str
+```
 
-1. numbers / boolenas / if / comparisons/ ternary
+1. numbers / booleans / if / comparisons/ ternary
 
    - [numbers](##numbers)
    - [boolean](##boolean)
@@ -42,60 +47,6 @@
    - [docstrings](##docstrings)
    - [ipython](##ipython)
    - [variables](##variables)
-
-## in
-
-the `in` operator
-
-```python
-43 in alpha # True
-42 in alpha # False
-#---------
-special_chars = '$%#&'
-'$' in special_chars # true
-#---------
-vegan_no_nos = ['eggs', 'meat', 'milk']
-tart = ['flour', 'apples', 'meat', 'eggs']
-cake = ['salad', 'onion', 'carrot']
-
-
-def check_if_vegan(recipe):
-    for item in recipe:
-        if item in vegan_no_nos:
-            return 'not vegan'
-    return 'vegan'
-
-
-print(check_if_vegan(cake)) # vegan
-print(check_if_vegan(tart)) # not vegan
-```
-
-## index
-
-```python
-vegan_no_nos = ['eggs', 'meat', 'milk']
-vegan_no_nos[-1]  # milk
-vegan_no_nos[-2]  # meat
-
-# update element:
-vegan_no_nos[1] = 'dairy'
-print(vegan_no_nos)  # ['eggs', 'dairy', 'milk']
-
-# can't add element at index out of range:
-vegan_no_nos[3] = 'some'  # ERROR
-#use .append for this
-```
-
-## len
-
-In python is a function, not a property of the element. len() goes and figures out the length of the given object.
-
-```python
-len('abc') #3
-len([]) #0
-len([1, 2, 3]) #3
-
-```
 
 ## numbers
 
