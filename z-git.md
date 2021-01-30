@@ -63,10 +63,14 @@ Git tracks all version history (will stay local unless is pushed to a remote rep
 
 ### Push
 
-7. Create `.gitignore` file, if needed.
+7. Create `.gitignore` file.
 
-   - `.file_name` in gitignore
-   - `folder_name/`in gitignore
+   1. if python:
+      - create requirements.txt
+   2. :
+      - `venv/` for python projects
+      - `.file_name` in gitignore
+      - `folder_name/`in gitignore
 
 8. Create Github repo and copy it's url.
 9. `git remote add origin ProjectsUrl` sets new remote and assigns the nickname "origin" to it.

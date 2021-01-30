@@ -1,3 +1,5 @@
+[python](#python)
+
 ## Command lines.
 
 ---
@@ -221,14 +223,41 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
 
 # PYTHON
 
-- `which python3` python version;
-- `which packageName` library version
-- `ctrl + d` quit python;
-- `q` to quit from places;
-- `python3` runs the python3 repl (read-evaluate-print-loop). It's like the JS console, but more powerful.
-- `help()` list of help topics.
+1. create virtual environment
 
-- `pip3 install packageName` installs package
-- `pip3 uninstall packageName` uninstalls package
+   1. cd to desired directory
+   2. `python3 -m venv venv` ("using the 'venv' module create a folder called 'venv' and put default stuff in there)
+   3. `source venv/bin/activate` ("activate the venv folder just created" (no need to cd to the venv folder))
+   4. [every time you want to run the venv you have to source it (step 3)]
+   5. [inside the venv, type `python` to run it's local python version, the venv will have the python version used when you created it.]
+   6. Install packages:
+      1. `(venv)` prompt in terminal?
+      2. `pip install packageName` installs package
+         - `pip uninstall packageName` uninstalls package
+         - `pip list` list of all installed packages
+   7. `pip freeze` list all installed packages
+   8. `pip freeze > requirements.txt` creates file in local dir with all the dependencies the app relies on. Needs to be updated every time a package is installed by running this same command.
+   9. In GITIGNORE file: `venv/` (don't track the venv folder in github, that's why we make this)
+   10. `deactivate` virtual env
 
-- `type(value)` same as typeof in JS.
+2. Clone python project
+
+   1. cd to dir where you want the clone in
+   2. `git clone http://project.url`
+   3. cd to clone's folder
+   4. create virtual environment
+   5. activate virtual environment
+   6. `pip install -r requirements.txt`
+   7. enjoy!!!!!!
+
+3. Global install (puaj)
+
+   - `which python3` python version;
+   - `which packageName` library version
+   - `ctrl + d` quit python;
+   - `q` to quit from places;
+   - `python3` runs the python3 repl (read-evaluate-print-loop). It's like the JS console, but more powerful.
+   - `help()` list of help topics.
+   - `pip3 install package_name` installs package globally
+   - `pip3 uninstall package_name` installs package globally
+   - `pip3 list` lists installed packages

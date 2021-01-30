@@ -115,6 +115,12 @@
    - [len](##len)
    - [in](##in)
    - [full_list](https://docs.python.org/3/library/functions.html)
+8. packing/unpacking
+   - [unpacking](##unpacking)
+     - [\*](###*)(rest of items)
+   - [packing/spreading](##pack/spread)
+     - [pack_dictionary](##pack_dict)(\*\*)
+     - [spread_in_function_call](##spread_in_function)
 
 ---
 
@@ -927,4 +933,105 @@ len('abc') #3
 len([]) #0
 len([1, 2, 3]) #3
 
+```
+
+---
+
+# packing/unpacking
+
+## unpacking
+
+Create variables extracting values from some iterable, based on its order. Works on all iterables.
+
+```python
+# List
+names = ['charlie', 'lucy']
+name1, name2 = names
+name1 #'charlie'
+name2 # 'lucy'
+
+# Tuple
+point = (100, 58)
+x, y = point
+x #100
+y #58
+
+# Dict
+grades = {
+    'A': 12,
+    'B': 19,
+    'C': 30
+}
+for (k, v) in grades:
+    print(k, v) # A 12 B 19 C 30
+
+# NESTED STRUCTURES UNPACK:
+
+color_pairs = [['red', 'green'], ['purple', 'orange']]
+pair1, pair2 = color_pairs
+pair1 # ['red', 'green']
+pair2 # ['purple', 'orange']
+
+# unpack individual items:
+
+((primary1, secondary1), (primary2, secondary2)) = color_pairs
+primary1 # 'red'
+secondary1 #'green'
+primary2 #'purple'
+secondary2 #'orange'Å
+```
+
+### \*
+
+rest of items
+
+```python
+letters = ['a', 'b', 'c']
+first, *others = letters
+first # a
+letters # b, c
+
+sorted_scores = [10, 9, 8, 7]
+top_score, *scores = sorted_scores
+top_scores # 10
+scores # [9, 8, 7]
+
+```
+
+## pack/spread
+
+Packing, spreading, is taking the items from an item and spreading them into a function call or into another iterable.
+
+```python
+nums = [2, 4, 6, 8]
+copy_nums = [*nums]
+copy_nums # [2, 4, 6, 8]
+add_and_copy [-1, 999, *nums] #[-1, 999, 2, 4, 6, 8]
+
+# Str
+[*'hello'] # ['h', 'e', 'l', 'l', 'o']
+
+# Set
+{*'hello', 45} #{45, 'h', 'e', 'o', 'l'}
+```
+
+## pack_dict
+
+use `**`
+
+```python
+rainfall = {'Jan': 2.5, 'Feb': 4.9}
+{'Dec': 0.5, **rainfall} # {'Dec': 0.5, 'Jan': 2.5, 'Feb': 4.9}
+
+# Overide values:
+{**rainfall, 'Dec':123} # {'Jan': 2.5, 'Feb': 4.9, 'Dec': 123}
+```
+
+## spread_in_function
+
+Spread / pack in function call
+
+```python
+nums = [1,2,3]
+print(*nums) # 1 2 3 (no comas, passes arguments as separate values, one by one)
 ```
