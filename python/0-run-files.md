@@ -42,7 +42,7 @@ file.close()
 # read and write example
 
 ```python
-ef toNums(str):
+def toNums(str):
     if str == 'c':
         return '1'
     return '2'
