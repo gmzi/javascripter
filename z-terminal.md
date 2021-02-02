@@ -228,17 +228,18 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
    1. cd to desired directory
    2. `python3 -m venv venv` ("using the 'venv' module create a folder called 'venv' and put default stuff in there)
    3. `source venv/bin/activate` ("activate the venv folder just created" (no need to cd to the venv folder))
-   4. [every time you want to run the venv you have to source it (step 3)]
-   5. [inside the venv, type `python` to run it's local python version, the venv will have the python version used when you created it.]
-   6. Install packages:
+   4. Create .gitignore file in main folder and add `venv/` in it.
+   5. [every time you want to run the venv you have to source it (step 3)]
+   6. [inside the venv, type `python` to run it's local python version, the venv will have the python version used when you created it.]
+   7. Install packages:
       1. `(venv)` prompt in terminal?
       2. `pip install packageName` installs package
          - `pip uninstall packageName` uninstalls package
          - `pip list` list of all installed packages
-   7. `pip freeze` list all installed packages
-   8. `pip freeze > requirements.txt` creates file in local dir with all the dependencies the app relies on. Needs to be updated every time a package is installed by running this same command.
-   9. In GITIGNORE file: `venv/` (don't track the venv folder in github, that's why we make this)
-   10. `deactivate` virtual envsource
+   8. `pip freeze` list all installed packages
+   9. `pip freeze > requirements.txt` creates file in local dir with all the dependencies the app relies on. Needs to be updated every time a package is installed by running this same command.
+   10. In GITIGNORE file: `venv/` (don't track the venv folder in github, that's why we make this)
+   11. `deactivate` virtual envsource
 
 2. Clone python project
 
