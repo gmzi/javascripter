@@ -1,0 +1,27 @@
+h1 {
+  color: red;
+}
+body {
+  padding: 0;
+  margin: 0;
+  background-color: tan;
+}
+
+.navbar {
+  background-color: black;
+  display: block;
+}
+
+.navbar a {
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  font-size: 0.5rem;
+}
+
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}

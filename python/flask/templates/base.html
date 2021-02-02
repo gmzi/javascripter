@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/concha.css">
+    <title>{%block title%}{%endblock%}</title>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/">home</a>
+        <a href="/form">Greeter form</a>
+        <a href="/lucky">lucky</a>
+        <a href="/hello">Hello</a>
+    </nav>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <footer>
+        this is a footer
+    </footer>
+    
+    <!-- <script src="/static/app.js"></script> -->
+</body>
+</html>
