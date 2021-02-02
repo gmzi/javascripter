@@ -238,7 +238,7 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
    7. `pip freeze` list all installed packages
    8. `pip freeze > requirements.txt` creates file in local dir with all the dependencies the app relies on. Needs to be updated every time a package is installed by running this same command.
    9. In GITIGNORE file: `venv/` (don't track the venv folder in github, that's why we make this)
-   10. `deactivate` virtual env
+   10. `deactivate` virtual envsource
 
 2. Clone python project
 
@@ -261,3 +261,34 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
    - `pip3 install package_name` installs package globally
    - `pip3 uninstall package_name` installs package globally
    - `pip3 list` lists installed packages
+
+4. Setup flask server
+
+   1. Installing Flask
+      1. mkdir or cd to directory
+      2. create virtual env (`python3 -m venv venv`)
+      3. activate venv (`source venv/bin/activate`)
+      4. `pip install flask`
+   2. Make a python file to run your code:
+      1. cd to project main folder
+      2. `touch app.py`
+      3. in 'app.py', instantiate your app:
+         - `from flask import Flask`
+         - `app = Flask(__name__)`
+   3. Start server:
+      1. Production mode
+         - `flask run` (with virtual env active)
+         - `ctrl + C` stop server
+      2. Development mode (debugger and restart activated):
+         - `FLASK_ENV=development flask run`
+         - (Set dev mode to default in local venv and not permanently:
+           1. check venv active
+           2. `export FLASK_ENV=development`
+           3. `flask run` will run dev mode by default, until terminal window is closed.)
+         - (change bash profile so it runs flask dev mode by default in all terminals):
+           1. go to local .zshrc file
+           2. paste `export FLASK_ENV=development`
+           3. reboot all terminals
+           4. `flask run` in venv will run in dev mode by default.
+   4. (If flask app file isn't called 'app.py':
+      - `FLASK_APP=my_custom_name.py flask run` (mind the not spaced chars))
