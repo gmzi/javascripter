@@ -232,7 +232,7 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
    5. [every time you want to run the venv you have to source it (step 3)]
    6. [inside the venv, type `python` to run it's local python version, the venv will have the python version used when you created it.]
    7. Install packages:
-      1. `(venv)` prompt in terminal?
+      1. `(venv)` prompt in terminal? -
       2. `pip install packageName` installs package
          - `pip uninstall packageName` uninstalls package
          - `pip list` list of all installed packages
@@ -241,29 +241,7 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
    10. In GITIGNORE file: `venv/` (don't track the venv folder in github, that's why we make this)
    11. `deactivate` virtual envsource
 
-2. Clone python project
-
-   1. cd to dir where you want the clone in
-   2. `git clone http://project.url`
-   3. cd to clone's folder
-   4. create virtual environment
-   5. activate virtual environment
-   6. `pip install -r requirements.txt`
-   7. enjoy!!!!!!
-
-3. Global install (puaj)
-
-   - `which python3` python version;
-   - `which packageName` library version
-   - `ctrl + d` quit python;
-   - `q` to quit from places;
-   - `python3` runs the python3 repl (read-evaluate-print-loop). It's like the JS console, but more powerful.
-   - `help()` list of help topics.
-   - `pip3 install package_name` installs package globally
-   - `pip3 uninstall package_name` installs package globally
-   - `pip3 list` lists installed packages
-
-4. Setup flask server
+2. Setup flask server
 
    1. Installing Flask
       1. mkdir or cd to directory
@@ -293,3 +271,25 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
            4. `flask run` in venv will run in dev mode by default.
    4. (If flask app file isn't called 'app.py':
       - `FLASK_APP=my_custom_name.py flask run` (mind the not spaced chars))
+
+3. Clone python project
+
+   1. cd to dir where you want the clone in
+   2. `git clone http://project.url`
+   3. cd to clone's folder
+   4. create virtual environment
+   5. activate virtual environment
+   6. `pip install -r requirements.txt`
+   7. enjoy!!!!!!
+
+4. Global install (puaj)
+
+   - `which python3` python version;
+   - `which packageName` library version
+   - `ctrl + d` quit python;
+   - `q` to quit from places;
+   - `python3` runs the python3 repl (read-evaluate-print-loop). It's like the JS console, but more powerful.
+   - `help()` list of help topics.
+   - `pip3 install package_name` installs package globally
+   - `pip3 uninstall package_name` installs package globally
+   - `pip3 list` lists installed packages
