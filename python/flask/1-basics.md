@@ -4,23 +4,28 @@
    - forms
    - variables in urls
    - template rendering
-2. [folders_structure](##dir)
-3. [flask_setup](#setup)
+2. [form](##form)
+3. [jsonify](##jsonify)
+4. [folders_structure](##dir)
+5. [flask_setup](#setup)
+6. [debug_toolbar_extension](#debug)
 
 # basics
 
 full syntax:
 
 ```python
-from flask import Flask, request, render_template
-from random import randint, choice, sample
+from flask import Flask, request, render_template, redirect, flash, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+from random import randint, choice, sample
 
 # main instance of Flask class:
 app = Flask(__name__)
 # debug toolbar extansion config:
 app.config['SECRET_KEY'] = "mypassword"
 debug = DebugToolbarExtension(app)
+# to stop debugger:
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 # Root route
 
@@ -173,12 +178,49 @@ def show_comments(subreddit, post_id):
     """multiple url variables must match with multiple view func paramters"""
     return f"Comments :{subreddit}. From {subreddit}"
 
+# JSONIFY
+@app.route('/movies/json')
+def get_movies_json():
+    json_data = jsonify(list(movies))
+    return json_data
+
 ```
 
 Views are functions that return strings of html according to requests.
 Routes are the subdirectories of the app
 
 ---
+
+## form
+
+```html
+{% extends 'base.html'%} {%block content%}
+<ul class="movies">
+  {%for movie in movies%}
+  <li>{{movie}}</li>
+  {%endfor%}
+</ul>
+<form action="/movies/new" method="POST">
+  <h2>Add your movie:</h2>
+  <input type="text" placeholder="movie title" name="title" />
+  <button>submit</button>
+</form>
+{%endblock%}
+```
+
+## jsonify
+
+return json for apis, and also set the header of the request to JSON, to specify to all browser what type of data it contents. Mind sets can be JSON, have to be lists or dictionaries.
+
+```python
+# JSON
+movies = {'rambo', 'rocky'}
+
+@app.route('/movies/json')
+def get_movies_json():
+    json_data = jsonify(list(movies))
+    return json_data
+```
 
 # dir
 
@@ -241,3 +283,51 @@ Basically, web applications do this:
 - connecto to databases
 - provide user authentication
 - cache pages for performance
+
+# debug
+
+## flask debug toolbar
+
+Install:
+
+1. check venv active
+2. `pip install flask-debugtoolbar`
+3. in app.py:
+
+   ```python
+   from flask_debugtoolbar import DebugToolbarExtension
+
+   app = Flask(__name__)
+
+   # config debugger:
+   app.config['SECRET_KEY'] = "caca"
+   debug = DebugToolbarExtension(app)
+   # to stop debugger:
+   app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+   ```
+
+````
+
+5. only works on pages where templates are returned.
+
+## Python debugger pdb
+
+```python
+import pdb
+pdb.set_trace()
+#execution will stop and terminal will be ready to find type variables and find its values.
+```
+
+Key commands for pdb:
+| key|command
+| ? | Get help
+| l | List code where I am
+| p | Print this expression
+| pp | Pretty print this expression
+| n |Go to next line (step over)
+| s |Step into function call
+| r |Return from function call
+| c |Continue to next breakpoint
+| w |Print “frame” (where am I?)
+| q |Quit debugger
+````

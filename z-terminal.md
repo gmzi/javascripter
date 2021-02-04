@@ -5,13 +5,15 @@
 ---
 
 0. Requests:
+
    - `dig website.url` IP address from hostname and DNS, if no IP, the host name is not found.
    - `dig website.url +trace` detailed IP, hostname, DNS.
    - `trace website.url` trace IP's from local to destination
 
-curl --Client URL
+1. curl --Client URL
 
 - `curl [options] [URL...]` GET response body from server.
+- `curl -v [URL]` get detailed response.
 - `curl -d "string" [URL...]` POST data as string in URL server (ex. '{"username":"xyz","password":"xyz"}').
 - `curl -d @file [URL...]` POST data as file in url server.
 - `-X` --request to specify HTTP verb (ex. '-X POST')
@@ -272,7 +274,25 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
    4. (If flask app file isn't called 'app.py':
       - `FLASK_APP=my_custom_name.py flask run` (mind the not spaced chars))
 
-3. Clone python project
+3. Flask debug toolbar:
+
+   1. check venv active
+   2. `pip install flask-debugtoolbar`
+   3. in app.py:
+
+   ```python
+   from flask_debugtoolbar import DebugToolbarExtension
+
+   app = Flask(__name__)
+
+   # config debugger:
+   app.config['SECRET_KEY'] = "caca"
+   debug = DebugToolbarExtension(app)
+   # to stop debugger:
+   app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+   ```
+
+4. Clone python project
 
    1. cd to dir where you want the clone in
    2. `git clone http://project.url`
@@ -282,7 +302,7 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
    6. `pip install -r requirements.txt`
    7. enjoy!!!!!!
 
-4. Global install (puaj)
+5. Global install (puaj)
 
    - `which python3` python version;
    - `which packageName` library version
