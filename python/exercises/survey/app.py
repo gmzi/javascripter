@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, flash, jsonify
+from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import Question, Survey, satisfaction_survey, personality_quiz, surveys
 
@@ -18,10 +18,10 @@ def home_page():
     return render_template('home.html', title=title, instructions=instructions)
 
 
-@app.route('/start')
+@app.route('/start', methods=['POST'])
 def start():
     """clears previous responses"""
-    responses.clear()
+    session['responses'] = []
     return redirect('/questions/0')
 
 
