@@ -7,7 +7,7 @@ app.config['SECRET_KEY'] = "caca"
 debug = DebugToolbarExtension(app)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-responses = []
+
 all_questions = satisfaction_survey.questions
 
 
@@ -18,7 +18,7 @@ def home_page():
     return render_template('home.html', title=title, instructions=instructions)
 
 
-@app.route('/start', methods=['POST'])
+@app.route('/start', methods=['POST', 'GET'])
 def start():
     """clears previous responses"""
     session['responses'] = []
@@ -28,13 +28,20 @@ def start():
 @app.route('/questions/<int:id>')
 def questions(id):
     url_id = int(request.url[:-2:-1])
+    responses = session['responses']
     order = int(len(responses))
+
+# copied from solution:
+    if responses is None:
+        return redirect('/')
+
+    if len(responses) == len(all_questions):
+        return redirect('/end')
+
     if url_id != order:
         flash('invalid selection')
-        if order < int(len(all_questions)):
-            return redirect(f"/questions/{order}")
-        else:
-            return redirect('/end')
+        return redirect(f"/questions/{order}")
+
     else:
         question = all_questions[id].question
         choice_a = all_questions[id].choices[0]
@@ -47,8 +54,10 @@ def questions(id):
 def save_answer_and_redirect():
     """adds answer to fake db and redirects to next survey's question"""
     choice = request.form['choice']
-    next = int(len(responses) + 1)
+    responses = session['responses']
     responses.append(choice)
+    session['responses'] = responses
+    next = len(responses)
     if next < len(all_questions):
         return redirect(f"/questions/{next}")
     else:
