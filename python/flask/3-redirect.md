@@ -1,11 +1,11 @@
 # redirect
 
-# flash message
+# flash messages
 
 Full syntax:
 
 ```python
-from flask import Flask, request, render_template, redirect, flash
+from flask import Flask, request, render_template, redirect, flash, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)

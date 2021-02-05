@@ -4,7 +4,6 @@
     <h2>Question  {{q_id + 1}}:</h2>
     <h3>{{question}}</h3>
     <form action="/answer" method="POST">
-        <input class="q_id" name="q_id" value={{q_id}}></input>
         <input type="radio" name='choice' value={{choice_a}}>{{choice_a}}</input>
         <input type="radio" name='choice' value={{choice_b}}>{{choice_b}}</input>
         <input type="submit">
