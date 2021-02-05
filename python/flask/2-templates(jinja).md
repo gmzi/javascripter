@@ -21,6 +21,18 @@ base template:
 
     {% block content %} {% endblock %}
 
+    <!-- Cool if check with templates: -->
+    {% if request.cookies %}
+    <fieldset>
+      <label>Cookies Received By Flask</label>
+      <ul>
+        {% for name, value in request.cookies.items() %}
+        <li>{{ name }} = "{{ value }}"</li>
+        {% endfor %}
+      </ul>
+    </fieldset>
+    {% endif %}
+
     <footer> this is a footer </footer>
 
     <script src="/static/app.js"></script>
