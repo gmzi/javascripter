@@ -14,6 +14,7 @@
 9. [flask_setup](#setup)
 10. [debug_toolbar_extension](#debug)
 
+
 # basics
 
 full syntax:

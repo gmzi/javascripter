@@ -55,11 +55,18 @@ def questions(id):
 @app.route('/answer', methods=['POST'])
 def save_answer_and_redirect():
     """adds answer to fake db and redirects to next survey's question"""
-    choice = request.form['choice']
     responses = session['responses']
+
+    # capture empty radio buttons:
+    if 'choice' not in request.form.keys():
+        print('no choice')
+        return redirect(f"/questions/{len(responses)}")
+
+    choice = request.form['choice']
     responses.append(choice)
     session['responses'] = responses
     next = len(responses)
+
     if next < len(all_questions):
         return redirect(f"/questions/{next}")
     else:
