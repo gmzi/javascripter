@@ -9,9 +9,6 @@
 </head>
 <body>
     <h1>Boggle!</h1>
-    <div class="timer-div">
-            <h5>Time left: <span id="time-num"></span></h5>
-    </div>
     {% block content%}
     <table>
         {% for row in board%}
@@ -24,20 +21,23 @@
     </table>
     {% endblock%}
     <form action="">
-        <input type="text" id="word" name="word" placeholder="make guess">
-        <input type="submit">
+        <input type="text" id="word" name="word" placeholder="type word here">
+        <button type="submit">send</button>
     </form>
     <div class="feedback">
         <h3></h3>
     </div>
     <div class="score">
-        <h3>Total score: <span id="score-num"></span></h3>
+        <h3>total score: <span id="score-num"></span></h3>
+    </div>
+    <div class="timer-div">
+        <h3>seconds left: <span id="time-num"></span></h3>
     </div>
     <div class="stats">
-        <h3>Stats:</h3>
+        <h3>|Stats|</h3>
         <ul>
-            <li>Record score: {%block highest%}{{session['score']}}{%endblock%}</li>
-            <li>Times played: {%block played%}{{session['times']}}{%endblock%}</li>
+            <li>Record score: <span class="stat-num">{%block highest%}{{session['score']}}{%endblock%}</span></li>
+            <li>Times played: <span class="stat-num">{%block played%}{{session['times']}}{%endblock%}</span></li>
         </ul>
     </div>
     <div class="btn-again">

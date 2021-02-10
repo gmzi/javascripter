@@ -77,7 +77,7 @@ function game() {
   }
 
   gameActive();
-  countDown(60);
+  countDown(10);
 }
 
 game();
