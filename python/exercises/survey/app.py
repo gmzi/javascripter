@@ -10,6 +10,8 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 all_questions = satisfaction_survey.questions
 
+finished = [1, 2, 3]  # why can't access this from inside the functions?
+
 
 @app.route('/')
 def home_page():
@@ -67,3 +69,8 @@ def save_answer_and_redirect():
 @app.route('/end')
 def thanks_page():
     return render_template('end_survey.html')
+
+
+@app.route('/redirect-me')
+def redirect_me():
+    return redirect('/')

@@ -567,9 +567,7 @@ Install:
    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
    ```
 
-````
-
-5. only works on pages where templates are returned.
+4. only works on pages where templates are returned.
 
 ## Python debugger pdb
 
@@ -591,8 +589,3 @@ Key commands for pdb:
 | c |Continue to next breakpoint
 | w |Print “frame” (where am I?)
 | q |Quit debugger
-
-```
-
-```
-````

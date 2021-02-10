@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Boggle!</title>
+</head>
+<body>
+    <h1>Boggle!</h1>
+    <div class="timer-div">
+            <h5>Time left: <span id="time-num"></span></h5>
+    </div>
+    {% block content%}
+    <table>
+        {% for row in board%}
+        <tr>
+            {%for char in row%}
+            <td>{{char}}</td>
+            {%endfor%}
+        </tr>
+        {%endfor%}
+    </table>
+    {% endblock%}
+    <form action="">
+        <input type="text" id="word" name="word" placeholder="make guess">
+        <input type="submit">
+    </form>
+    <div class="feedback">
+        <h3></h3>
+    </div>
+    <div class="score">
+        <h3>Total score: <span id="score-num"></span></h3>
+    </div>
+    <div class="stats">
+        <h3>Stats:</h3>
+        <ul>
+            <li>Record score: {%block highest%}{{session['score']}}{%endblock%}</li>
+            <li>Times played: {%block played%}{{session['times']}}{%endblock%}</li>
+        </ul>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="/static/word-check.js"></script>
+</body>
+</html>
