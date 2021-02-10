@@ -1,4 +1,5 @@
 const timeNum = document.querySelector('#time-num');
+const scoreNum = document.querySelector('#score-num');
 form = document.querySelector('form');
 let input = document.querySelector('#word');
 let feedback = document.querySelector('.feedback');
@@ -27,10 +28,14 @@ function gameActive() {
   });
 
   async function checkIfValid(word) {
-    const response = await axios.get('http://127.0.0.1:5000/server', {
-      params: { word: word },
-    });
-    msg = response.data.result;
+    if (word === '') {
+      msg = 'not-a-word';
+    } else {
+      const response = await axios.get('http://127.0.0.1:5000/server', {
+        params: { word: word },
+      });
+      msg = response.data.result;
+    }
     displayFeedback(msg);
     if (msg === 'well done!!') {
       updateScore(word);
@@ -50,6 +55,7 @@ function gameActive() {
 
 function gameDone() {
   timeNum.innerText = 'time out';
+  scoreNum.innerText = current_score;
   form.classList.add('hide');
   feedback.classList.add('hide');
   sendScore(current_score);
@@ -60,5 +66,4 @@ async function sendScore(score) {
 }
 
 gameActive();
-countDown(10);
-// function saveScore(score) {}
+countDown(60);
