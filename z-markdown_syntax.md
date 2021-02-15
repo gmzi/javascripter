@@ -93,6 +93,8 @@ Local source:
 
 #### _**Quotes**_:
 
+# block quote
+
 > This is quoted text.
 
 #### _Lists_:
@@ -129,4 +131,9 @@ link:
 [for](##for)
 section title:
 
-## for
+# bullets
+
+1. The list:
+   - something
+   * something else
+     both are bullets

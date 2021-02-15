@@ -1,39 +1,175 @@
-[python](#python)
+0. [git](#git)
+   - [branches](##branches)
+1. [github](#github)
+   - [push](##push)
+   - [clone_project](##clone_project)
+   - [pull](##pull)
+   - [Open_source_contributions_workflow](####Open_source_contributions_workflow)
+1. [dirs-and-files](#dirs-and-files)
+   - [list](###list)
+   - [create](###create)
+   - [view](###view)
+   - [remove](###remove)
+   - [open](###open)
+   - [move/rename](###move/rename)
+   - [copy](###copy)
+   - [source/clear/q](###cource/clear/q)
+1. [shortcuts](#shortcuts)
+   - [terminal](##terminal)
+   - [VSCode](##VSCode)
+   - [chrome](##chrome)
+   - [mac](##mac)
+1. [Requests](#Requests)
+   - [curl](##curl)
+   - [local-server](##local-server)
+1. [PYTHON](#PYTHON)
+   - [venv](##venv)
+   - [flask](##flask)
+   - [clone_project](##clone_project)
+   - [global_install](##global_install)
 
-## Command lines.
+# git
+
+Git tracks all version history (will stay local unless is pushed to a remote repo)
+
+1. `cd projectname` go to project's folder.
+2. `git status` to check you're not initializing a git repo inside other git repo.
+3. `git init` initialize repo.
+4. git settings:
+
+   - `git config user.name` existing local username (none if empty)
+   - `git config user.name userName` create local username
+   - `git config user.email` existing local email (none if empty)
+   - `git config user.email user@email.com` create local email
+   - `git config --global user.name` existing global usr
+   - `git config --global user.name userName` create global usr
+   - `git config --global user.email` existing global email.
+   - `git config --global user.email email@address.com` add global email.
+
+5. (`git diff` highlight changes to be staged.)
+
+6. `git add .` (mind the space and dot) stages ALL files for commit.
+
+   - `git status` to check
+
+   - `git add filename.extension` stage ONLY that file for commit.
+
+7. `git commit -m "Description of commit"` Commits changes and prepares them to be pushed.
+
+   - `git status` check status ("nothing to commit" is fine). All changes will be here, if any.
+   - `git log` returns commit hash of each file with changes to commit.
+
+8. ## branches
+
+   (for experiments, new ideas, trying things before putting them in master branch)
+
+   Check where are you branching from, new branches are nested in current branch.
+
+   1. `git branch` list of branches (asterisc marks what branch are you in)
+   2. `git branch namefBranch` create new branch.
+   3. `git checkout branchName` go to new branch (or any branchName).
+      - (`git checkout -b nameOfBranch` creates new branch and jumps into it).
+   4. Modify project's code (add files or remove them, change code, make cool things)
+   5. `git add .` stage changes in current branch.
+   6. `git commit -m "description"` commit changes to current branch.
+   7. `git log --oneline` check commit.
+   8. Merge:
+   9. Go to branch where you want the merge on.
+   10. `git merge nameOfBranch` merges nameOfBranch in current branch. (fast-forward merge)
+   11. Delete:
+   12. `git branch -d nameOfBranch` delete branch (you must be in another branch, can't delete from current branch).
+
+9. ## MERGE CONFLICTS
+
+   Go back to VSCode and fix the conflicts. Then git add . and git commit -m "description".
+
+10. ## Remove git
+    - `rm -rf .git` remove all git.
+    - `rm -rf .git*` remove all git and metadata.
 
 ---
 
-0. Requests:
+# github
 
-   - `dig website.url` IP address from hostname and DNS, if no IP, the host name is not found.
-   - `dig website.url +trace` detailed IP, hostname, DNS.
-   - `trace website.url` trace IP's from local to destination
+## push
 
-1. curl --Client URL
+7. Create `.gitignore` file.
 
-- `curl [options] [URL...]` GET response body from server.
-- `curl -v [URL]` get detailed response.
-- `curl -d "string" [URL...]` POST data as string in URL server (ex. '{"username":"xyz","password":"xyz"}').
-- `curl -d @file [URL...]` POST data as file in url server.
-- `-X` --request to specify HTTP verb (ex. '-X POST')
-- `-H` --header to specify additional headers (ex. '"Content-Type: application/json"')
-  (ex. of larger request:
-  "curl --header "Content-Type: application/json" \
-   --request POST \
-   --data '{"username":"xyz","password":"xyz"}' \
-   https://myapplication.com/login")
+   1. if python:
+      - create requirements.txt
+   2. :
+      - `venv/` for python projects
+      - `.file_name` in gitignore
+      - `folder_name/`in gitignore
 
-1. Local server
+8. Create Github repo and copy it's url.
+9. `git remote add origin ProjectsUrl` sets new remote and assigns the nickname "origin" to it.
+10. `git remote -v` Verifies the new remote
+11. `git push -u origin master` pushes changes from local branch to remote repo. The flag -u sets "origin" as default repo and "master" as default branch to be pushed. So in future pushes, just type `git push` and it will be done (master branch to origin repo).
+12. pull the readme file!!!!!
+13. `git push origin branchName` pushes branchName only.
+14. `git push` pushes default branch to default repo.
 
-- `python3 -m http.server` start server in local machine with python3.
+## clone_project
 
-1. navigate folders and directories
+Clone a github repo into local machine, it will be your own version of the repo.
+
+1. Copy repo's url.
+2. check in terminal where you are and where you want the clone, and git status not initialized there.
+3. `git clone projectUrl` clones in local folder.
+4. Create or remove files and folders, stage them and commit them with no problem. Just can't push the changes unless with permission from the owner.
+
+## pull
+
+Pull changes down from remote repo and applies them to the local version of the project.
+
+1. Go to project's folder:
+2. `git remote -v` check sources.
+3. `git pull origin master` pulls brnachName changes, if any, into local folder.
+
+---
+
+## Open_source_contributions_workflow
+
+find first issues: search `good first issues` on github.
+
+#### To contribute to a repo:
+
+You can contribute reporting a bug, suggesting a new feature, translating
+documentation or text in general, or with actual code. These are the steps:
+
+1.  fork the repo in to your github account.
+2.  clone repo in your local computer vscode.
+3.  Make the changes, stage them and push them.
+4.  Now, after your changes are pushed and visible in your github, make the PULL REQUEST.
+5.  Put the title and description of the change that you propose.
+6.  Now the owner of the repo will decide about merging in your change or not (you should see your requeest on the owner's repo).
+
+`git clone https://....` clone a repository in local folder
+
+---
+
+10. GO BACK IN VERSION HISORY: (not checked, and broke a couple of things with it so do some more research )
+
+    1. `git log` see all the hashes with their descriptions, and pick the one you want to come back to. (Type `q` to exit log list).
+    2. `git checkout hashNumber` this will go back the project to the desired hash version.
+
+---
+
+# dirs-and-files
 
 - `/` root directory. (Macintosh HD)
 - `~` home directory (xxx)
 - `~` === `/Users/xxx`
 - `pwd` print working directory.
+- `cd folderName` change directory.
+- `cd + firstLetter + tab` autocomplete folderName
+  - `cd ~` change directory to home.
+- `cd ..` go one level backwards.
+- `man + commandName` manual of given command (`q` to get out of it, enter to scroll)
+
+### list
+
 - `ls` list all files and folders of the directory
   - `ls nameOfFolder` list content of folder (no need to cd to that folder to see the list)
   - `ls -a` lists all (hidden files)(hidden files names starts with a dot)
@@ -44,38 +180,33 @@
   - `ls -lS` list sorted by size
   - `ls -lh` list sorted by size in human readable format
   - `ls -lt` list sorted by modification time
-- `cd folderName` change directory.
-- `cd + firstLetter + tab` autocomplete folderName
-  - `cd ~` change directory to home.
-- `cd ..` go one level backwards.
-- `man + commandName` manual of given command (`q` to get out of it, enter to scroll)
 
-2. Create dir
+### create
 
 - `mkdir folder1 folder2 folder3` make directory/ies inside the current directory.
 - `touch index.html app.js style.css` create new empty file/s. (if file already exists, `touch` command will modify it's modification date and time)
 - `echo "hola caca" > caca.txt` create new file and write content in it.
 
-3. view files
+### view
 
 - `cat fileName` shows file's content.
 - `echo "something"` repeats what's inside quotes
 - `echo "hello World" > app.js` overwrites the left hand text on the right hand file (beware it erases the previous content of the file)
 
-4. remove files
+### remove
 
 - `rm name.ext` removes file permanently (beware there's no undo to this).
 - `rmdir folderName` removes empty folder (if there's file in it, won't delete it, not undo once deleted)
 - `rm -rf folderName` removes folder and nested files (BEWARE NO UNDO)
 
-5.  open files
+### open
 
 - `open file.ext` opens file with default app.
 - `open folderName` opens folder in finder.
 - `open .` opens current directory in finder.
 - `open ..` opens prior directory in finder.
 
-6. move/rename files
+### move/rename
 
 - `mv file.txt ../` move file.txt to ../ (one level up).
 - `mv file.txt path/to/folder` move file to folder inside current dir.
@@ -84,7 +215,7 @@
 - `mv fileName.txt newFileName.txt` rename file
 - `mv ~/projects/nameOfDir ~/projects/new-name-of-dir` rename directory.
 
-7. copy files
+### copy
 
 - `cp fileName.txt fileCopy.txt` copy file
 - `cp path/to/file.txt path/to/copiedFile.txt` copy file in different location.
@@ -93,17 +224,17 @@
 - `cp caca.txt folder6/caca_copia.txt` copy and rename file.
 - `cp -r folder6 folder1/foler6_copia` copy and rename folder.
 
---
-`src` source
+### source/clear/q
 
+`src` source
 `clear` cleans console.
 `q` get out of there exit quit
 
 ---
 
-# SHORTCUTS
+# shortcuts
 
-## terminal shortcuts
+## terminal
 
 - `option + click` move along the line with mouse.
 - `ctrl + a` go to beginning of line.
@@ -112,7 +243,7 @@
 - `ctrl + u` delete entire line (put cursor at end).
 - `option + left/right arrows` jump words.
 
-## VS Code cool shortcuts
+## VSCode
 
 - `! + tab`: html template
 - `.classname + tab` new div with class name given.
@@ -126,104 +257,52 @@
 - "⌘ + `" switch windows.
 - `opt + ⌘ + up/down arrows` add cursors.
 
----
-
-## Chrome cool shortcuts
+## chrome
 
 - `opt + ⌘ + i` inspector.
 - `opt + ⌘ + j` JS console.
 - `⌘ + k` clear console.
 
-## mac cool shortcuts
+## mac
 
 - ``⌘ + ` ` swith safari windows
 - `opt + F2` display preferences
 - `opt + f10` sound preferences
 - `⌘ + shift + .` show hidden files and folders.
 
----
-
-## Javascript
-
-### Console
-
-- `clean()` chrome cleans console.
-
----
-
-## Python file and folder management:
-
-- `pipenv --three` venv for Pyth3  
-  _MIND SELECTING THE CORRECT PYTHON INTERPRETER AFTER CREATING FILE_
-- `printenv` to list all the environment variables currently set.  
-  Pipenv  
-  `pipenv shell` activates virtual env  
-  `pipenv install packagename`  
-  `pipenv lock -r` creates requirements.txt for a project  
-  `pipenv --rm` delete an environment
-
-#### Python3 execution:
-
-`python3 filename.py` runs file in p3
-
-#### DJANGO
-
-`python3 manage.py makemigrations` to create migration of db changes  
-`python3 manage.py migrate` to apply changes to db.
-
-#### SQL
-
-`makemigrations` lists the migrations to be done
-`sqlmigrate` prints migrations items without running the migration
-`check` checks files before migration
-`migrate` runs migration
-
-#### ANACONDA AND JUPYTER
-
-`/Users/xxx/opt/anaconda3/bin/jupyter_mac.command` opens jupyter notebook
-
----
-
-## Terminal_Shell_Zsh/Bash
-
-- TERMINAL is the mac app that provides CLI (Command Line Interface) to interact with the computer through command lines.
-- SHELL is the program that processes the commands and returns outputs.
-- Zsh and Bash. Are the standard shell for linux systems, that also manages foreground and background processes. There are other shell programs.
-
 --
 
-## Path
+# Requests
 
-Path is the way to reach a folder, it's the address of the file or folder in the machine.
+- `dig website.url` IP address from hostname and DNS, if no IP, the host name is not found.
+- `dig website.url +trace` detailed IP, hostname, DNS.
+- `trace website.url` trace IP's from local to destination
 
-### Absolute_path
+## curl
 
-Absolute path (the entire location):
-option 1:
+Client url
 
-1. /Users/xxx/projects/TopSecret/coca_cola_formula.txt  
-   or
-2. ~/projects/TopSecret/coca_cola_formula.txt
+- `curl [options] [URL...]` GET response body from server.
+- `curl -v [URL]` get detailed response.
+- `curl -d "string" [URL...]` POST data as string in URL server (ex. '{"username":"xyz","password":"xyz"}').
+- `curl -d @file [URL...]` POST data as file in url server.
+- `-X` --request to specify HTTP verb (ex. '-X POST')
+- `-H` --header to specify additional headers (ex. '"Content-Type: application/json"')
+  (ex. of larger request:
+  "curl --header "Content-Type: application/json" \
+   --request POST \
+   --data '{"username":"xyz","password":"xyz"}' \
+   https://myapplication.com/login")
 
-### Relative_path
+## local-server
 
-Relative to your courrent location (the location from where you are).
-Relative path (from home directory): cd projects/TopSecret/coca_cola_formula.txt
-
-### flags
-
-Are appended to command lines to specify an action: `ls -a` (ls is the command, -a is the flag).
-Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
-
-### folder naming
-
-`mkdir "folder name"` for a folder name with a space (don't do it).
-
----
+- `python3 -m http.server` start server in local machine with python3.
 
 ---
 
 # PYTHON
+
+## venv
 
 1. create virtual environment
 
@@ -242,6 +321,8 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
    9. `pip freeze > requirements.txt` creates file in local dir with all the dependencies the app relies on. Needs to be updated every time a package is installed by running this same command.
    10. In GITIGNORE file: `venv/` (don't track the venv folder in github, that's why we make this)
    11. `deactivate` virtual envsource
+
+## flask
 
 2. Setup flask server
 
@@ -292,24 +373,28 @@ Combine flags: `ls -al` (ls + a + ls + l). // or `ls -a -l`
    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
    ```
 
-4. Clone python project
+## clone_project
 
-   1. cd to dir where you want the clone in
-   2. `git clone http://project.url`
-   3. cd to clone's folder
-   4. create virtual environment
-   5. activate virtual environment
-   6. `pip install -r requirements.txt`
-   7. enjoy!!!!!!
+Clone python project
 
-5. Global install (puaj)
+1.  cd to dir where you want the clone in
+2.  `git clone http://project.url`
+3.  cd to clone's folder
+4.  create virtual environment
+5.  activate virtual environment
+6.  `pip install -r requirements.txt`
+7.  enjoy!!!!!!
 
-   - `which python3` python version;
-   - `which packageName` library version
-   - `ctrl + d` quit python;
-   - `q` to quit from places;
-   - `python3` runs the python3 repl (read-evaluate-print-loop). It's like the JS console, but more powerful.
-   - `help()` list of help topics.
-   - `pip3 install package_name` installs package globally
-   - `pip3 uninstall package_name` installs package globally
-   - `pip3 list` lists installed packages
+## global_install
+
+8.  Global install (puaj)
+
+    - `which python3` python version;
+    - `which packageName` library version
+    - `ctrl + d` quit python;
+    - `q` to quit from places;
+    - `python3` runs the python3 repl (read-evaluate-print-loop). It's like the JS console, but more powerful.
+    - `help()` list of help topics.
+    - `pip3 install package_name` installs package globally
+    - `pip3 uninstall package_name` installs package globally
+    - `pip3 list` lists installed packages
