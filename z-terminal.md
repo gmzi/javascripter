@@ -1,11 +1,11 @@
-0. [git](#git)
+1. [git](#git)
    - [branches](##branches)
-1. [github](#github)
+2. [github](#github)
    - [push](##push)
    - [clone_project](##clone_project)
    - [pull](##pull)
    - [Open_source_contributions_workflow](####Open_source_contributions_workflow)
-1. [dirs-and-files](#dirs-and-files)
+3. [dirs-and-files](#dirs-and-files)
    - [list](###list)
    - [create](###create)
    - [view](###view)
@@ -14,19 +14,25 @@
    - [move/rename](###move/rename)
    - [copy](###copy)
    - [source/clear/q](###cource/clear/q)
-1. [shortcuts](#shortcuts)
+4. [shortcuts](#shortcuts)
    - [terminal](##terminal)
    - [VSCode](##VSCode)
    - [chrome](##chrome)
    - [mac](##mac)
-1. [Requests](#Requests)
+5. [Requests](#Requests)
    - [curl](##curl)
    - [local-server](##local-server)
-1. [PYTHON](#PYTHON)
+6. [PYTHON](#PYTHON)
    - [venv](##venv)
    - [flask](##flask)
    - [clone_project](##clone_project)
    - [global_install](##global_install)
+7. [postgreSQL](#postgreSQL)
+   - [create_db](##create_db)
+   - [navigate](##navigate)
+   - [seed_db](##seed_db)
+   - [drop_db](##drop_db)
+   - [backup_db](##backup_db)
 
 # git
 
@@ -398,3 +404,46 @@ Clone python project
     - `pip3 install package_name` installs package globally
     - `pip3 uninstall package_name` installs package globally
     - `pip3 list` lists installed packages
+
+---
+
+# postgreSQL
+
+Almost all translatable to MySql and others relational db's.
+Database _is not_ a file, it's a bunch of files and folders distributed in the local computer. They're not human readable, as they're optimized for speed.
+
+## command_lines
+
+- `psql` check if server running
+- `\q` quit server
+
+## create_db
+
+- `createdb my_database_name` create database
+- FROM HOME DIRECTORY: `psql name_of_database` connects to database
+
+## navigate
+
+- `\l` list all databases
+- `\c DB_NAME` connect to DB_NAME / switch to db_name
+- `\dt` List all tables (in current db)
+- `\d TABLE_NAME` details about table_name
+
+## seed_db
+
+(Starter data for an app.)
+
+- `psql < my_database_name.sql` fill database with starter data.
+
+## drop_db
+
+Delete database completely
+
+- `dropdb my_database_name`
+
+## backup_db
+
+Makes a file with all the data and schemas to recreate a database
+
+- `pg_dump -C -c -O my_database_name > backup.sql` creates backup file.
+- `psql < backup.sql` restores database from backup file (creates it and stores it)
