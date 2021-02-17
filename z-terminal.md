@@ -28,11 +28,44 @@
    - [clone_project](##clone_project)
    - [global_install](##global_install)
 7. [postgreSQL](#postgreSQL)
+   1. Create and navigate:
    - [create_db](##create_db)
-   - [navigate](##navigate)
    - [seed_db](##seed_db)
-   - [drop_db](##drop_db)
+   - [navigate](##navigate)
    - [backup_db](##backup_db)
+   - [drop_db](##drop_db)
+   2. CRUD:
+   - [INSERT...INTO](##INSERT...INTO)
+   - [SELECT...FROM](##SELECT...FROM)
+     - [WHERE](###WHERE)
+     - [GROUP_BY](###GROUP_BY)
+     - [HAVING](###HAVING)
+     - [ORDER_BY](###ORDER_BY)
+     - [LIMIT](###LIMIT)
+     - [OFFSET](###OFFSET)
+   - [UPDATE](##UPDATE)
+   - [DELETE](##DELETE)
+   3. OPERATORS
+   - [operators](#SQL_operators)
+   - IS
+   - IS NOT
+   - IN
+   - NOT IN
+   - BETWEEN
+   - AND
+   - OR
+   - LIKE
+   - ILIKE
+   4. AGGREGATE FUNCTIONS
+   - [AG_FUNCS](#aggregate_functions)
+     - COUNT
+     - MIN
+     - MAX
+     - SUM
+     - AVG
+   5. [ALIAS](#alias)
+   6. [quotation_marks](#quotation_marks)
+   7. [comments](#comments)
 
 # git
 
@@ -412,10 +445,18 @@ Clone python project
 Almost all translatable to MySql and others relational db's.
 Database _is not_ a file, it's a bunch of files and folders distributed in the local computer. They're not human readable, as they're optimized for speed.
 
-## command_lines
+## subclasses order of execution `[]` FOR NOT REQUIRED
 
-- `psql` check if server running
-- `\q` quit server
+- 1.  FROM
+- 2.  [WHERE]
+- 3.  [GROUP BY]
+- 4.  SELECT
+- 5.  [HAVING]
+- 6.  [ORDER BY]
+- 7.  [LIMIT]
+- 8.  [OFFSET]`
+
+1. navigate
 
 ## create_db
 
@@ -424,16 +465,20 @@ Database _is not_ a file, it's a bunch of files and folders distributed in the l
 
 ## navigate
 
+- `psql` check if server running
+- `\q` quit server
 - `\l` list all databases
 - `\c DB_NAME` connect to DB_NAME / switch to db_name
 - `\dt` List all tables (in current db)
 - `\d TABLE_NAME` details about table_name
+- `\x auto;` view adjusted to size of display
 
 ## seed_db
 
 (Starter data for an app.)
 
-- `psql < my_database_name.sql` fill database with starter data.
+1.  cd to directory
+2.  - `psql < my_database_name.sql` fill database with starter data.
 
 ## drop_db
 
@@ -447,3 +492,136 @@ Makes a file with all the data and schemas to recreate a database
 
 - `pg_dump -C -c -O my_database_name > backup.sql` creates backup file.
 - `psql < backup.sql` restores database from backup file (creates it and stores it)
+
+---
+
+2. # CRUD
+
+CRUD:
+C (create) `INSERT INTO`
+R (Read) `SELECT ...FROM`
+U (Update) ` UPDATE ...SET`
+D (Delete) `DELETE FROM`
+
+## INSERT...INTO
+
+Insert new rows in our tables.
+
+- `INSERT INTO books (title, author) VALUES ('The Iliad', 'Homer');`
+- `INSERT INTO books (title, author) VALUES ('chickens', 'John Chicken'), ('animals', 'Darwin'), ('birds', 'charly bird');`
+
+## SELECT...FROM
+
+- `SELECT * FROM table_name;` all cols and rows of table
+- `SELECT column_name FROM table_name` column from tabl
+
+### WHERE
+
+- `SELECT * FROM students WHERE IsActive`
+- `SELECT col_name FROM table_name WHERE condition`
+- `SELECT title FROM books WHERE price = ('8.59');`
+- `SELECT title, price FROM books WHERE price < 10;`
+- `SELECT title FROM books WHERE page_count > 80 AND page_count <= 300`
+
+### GROUP_BY
+
+- `SELECT author, COUNT(*) FROM books GROUP BY author;`
+  No duplicates in new list:
+- `SELECT continent FROM world GROUP BY continent;`
+  Total items in category:
+- `SELECT category, COUNT(*) FROM analytics GROUP BY category;`
+
+### HAVING
+
+- `SELECT publisher, COUNT(*) FROM books GROUP BY publisher HAVING COUNT(*) >= 2;` "take the publisher col, and the number of rows in which every publisher appears, and make a new table that has only the publishers that occurs 2 or more tan 2 times".
+- `SELECT author, AVG(page_count) FROM books GROUP BY author HAVING AVG(page_count) > 650;`
+
+### ORDER_BY
+
+- `SELECT id, author FROM books ORDER BY id;` numbs sort in ascending order
+- `SELECT id, author FROM books ORDER BY author;` str sorts in alphabetical order
+- `SELECT id, author FROM books ORDER BY author desc;` descending order
+- `SELECT id, author FROM books ORDER BY author asc;` ascending order
+- `SELECT author, title FROM books ORDER BY author, title;` order by author, title and for duplicates order by author,title
+- `SELECT app_name, reviews, min_installs, min_installs / reviews AS proportion FROM analytics WHERE min_installs >= 100000 ORDER BY proportion DESC LIMIT 1;`
+
+### LIMIT
+
+- `SELECT author, title FROM books LIMIT 5;` limit results to 5 rows.
+- `SELECT * FROM books WHERE page_count > 500 ORDER BY page_count desc LIMIT 2;`
+
+### OFFSET
+
+Skip amount of rows for pagination
+
+- `SELECT id, author FROM books LIMIT 5 OFFSET 15;` will result rows 16 to 20
+
+## UPDATE
+
+- `UPDATE books SET price = 0;` update all (warning)
+- `UPDATE books SET author = 'caca' WHERE author = 'J. K. Rowling';` will pick the JK Rowling occurences and replace the 'author' column by the new 'caca' value
+
+## DELETE
+
+- `DELETE FROM books WHERE page_count > 500;`
+- `DELETE FROM books WHERE title LIKE 'The%' OR title LIKE 'My%';`
+- `DELETE FROM books;` (warning, erases all table)
+
+---
+
+3. # SQL_operators
+
+# SQL_operators
+
+- IS NOT `SELECT * FROM analytics WHERE min_installs <= 50 AND rating IS NOT null;`
+- IN `SELECT id, title FROM books WHERE id IN (1, 7, 9);`
+- NOT IN `SELECT id, title FROM books WHERE id NOT IN (1, 7, 9);`
+- BETWEEN (range) `SELECT id, title FROM books WHERE id BETWEEN 20 and 25;` will throw rows with id 20 to 25 only.
+  - `SELECT id, title FROM books WHERE id NOT BETWEEN 20 and 25;` all the rest except 20 to 25
+- AND `SELECT yr, subject, winner FROM nobel WHERE subject = 'Physics' AND yr = 1980 OR subject = 'Chemistry' AND yr = 1984;`
+- OR `SELECT yr, subject, winner FROM nobel WHERE subject = 'Medicine' AND yr < 1910 OR subject = 'Literature' AND yr >= 2004;`
+- LIKE `SELECT id, title FROM books WHERE title LIKE 'T%';` "title starts wit "T" and not matter what letter comes after"
+  - `SELECT id, title FROM books WHERE title LIKE '%t%';` "has a "t" anywere in title"
+- ILIKE (non-case sensitive) `SELECT id, title FROM books WHERE title ILIKE '%harry%';` all 'Harry' or 'harry'
+  - `SELECT author FROM books WHERE author ILIKE '% % %';` author name with two blank spaces between characters
+
+---
+
+4. # aggregate_functions
+
+# aggregate_functions
+
+- `SELECT COUNT(*) FROM books;` 40
+- `SELECT MIN(price) FROM books;` $2.99
+- `SELECT MAX(price) FROM books;` $43
+- `SELECT SUM(PRICE) FROM books;` 432432423
+- `SELECT AVG(page_count) FROM books;` 371.65000000
+- `SELECT AVG(page_count) FROM books WHERE author = 'J. K. Rowling';`
+
+[list_of_functions](https://www.postgresql.org/docs/9.5/functions-aggregate.html)
+
+5. # alias
+
+# alias
+
+Name the result columns to make data easier to understand.
+
+1.  alias:
+
+- `SELECT AVG(price) AS caca FROM books;` column with name "caca" and avg price number.
+- `SELECT AVG(page_count) AS pages_average, AVG(price) AS price_average FROM books GROUP BY author;` two columns with their custom names
+
+2.  alias and reference:
+
+- `SELECT author, SUM(page_count) AS caquita FROM books GROUP BY author ORDER BY caquita;`
+- `SELECT age AS age, COUNT(age) AS total_people FROM people GROUP BY age HAVING COUNT(age) >= 10`
+
+6. # quotation_marks
+
+- `SELECT * FROM nobel WHERE winner = 'EUGENE O''NEILL';`
+
+7. # comments
+
+```sql
+-- this is a comment-comment --
+```

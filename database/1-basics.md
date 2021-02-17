@@ -1,7 +1,22 @@
 # postgreSQL
 
+Syntax:
+
+1. DML (Data Manipulation Language). Manipulate data in columns and rows that are already created.
+
+```sql
+
+
+```
+
 Almost all translatable to MySql and others relational db's.
 Database _is not_ a file, it's a bunch of files and folders distributed in the local computer. They're not human readable, as they're optimized for speed.
+
+CRUD:
+C (create) `INSERT INTO`
+R (Read) `SELECT ...FROM`
+U (Update) ` UPDATE ...SET`
+D (Delete) `DELETE FROM`
 
 ## SQL
 
@@ -13,11 +28,6 @@ Bare in mind:
 - single quotes
 - Separate queries with `;`
 - Keywords ALL IN CAPS (by convention)
--
-
-```sql
-
-```
 
 ## Connect to db:
 
