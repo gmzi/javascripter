@@ -63,9 +63,14 @@
      - MAX
      - SUM
      - AVG
-   5. [ALIAS](#alias)
-   6. [quotation_marks](#quotation_marks)
-   7. [comments](#comments)
+   5. [JOIN](#JOIN)
+      - JOIN
+      - LEFT JOIN
+      - RIGHT JOIN
+      - FULL JOIN
+   6. [ALIAS](#alias)
+   7. [quotation_marks](#quotation_marks)
+   8. [comments](#comments)
 
 # git
 
@@ -477,8 +482,9 @@ Database _is not_ a file, it's a bunch of files and folders distributed in the l
 
 (Starter data for an app.)
 
-1.  cd to directory
-2.  - `psql < my_database_name.sql` fill database with starter data.
+0. open Postgres app and run server.
+1. cd to directory
+2. - `psql < my_database_name.sql` fill database with starter data.
 
 ## drop_db
 
@@ -601,6 +607,52 @@ Skip amount of rows for pagination
 [list_of_functions](https://www.postgresql.org/docs/9.5/functions-aggregate.html)
 
 5. # alias
+
+# JOIN
+
+1. inner join
+
+```sql
+SELECT title, name
+   -- referencing table:--
+   FROM movies
+   -- referenced table:--
+   JOIN studios
+     ON movies.studio_id = studios.id;
+     --"in the Movies table, the 'studio_id' field is referencing the 'studios.id' field in        the Studios table"--
+
+-- JOIN FULL TABLES --
+ SELECT * FROM movies JOIN studios ON movies.studio_id = studios.id;
+
+ -- JOIN SELECTED FIELDS FROM TWO TABLES --
+SELECT col_of_table_1, col_of_table_2 FROM table_1 JOIN table_2ONtable_1.name_of_coL = table_2.name_of_col;
+
+SELECT title, founded_in FROM movies JOIN studios ON moviesstudio_id= studios.id;
+
+ -- JOIN TABLES WITH SAME FIELD NAME --
+ SELECT movies.id, studios.id FROM movies JOIN studios ONmoviesstudio_id = studios.id;
+```
+
+Cool examples:
+
+```sql
+SELECT name, COUNT(*) AS total FROM movies JOIN studios ON movies.studio_id = studios.id GROUP BY studios.name ORDER BY total;
+```
+
+2. Outer join
+
+```sql
+-- LEFT JOIN --
+SELECT title, name AS studio_name FROM movies LEFT JOIN studios Omovies.studio_id = studios.id
+
+--RIGHT JOIN--
+SELECT title, name AS studio_name FROM movies RIGHT JOIN studioON movies.studio_id = studios.id
+
+--FULL JOIN--
+SELECT title, name AS studio_name FROM movies FULL JOIN studios Omovies.studio_id = studios.id;
+```
+
+---
 
 # alias
 
