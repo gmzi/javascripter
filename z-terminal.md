@@ -64,10 +64,13 @@
      - SUM
      - AVG
    5. [JOIN](#JOIN)
+      One to many:
       - JOIN
       - LEFT JOIN
       - RIGHT JOIN
       - FULL JOIN
+        Many to many:
+      - [many:many](## many:many)
    6. [ALIAS](#alias)
    7. [quotation_marks](#quotation_marks)
    8. [comments](#comments)
@@ -484,7 +487,8 @@ Database _is not_ a file, it's a bunch of files and folders distributed in the l
 
 0. open Postgres app and run server.
 1. cd to directory
-2. - `psql < my_database_name.sql` fill database with starter data.
+2. - `psql < my_database_file.sql` fill database with starter data.
+3. - `psql name_of_database` run database
 
 ## drop_db
 
@@ -610,7 +614,7 @@ Skip amount of rows for pagination
 
 # JOIN
 
-1. inner join
+1. inner joins
 
 ```sql
 SELECT title, name
@@ -636,7 +640,19 @@ SELECT title, founded_in FROM movies JOIN studios ON moviesstudio_id= studios.id
 Cool examples:
 
 ```sql
+SELECT first_name, last_name, AVG(price), COUNT(owner_id)
+FROM owners
+JOIN vehicles
+ON owners.id=owner_id
+GROUP BY (first_name, last_name)
+HAVING
+COUNT(owner_id) > 1 AND ROUND(AVG(price)) > 10000
+ORDER BY first_name DESC;
+
+
 SELECT name, COUNT(*) AS total FROM movies JOIN studios ON movies.studio_id = studios.id GROUP BY studios.name ORDER BY total;
+
+SELECT first_name, last_name, COUNT(owner_id) FROM owners JOIN vehicles ON owners.id=vehicles.owner_id GROUP BY (first_name, last_name) ORDER BY first_name;
 ```
 
 2. Outer join
@@ -650,6 +666,33 @@ SELECT title, name AS studio_name FROM movies RIGHT JOIN studioON movies.studio_
 
 --FULL JOIN--
 SELECT title, name AS studio_name FROM movies FULL JOIN studios Omovies.studio_id = studios.id;
+```
+
+## many:many
+
+```sql
+SELECT title, first_name, last_name FROM roles JOIN actors ON roles.actor_id = actors.id JOIN movies ON roles.movie_id = movies.id;
+
+SELECT * FROM roles JOIN actors ON roles.actor_id = actors.id JOIN movies ON roles.movie_id = movies.id;
+
+--SELECT COLUMNS USING TABLE ALIAS--
+SELECT m.title, a.first_name, a.last_name
+FROM movies m
+JOIN roles r
+ON m.id = r.movie_id
+JOIN actors a
+ON r.actor_id = a.id;
+```
+
+Outer join:
+
+```sql
+SELECT *
+FROM roles r
+FULL JOIN movies m
+ON r.movie_id = m.id
+FULL JOIN actors a
+ON r.actor_id = a.id;
 ```
 
 ---

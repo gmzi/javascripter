@@ -69,6 +69,10 @@ DML (Data Modification Language)
 
 ## join
 
+### join_1:M
+
+Join one to many tables
+
 Create table in memory that combines information from different tables. Data from tables is matched according to join condition. Join condition involves comparing a foreign key from one table and a primary key in another table.
 
 1. Inner join (default type of join `join` === `inner join`)
@@ -94,7 +98,7 @@ Create table in memory that combines information from different tables. Data fro
      SELECT movies.id, studios.id FROM movies JOIN studios ON movies.studio_id = studios.id;
    ```
 
-2. Outer Join
+1. Outer Join
    For data that doesn't overlap. "Left": first table, "Right": second table.
 
    - left join
@@ -114,6 +118,35 @@ Create table in memory that combines information from different tables. Data fro
      --FULL JOIN--
      SELECT title, name AS studio_name FROM movies FULL JOIN studios ON movies.studio_id = studios.id;
    ```
+
+### join_M:N
+
+Join multiple tables.
+
+```sql
+SELECT title, first_name, last_name FROM roles JOIN actors ON roles.actor_id = actors.id JOIN movies ON roles.movie_id = movies.id;
+
+SELECT * FROM roles JOIN actors ON roles.actor_id = actors.id JOIN movies ON roles.movie_id = movies.id;
+
+--SELECT COLUMNS USING TABLE ALIAS--
+SELECT m.title, a.first_name, a.last_name
+FROM movies m
+JOIN roles r
+ON m.id = r.movie_id
+JOIN actors a
+ON r.actor_id = a.id;
+```
+
+Outer join:
+
+```sql
+SELECT *
+FROM roles r
+FULL JOIN movies m
+ON r.movie_id = m.id
+FULL JOIN actors a
+ON r.actor_id = a.id;
+```
 
 ## insert_data
 
