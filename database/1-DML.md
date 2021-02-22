@@ -68,8 +68,23 @@ Database _is not_ a file, it's a bunch of files and folders distributed in the l
 
 ## create_db
 
-- `createdb my_database_name` create database
-- FROM HOME DIRECTORY: `psql name_of_database` connects to database
+1. Option 1, in terminal:
+   - cd to directory
+   - `createdb my_database`
+2. Option 2, in Posgres:
+   - activate Postgres server
+   - cd to directory
+   - `psql`
+   - `CREATE DATABASE my_database;`
+
+## seed_db
+
+(Starter data for an app.)
+
+0. open Postgres app and run server.
+1. cd to directory (check psql runing but not active in terminal)
+2. - `psql < my_database_file.sql` fill database with starter data.
+3. - `psql name_of_database` run database
 
 ## navigate
 
@@ -82,18 +97,15 @@ Database _is not_ a file, it's a bunch of files and folders distributed in the l
 - `\d+ table_name` more details.
 - `\x auto;` view adjusted to size of display
 
-## seed_db
-
-(Starter data for an app.)
-
-0. open Postgres app and run server.
-1. cd to directory
-2. - `psql < my_database_file.sql` fill database with starter data.
-3. - `psql name_of_database` run database
-
 ## drop_db
 
 Delete database completely
+Opotion 1: 0. psql active
+
+1. cd out database
+2. `DROP DATABASE my_database;`
+
+   Option2 :
 
 - `dropdb my_database_name`
 

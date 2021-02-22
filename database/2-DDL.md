@@ -229,7 +229,7 @@ Notation used specifically for database design.
    - activate Postgres server
    - cd to directory
    - `psql`
-   - `CREATE DATABASE my_database`
+   - `CREATE DATABASE my_database;`
 
 # normalization
 
