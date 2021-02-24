@@ -41,7 +41,7 @@ CREATE TABLE post (
     user_id INT REFERENCES users,
     city_id INT REFERENCES city
 );
-
+-- do a query on post table and delete all user id cases. 
 -- INSERTS --
 
 INSERT INTO region 

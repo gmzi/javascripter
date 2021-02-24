@@ -96,7 +96,7 @@ Git tracks all version history (will stay local unless is pushed to a remote rep
 7. Create `.gitignore` file.
 
    1. if python:
-      - create requirements.txt
+      - `pip freeze > requirements.txt`
    2. :
       - `venv/` for python projects
       - `.file_name` in gitignore
