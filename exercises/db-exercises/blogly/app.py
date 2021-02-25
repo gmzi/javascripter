@@ -53,6 +53,28 @@ def edit_user(user_id):
     return render_template('edit.html', user=user)
 
 
-# @app.route('/users/<int:user_id>/update')
-# def update_user(user_id):
-    # check if form placeholder values can work as default values.
+@app.route('/users/<int:user_id>/update', methods=['POST'])
+def update_user(user_id):
+    user = User.query.get(user_id)
+    user.first_name = request.form['first']
+    user.last_name = request.form['last']
+    user.username = request.form['username']
+    user.image_url = request.form['image']
+    db.session.add(user)
+    try:
+        db.session.commit()
+    except Exception as error:
+        db.session.rollback()
+        return 'Oh no'
+    return redirect(f"/users/{user_id}")
+
+
+@app.route('/users/<int:user_id>/delete')
+def delete_user(user_id):
+    User.query.filter_by(id=user_id).delete()
+    try:
+        db.session.commit()
+    except Exception as error:
+        db.session.rollback()
+        return 'Oh no'
+    return redirect('/')
