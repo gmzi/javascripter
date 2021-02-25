@@ -124,7 +124,7 @@ db = SQLAlchemy()
 def connect_db(app):
     db.app = app
     db.init_app(app)
-# 3. Define table (class name in Singular, table name in plural):
+# 3. Define model (o sea table) (class name in Singular, table name in plural):
 
 class Pet(db.Model):
     """Pet."""
@@ -493,15 +493,16 @@ The point of a model is creating a class that will represent a table in theSQL d
 
 1. cd to project's folder.
 2. activate virtual environment.
-3. `pip install psycopg2-binary`
-4. `pip install flask-sqlalchemy`
+3. (install flask)
+4. `pip install psycopg2-binary`
+5. `pip install flask-sqlalchemy`
 
 # setup
 
 0. (create database)
 1. run PostgreSQL server
 2. connect to database
-3. In models.py:
+3. models.py:
 
 ```python
  from flask_sqlalchemy import SQLAlchemy
@@ -520,7 +521,7 @@ def connect_db(app):
    ```python
    from flask import Flask, request, render_template, redirect
    # 1. Import models.py:
-   from models import db, connect_db
+   from models import db, connect_db, My_model_name
 
    app = Flask(__name__)
    # 2. Database config:

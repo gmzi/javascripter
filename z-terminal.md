@@ -302,6 +302,9 @@ Client url
 
 # PYTHON
 
+- `pip list` list of all modules installed globally.
+- `pip3 uninstall -r requirements.txt` remove all global packages in case of conflict (check venv is inactive and dir to project's folder)
+
 ## venv
 
 1. create virtual environment
