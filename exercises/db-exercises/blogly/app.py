@@ -11,6 +11,14 @@ app.config['SECRET_KEY'] = 'caca'
 
 connect_db(app)
 
+# Reload with no cache for styling purposes:
+
+
+@app.after_request
+def apply_caching(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    return response
+
 
 @app.route('/')
 def list_users():

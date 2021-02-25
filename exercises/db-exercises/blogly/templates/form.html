@@ -1,18 +1,13 @@
-{%extends 'base.html'%}
-{%block title%} New User {% endblock%}
-{%block form%}
-<h1>Create New User</h1>
+{%extends 'base.html'%} {%block title%} Create new user {% endblock%} {%block form%}
 <form action="/create" method="POST">
-    <label for="first">First Name</label>
-    <input type="text" name="first" placeholder="Your First Name">
-    <label for="last">Last Name</label>
-    <input type="text" name="last" placeholder="Your Last Name">
-    <label for="username">User Name</label>
-    <input type="text" name="username" placeholder="Your user name">
-    <label for="image">Image Url</label>
-    <input type="text" name="image" placeholder="Provide your image url">
-    <button>Add</button>
+  <label for="first">First Name</label>
+  <input type="text" name="first" placeholder="Your First Name" />
+  <label for="last">Last Name</label>
+  <input type="text" name="last" placeholder="Your Last Name" />
+  <label for="username">User Name</label>
+  <input type="text" name="username" placeholder="Your user name" />
+  <label for="image">Image Url</label>
+  <input type="text" name="image" placeholder="Provide your image url" />
+  <button>Add</button>
 </form>
-{%endblock%}
-{%block list%}
-{%endblock%}
+{%endblock%} {%block list%} {%endblock%}
