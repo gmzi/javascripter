@@ -1,12 +1,14 @@
-1. app.py:
+1. app.py (DML):
    - [query_database](#query_database)
    - [create_instance_and_commit](#create_instance_and_commit)
    - [update_instance](#update_instance)
    - [delete_instance](#delete_instance)
    - [rollback](#rollback)
-2. models.py:
-   - [models](#models)
-   - [update_model](#update_model)
+2. models.py (DDL):
+   - [single_model_syntax](##single_model_syntax)
+   - [one_to_many](##one_to_many)
+   - [many_to_many](##many_to_many)
+   - [models_setup](##models_setup)
 3. [seed_file](#seed_file)
 4. [routes_demo](#routes_demo)
 5. [tests](#tests)
@@ -25,19 +27,26 @@
    - `.first()` first record that match or **None** if nothing matches
    - `.one()` get first record, **Error** if no results or if there's more than one result, "there should be only one thing that matches this, otherwise give me error".
    - `.one_or_none()` **Error** if more than one result, **None** if 0 results.
-2. Full queries:
+   - `.count()` number of records found without fetching them.
+2. Single queries:
 
    ```python
+    # select specific columns (retrieves tuples):
+    db.session.query(Employee.id, Employee.name).all() # [(1, 'Leonard'), (2, 'Liz'), (3, 'Maggie')]
+
    Pet.query.all() #(it's like 'SELECT * FROM pets')
 
    # GET
    Pet.query.get(1) # select by id (SELECT * FROM pets WHERE id = 1)
+   Department.query.get('finance')
+
+   # GET_OR_404
+   Pet.query.get_or_404(7)
+   Department.query.get_or_404('marketing')
 
    # FILTER_BY
    Pet.query.filter_by(species='dog').all() # all objects that matches 'dog'
-
    Pet.query.filter_by(species='dog').first() # only first result matching 'dog'
-
    Pet.query.filter_by(species='dog', hunger=12).all() # multiple paramsdcxc
 
    # FILTER
@@ -48,6 +57,42 @@
    Pet.query.filter(Pet.hunger != 20).all()
       #AND
    Pet.query.filter(Pet.hunger < 15, Pet.species == 'dog').all()
+   Pet.query.filter((Pet.hunger < 15) & (Pet.species == 'dog')).all()
+     # OR_
+   Employee.query.filter(db.or_(Employee.state == 'CA', Employee.id > 65)).all()
+   Employee.query.filter((Employee.state == 'CA') | (Employee.id > 65) ).all()
+
+   #LIKE / ILIKE
+   Employee.query.filter(Employee.name.like('%Jane%')).first()
+   Employee.query.filter(Employee.name.ilike('%jane%')).all()
+   # IN_
+   Employee.query.filter(Employee.id.in_([22, 23, 24])).one()
+
+   # GROUP BY / HAVING
+    q = Employee.query
+
+    q.group_by('state')
+    q.group_by('state').having(db.func.count(Employee.id) > 2)
+
+   #ORDER BY
+    q.order_by('state')
+
+   #OFFSET
+    q.offset(10)
+
+   #LIMIT
+   q.limit(10)
+   ```
+
+   [methods_full_list_docs](https://docs.sqlalchemy.org/en/13/orm/query.html#sqlalchemy.orm.query.Query.offset)
+
+3. Chained queries:
+
+   ```python
+   new_hires = Employee.query.filter(Employee.id >= 4)
+   cal_new_hires = new_hires.filter(Employee.state == 'CA')
+   new_hires.all() # [<Employee 3>, <Employee 12>, <Employee233>]
+   cal_new_hires.all() # [<Employee 3>, <Employee 12>]
    ```
 
 # create_instance_and_commit
@@ -74,6 +119,8 @@
 
    # STAGE NEW INSTANCES (ALL AT ONCE):
    db.session.add_all(pets)
+   #or
+   db.session.add_all([d1, d2, d3])
 
    # COMMIT NEW INSTANCES:
    db.session.commit()
@@ -109,12 +156,7 @@ When there's an error in the attempt to commit a new object to the database, we 
 
 # models
 
-1. (cd to dir and create empty database)
-2. in app.py:
-   ```python
-   app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///my_database'
-   ```
-3. in models.py:
+## single_model_syntax
 
 ```python
 from flask_sqlalchemy import SQLAlchemy
@@ -184,26 +226,116 @@ db.session.commit()
 # now check database: fluffy.hunger: 4
 ```
 
-4. Run function to create the tables:
+## one_to_many
 
-5. check venv active
-6. check postgres server active
-7. In app.py:
+SQLAlchemy allows to create RELATIONSHIPS, to join different tables. First define a Foreign key constrain and then define the realtionship:
+![db_graphic](/images/one-to-many-ex.jpg)
+
+```python
+from enum import unique
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import backref
+
+db = SQLAlchemy()
+
+
+def connect_db(app):
+    db.app = app
+    db.init_app(app)
+
+
+class Department(db.Model):
+    """Department. A department has many employees."""
+
+    __tablename__ = "departments"
+
+    dept_code = db.Column(db.Text, primary_key=True)
+    dept_name = db.Column(db.Text,
+                          nullable=False,
+                          unique=True)
+    phone = db.Column(db.Text)
+
+    # RELATIONSHIP TO FOREIGN TABLE (if no backref somewhere else):
+    # dept_employees = db.relationship('Employee')
+
+
+class Employee(db.Model):
+    """ employee table """
+
+    __tablename__ = 'employees'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
+    state = db.Column(db.Text, nullable=False, default='CA')
+
+    # 1. FOREIGN KEY constraint:
+    dept_code = db.Column(db.Text, db.ForeignKey('departments.dept_code'))
+
+    # 2. RELATIONSHIP TO FOREIGN TABLE:
+    # syntax "one way only"
+    # department = db.relationship('Department')
+    # syntax to go both ways (from Employee to Department and from Department to Employee, and
+    # no need to add a relationship in Department):
+    department_where_works = db.relationship('Department', backref='emps')
+
+
+# USE RELATIONSHIP FROM DEPARTMENT:
+# app.py
+d = Department.query.get('MKTG')
+d.dept_employees[0].name  # River Bottom
+d.dept_employees  # [<Employee 1>, <Employee 3>, <Employee 5>]
+
+# USE RELATIONSHIP FROM EMPLOYEE:
+# app.py:
+emp = Employee.query.get(1)
+emp.department.dept_code  # MKTG
+emp.department.phone # 23232323
+
+# USE BACKREF RELATIONSHIP from Department:
+d = Department.query.get('MKTG')
+d.emps # [<Employee 1>, <Employee 3>, <Employee 5>]
+
+# USE BACKREF RELATIONSHIP from Employee:
+ca = Employee.query.filter_by(state='CA').first()
+ca.name  # Summer Winter
+ca.department_where_works  # Department MKTG
+ca.department_where_works.phone  # 23232323
+```
+
+## many_to_many
+
+## models_setup
+
+1. (cd to dir and create empty database)
+2. in app.py:
+   ```python
+   app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///my_database'
+   ```
+3. Write models.
+4. check venv active
+5. check postgres server active
+6. In app.py:
    ```python
    db.create_all()
    ```
-8. in terminal: `python app.py`
-9. Once the db is created, erase 'db.create_all()`, otherwise will create a new table every time 'app.py' runs.
-10. In app.py, import the new created class:
-    ```python
-    from models import db, connect_db, Pet
-    ```
+7. in terminal: `python app.py`
+8. Once the db is created, erase 'db.create_all()`, otherwise will create a new table every time 'app.py' runs.
+9. In app.py, import the new created class:
+   ```python
+   from models import db, connect_db, Mymodel
+   ```
 
 ---
 
 # update_model
 
 Go to terminal, connect to database and drop table with SQL syntax (`DROP TABLE my_table`). Then redo the table in Alchemy and run it again from app.pyYo .
+To reset all tables:
+
+```python
+db.drop_all()
+db.create_all()
+```
 
 # seed_file
 
@@ -499,10 +631,11 @@ The point of a model is creating a class that will represent a table in theSQL d
 
 # setup
 
-0. (create database)
+0. (`createdb name_of_db`)
 1. run PostgreSQL server
-2. connect to database
-3. models.py:
+2. `psql`
+3. connect to database (`\c my_db`)
+4. models.py:
 
 ```python
  from flask_sqlalchemy import SQLAlchemy
@@ -516,7 +649,7 @@ def connect_db(app):
     db.init_app(app)
 ```
 
-4. In app.py:
+5. app.py:
 
    ```python
    from flask import Flask, request, render_template, redirect
@@ -538,6 +671,15 @@ def connect_db(app):
    actors = db.session.execute('SELECT * FROM actors')
    print(list(actors))
    ```
+
+6. Once models are written, to commit them in database, run in
+   app.py or in seed.py:
+
+```python
+db.create_all()
+```
+
+Mind running only once, otherwise it will "seed" a new table every time.
 
 # ORM
 

@@ -90,6 +90,14 @@ Prevent repetitio of html setting a parent template and extend that base templat
 In a same template, add different content according to different conditions (user loged in or not, etc)
 
 ```html
+<ul>
+  {% if (posts|le0)%} {% for post in%}
+  <li>{{post.title}}</li>
+  {%endfor%} {%else%}
+  <p>No posts yet</p>
+  {%endif%}
+</ul>
+
 {% if number == 2 %}
 <h2>That's extra cool!!</h2>
 {% else %}

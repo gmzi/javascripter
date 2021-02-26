@@ -88,6 +88,12 @@ button {
   margin: 1rem 1rem;
 }
 
+.data-container {
+  width: 80%;
+  height: auto;
+  margin: 0.2rem 0.2rem;
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -104,13 +110,15 @@ span {
   color: white;
 }
 .btn-delete {
-  background-color: red;
+  background-color: rgba(255, 0, 0, 0.81);
 }
 
 .btn-edit {
-  background-color: mediumblue;
+  background-color: rgba(0, 0, 205, 0.81);
 }
 
 .btn-all {
   color: blue;
+  border: 1px solid lightskyblue;
+  background-color: rgba(255, 255, 255, 0.81);
 }
