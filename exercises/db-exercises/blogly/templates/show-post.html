@@ -1,12 +1,21 @@
 {% extends 'base.html'%}
-{%block title%} {{post.title}} {%endblock%}
-{% block show_post %}
-<p>{{post.content}}</p>
-<span class="author">Created by <a href="/users/{{post.created_by.id}}">{{post.created_by.username}}</a> on <span class="date">{{date_time}}</span></span>
-<div class="row">
-    <a href="/users/{{post.created_by.id}}" class="button btn-all">All posts</a>
-    <a href="/posts/{{post.id}}/edit" class="button btn-edit">Edit</a>
-    <a href="/posts/{{post.id}}/delete" class="button btn-delete">Delete</a>
+{%block title%}{% endblock %}
+{% block show_post%}
+<div class="post-container">
+    <div class="post-header">
+        <h3 class='post-title'>{{post.title}}</h3>
+    </div>
+    <div class="post-body">
+        <p>{{post.content}}</p>
+    </div>
+    <div class="post-footer">
+        <span class="author">Created by <a href="/users/{{post.created_by.id}}">{{post.created_by.username}}</a> on <span class="date">{{date_time}}</span></span>
+    </div>
+    <div class="row">
+        <a href="/users/{{post.created_by.id}}" class="button btn-all">All posts by {{post.created_by.username}}</a>
+        <a href="/posts/{{post.id}}/edit" class="button btn-edit">Edit</a>
+        <a href="/posts/{{post.id}}/delete" class="button btn-delete">Delete</a>
+    </div> 
 </div>
 {% endblock %}
 

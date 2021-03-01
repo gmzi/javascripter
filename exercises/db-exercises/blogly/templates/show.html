@@ -22,7 +22,7 @@
             <ul>
                 {% if (posts|length > 0)%}
                 {% for post in posts %}
-                <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+                <li><a class="base-item" href="/posts/{{post.id}}">{{post.title}}</a></li>
                 {%endfor%}
                 {%else%}
                 <p>No posts yet</p>
@@ -32,21 +32,6 @@
         <div class="row">
             <a href="/users/{{user.id}}/new-post-form" class="button">Add post</a>
         </div>
-
-
-
-        <!-- <div class="row">
-            <h2><span>username: </span>{{user.username}}</h2>
-        </div>
-        <div class="row">
-            <h2><span>first name: </span>{{user.first_name}}</h2>
-        </div>
-        <div class="row">
-            <h2><span>last name: </span>{{user.last_name}}</h2>
-        </div>
-        <div class="row">
-            <h2>{{user.first_name}} {{user.last_name}}</h2>
-        </div> -->
     </div>
 </div>
 
