@@ -8,11 +8,15 @@
 3. [flash](##flash)
 4. [jsonify](##jsonify)
 5. [sessions-cookies](##flask_sessions)
-6. [form-session-flow](###form-session-flow)
-7. [form](##forms)
-8. [folders_structure](##dir)
-9. [flask_setup](#setup)
-10. [debug_toolbar_extension](#debug)
+   Foms:
+6. [WTF_forms](#WTF_forms)
+7. [form-session-flow](###form-session-flow)
+8. [form](##forms)
+   Setup:
+9. [folders_structure](##dir)
+10. [flask_setup](#setup)
+    Debug:
+11. [debug_toolbar_extension](#debug)
 
 # basics
 
@@ -350,118 +354,122 @@ If want to add things to a shopping cart, or stay authenticated in a website, mu
    - Are cryptographically signed, user's can't modify data. ("signed" means that is codified by an algorithm in the server)
      It's a dictionary that manage cookie creation, reading and sending. It's more secure than cookies.
 
-   ### form-session-flow
+# WTF_forms
 
-   1. Show form view:
+It's a
+
+### form-session-flow
+
+1.  Show form view:
+
+    ```python
+    @app.route('/form')
+    def show_form():
+        return render_template('form1.html')
+    ```
+
+2.  Form template:
+
+    ```html
+    {% extends 'base.html'%} {%block content%}
+
+    <form action="/handle-form">
+      Nickname?
+      <input name="nickname" type="text" />
+      Number?
+      <input name="number" type="text" />
+      <input type="submit" />
+    </form>
+    {%endblock%}
+    ```
+
+3.  Handle user input:
+    (`request.args` for GET requests
+    `request.form` for POST requests)
+
+    ```python
+    @app.route('/handle-form')
+    def handle_form():
+       session['nickname'] = request.args['nickname']
+       session['number'] = int(request.args['number'])
+
+       return render_template('confirmation.html',
+                              # this is autmatically added by flask without us having to pass it:
+                              # nickname=session['nickname'], number=session['number']
+                              )
+    ```
+
+4.  Confirmation template:
+
+    ```html
+    {% extends 'base.html'%} {%block content%}
+
+    <h2>done</h2>
+    <ul>
+      <li>Your nickname has been stored as {{session['nickname']}}</li>
+      <li>Your number has been stored as {{session['number']}}</li>
+    </ul>
+
+    {%endblock%}
+    ```
+
+5.  Server Sessions, not flask default, to import it check docs about flask Sessions.
+
+6.  Cookies
+
+    - ### set cookie from server side
+
+    ```python
+    from flask import Flask, make_response
+
+    @app.route('/demo')
+    def demo():
+        content = "<h1>Hello</h1>"
+        res = make_response(content)
+        res.set_cookie('fav-color', 'blue')
+        return res
+    ```
+
+    - ### read cookies
 
       ```python
-      @app.route('/form')
-      def show_form():
-          return render_template('form1.html')
+      from flask import Flask, request
+
+      @app.before_request
+      def print_cookies():
+          print(request.cookies) # {'fav_color': 'blue', 'location': 'las totoras motel'}
       ```
 
-   2. Form template:
+    - ### cookie options
 
-      ```html
-      {% extends 'base.html'%} {%block content%}
+      - Expiration
+        - default is "as long as browser is running" (session cookie)
+      - Domain (which domain should the cookie be sent to)
+      - HttpOnly (not accessible via javascript)
 
-      <form action="/handle-form">
-        Nickname?
-        <input name="nickname" type="text" />
-        Number?
-        <input name="number" type="text" />
-        <input type="submit" />
-      </form>
-      {%endblock%}
-      ```
+    - Chrome: Dev Tools - Application - Storage - Cookies
+    - Key-value pair, stored in the browser (client side). When making a request to a website, the browser sends all the cookies it has in storage (in the header of the request), when the server receives them, uses only the ones that can understand, and ignore the rest. If not, the server will instruct the browser what to do about storing cookies and how they will be structured. The client will send those cookies to the server always with every single request. (similar to JS local storage, with the difference that cookies are sent to server). with this implementation we now have state in our http protocol. The server can also send something in the http response instructing the browser to store a cookie, and the browser will store it in the client side.
 
-   3. Handle user input:
-      (`request.args` for GET requests
-      `request.form` for POST requests)
+7.  Types of browser storage:
 
-      ```python
-      @app.route('/handle-form')
-      def handle_form():
-         session['nickname'] = request.args['nickname']
-         session['number'] = int(request.args['number'])
-
-         return render_template('confirmation.html',
-                                # this is autmatically added by flask without us having to pass it:
-                                # nickname=session['nickname'], number=session['number']
-                                )
-      ```
-
-   4. Confirmation template:
-
-      ```html
-      {% extends 'base.html'%} {%block content%}
-
-      <h2>done</h2>
-      <ul>
-        <li>Your nickname has been stored as {{session['nickname']}}</li>
-        <li>Your number has been stored as {{session['number']}}</li>
-      </ul>
-
-      {%endblock%}
-      ```
-
-2. Server Sessions, not flask default, to import it check docs about flask Sessions.
-
-3. Cookies
-
-   - ### set cookie from server side
-
-   ```python
-   from flask import Flask, make_response
-
-   @app.route('/demo')
-   def demo():
-       content = "<h1>Hello</h1>"
-       res = make_response(content)
-       res.set_cookie('fav-color', 'blue')
-       return res
-   ```
-
-   - ### read cookies
-
-     ```python
-     from flask import Flask, request
-
-     @app.before_request
-     def print_cookies():
-         print(request.cookies) # {'fav_color': 'blue', 'location': 'las totoras motel'}
-     ```
-
-   - ### cookie options
-
-     - Expiration
-       - default is "as long as browser is running" (session cookie)
-     - Domain (which domain should the cookie be sent to)
-     - HttpOnly (not accessible via javascript)
-
-   - Chrome: Dev Tools - Application - Storage - Cookies
-   - Key-value pair, stored in the browser (client side). When making a request to a website, the browser sends all the cookies it has in storage (in the header of the request), when the server receives them, uses only the ones that can understand, and ignore the rest. If not, the server will instruct the browser what to do about storing cookies and how they will be structured. The client will send those cookies to the server always with every single request. (similar to JS local storage, with the difference that cookies are sent to server). with this implementation we now have state in our http protocol. The server can also send something in the http response instructing the browser to store a cookie, and the browser will store it in the client side.
-
-4. Types of browser storage:
-
-   1. LocalStorage
-      - not sent to server
-      - Stores data with no expiration date, and gets cleared only through JavaScript, or clearing the broser cache.
-      - It's domain specific (can't use it accross different websites).
-      - Storage limit is much larger than cookies.
-      - For complex stuff or things we don't need to be in the server
-   2. SessionStorage (different than flask session)
-      - not sent to server
-      - Stores data only for until the browser tab is closed.
-      - Storage limit larger than cookie.
-   3. Cookie
-      - 4kb limit (must be light because:)
-      - They are sent to servers
-      - server and client can read them
-      - Are made secure by setting the OnlyHttpOnly flag as true for that cookie. This prevent client-side access to it.
-      - Sent from browser to server for every request to the same domain.
-      - Set usually from the server side.
-      - older browsers support
+    1.  LocalStorage
+        - not sent to server
+        - Stores data with no expiration date, and gets cleared only through JavaScript, or clearing the broser cache.
+        - It's domain specific (can't use it accross different websites).
+        - Storage limit is much larger than cookies.
+        - For complex stuff or things we don't need to be in the server
+    2.  SessionStorage (different than flask session)
+        - not sent to server
+        - Stores data only for until the browser tab is closed.
+        - Storage limit larger than cookie.
+    3.  Cookie
+        - 4kb limit (must be light because:)
+        - They are sent to servers
+        - server and client can read them
+        - Are made secure by setting the OnlyHttpOnly flag as true for that cookie. This prevent client-side access to it.
+        - Sent from browser to server for every request to the same domain.
+        - Set usually from the server side.
+        - older browsers support
 
 ## forms
 
