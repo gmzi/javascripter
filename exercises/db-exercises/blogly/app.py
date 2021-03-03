@@ -158,7 +158,7 @@ def update_user(user_id):
 
 @app.route('/posts/<int:post_id>/update', methods=['POST'])
 def update_post(post_id):
-    return 'view in construction'
+    # return 'view in construction'
     post = Post.query.get(post_id)
     post.title = request.form['title']
     post.content = request.form['content']
@@ -199,3 +199,10 @@ def delete_post(post_id):
         db.session.rollback()
         return 'Oh no'
     return redirect(f"/users/{post.user_id}")
+
+
+# dieci = PostTag.query.filter_by(post_id=19).first()
+# print(dieci.tag_id)
+# dieci.tag_id = 3
+# db.session.add(dieci)
+# db.session.commit()
