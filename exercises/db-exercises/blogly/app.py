@@ -164,8 +164,7 @@ def update_post(post_id):
     post.content = request.form['content']
     categories = request.form.getlist('category')
     tags = Tag.query.filter(Tag.name.in_(categories)).all()
-    print(tags)
-    # update_postag(post, tags)
+    update_postag(post, tags)
     return redirect(f"/posts/{post_id}")
 
 
@@ -202,8 +201,11 @@ def delete_post(post_id):
 
 
 # dieci = PostTag.query.filter_by(post_id=19).first()
+# tags = [1, 2, 3, 4, 5]
 # print(dieci.tag_id)
 # dieci.tag_id = 3
 # db.session.add(dieci)
 # db.session.commit()
 # this works, now make it in a loop for all tags in list
+
+# PostTag.query.filter_by(post_id=19).first()

@@ -61,14 +61,16 @@ def create_postag(title, user_id, tags):
 
 
 def update_postag(post, tags):
+    PostTag.query.filter(PostTag.post_id == post.id).delete()
+    db.session.commit()
     for tag in tags:
-        post.tag_id = tag.id
-        db.session.add(post)
-    try:
-        db.session.commit()
-    except Exception as error:
-        msg = 'failed to update post'
-        return render_template('error.html', msg=msg)
+        new_postag = PostTag(post_id=post.id, tag_id=tag.id)
+        db.session.add(new_postag)
+        try:
+            db.session.commit()
+        except Exception as error:
+            msg = 'failed to update post'
+            return render_template('error.html', msg=msg)
 
 
 def add_or_die(object):
