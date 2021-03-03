@@ -1,7 +1,8 @@
 from flask import Flask, request, render_template, redirect
-from flask.helpers import total_seconds
-from models import db, connect_db, User, Post
+from flask.helpers import flash, total_seconds
+from models import db, connect_db, User, Post, Tag, PostTag
 from datetime import datetime
+from modules import pretty_date, add_or_die, create_postag, update_postag
 
 app = Flask(__name__)
 
@@ -23,16 +24,28 @@ def apply_caching(response):
 
 
 @app.route('/')
-def list_users():
+def list_all():
     """shows all existing posts and users"""
     users = User.query.all()
     posts = Post.query.all()
-    return render_template('base.html', users=users, posts=posts)
+    tags = Tag.query.all()
+    return render_template('base.html', users=users, posts=posts, tags=tags)
 
 
 @app.route('/form')
 def form():
     return render_template('form.html')
+
+
+@app.route('/users/<int:user_id>/new-post-form')
+def new_post_form(user_id):
+    user = User.query.get(user_id)
+    return render_template('new-post-form.html', user=user)
+
+
+@app.route('/new-tag-form')
+def new_tag_form():
+    return render_template('new-tag-form.html')
 
 
 @app.route('/create', methods=['POST'])
@@ -56,15 +69,24 @@ def create_user():
 def add_post(user_id):
     title = request.form['title']
     content = request.form['content']
-
     new_post = Post(title=title, content=content, user_id=user_id)
-    db.session.add(new_post)
-    try:
-        db.session.commit()
-    except Exception as error:
-        db.session.rollback()
-        return 'Oh no something is wrong'
+    categories = request.form.getlist('category')
+    add_or_die(new_post)
+    tags = Tag.query.filter(Tag.name.in_(categories)).all()
+    create_postag(title, user_id, tags)
     return redirect(f"/users/{user_id}")
+
+
+@app.route('/create-tag', methods=['POST'])
+def create_tag():
+    name = request.form['tagname']
+    if name == '':
+        msg = 'New tag must have a name'
+        return render_template('error.html', msg=msg)
+    else:
+        new_tag = Tag(name=name)
+        add_or_die(new_tag)
+        return redirect('/')
 
 
 @app.route('/users/<int:user_id>')
@@ -79,7 +101,23 @@ def show_post(post_id):
     post = Post.query.get_or_404(post_id)
     no = str(post.created_at.replace(microsecond=0))
     date_time = no[:-3]
-    return render_template('show-post.html', post=post, date_time=date_time)
+    posts = [post]
+    tags = post.show_tags
+    return render_template('show-post.html', posts=posts, tags=tags, date_time=date_time)
+
+
+@app.route('/tags/<int:tag_id>/show-posts')
+def show_posts_by(tag_id):
+    tag = Tag.query.get(tag_id)
+    posts = tag.show_posts
+    tags = [tag]
+    return render_template('show-post.html', posts=posts, tags=tags)
+
+
+@app.route('/tags/<int:tag_id>')
+def show_tag(tag_id):
+    tag = Tag.query.get_or_404(tag_id)
+    return render_template('show-tag.html', tag=tag)
 
 
 @app.route('/users/<int:user_id>/edit')
@@ -91,7 +129,15 @@ def edit_user(user_id):
 @app.route('/posts/<int:post_id>/edit')
 def edit_post(post_id):
     post = Post.query.get(post_id)
-    return render_template('edit-post.html', post=post)
+    checked_tags = set(post.show_tags)
+    all_tags = Tag.query.all()
+    return render_template('edit-post.html', post=post, checked_tags=checked_tags, all_tags=all_tags)
+
+
+@app.route('/tags/<int:tag_id>/edit')
+def edit_tag(tag_id):
+    tag = Tag.query.get(tag_id)
+    return render_template('edit-tag.html', tag=tag)
 
 
 @app.route('/users/<int:user_id>/update', methods=['POST'])
@@ -112,16 +158,23 @@ def update_user(user_id):
 
 @app.route('/posts/<int:post_id>/update', methods=['POST'])
 def update_post(post_id):
+    return 'view in construction'
     post = Post.query.get(post_id)
     post.title = request.form['title']
     post.content = request.form['content']
-    db.session.add(post)
-    try:
-        db.session.commit()
-    except Exception as error:
-        db.session.rollback()
-        return 'Oh no'
+    categories = request.form.getlist('category')
+    tags = Tag.query.filter(Tag.name.in_(categories)).all()
+    print(tags)
+    # update_postag(post, tags)
     return redirect(f"/posts/{post_id}")
+
+
+@app.route('/tags/<int:tag_id>/update', methods=['POST'])
+def update_tag(tag_id):
+    tag = Tag.query.get(tag_id)
+    tag.name = request.form['tagname']
+    add_or_die(tag)
+    return redirect('/')
 
 
 @app.route('/users/<int:user_id>/delete')
@@ -146,52 +199,3 @@ def delete_post(post_id):
         db.session.rollback()
         return 'Oh no'
     return redirect(f"/users/{post.user_id}")
-
-
-@app.route('/users/<int:user_id>/new-post-form')
-def new_post_form(user_id):
-    user = User.query.get(user_id)
-    return render_template('new-post-form.html', user=user)
-
-
-def pretty_date(time=False):
-    """
-    Get a datetime object or a int() Epoch timestamp and return a
-    pretty string like 'an hour ago', 'Yesterday', '3 months ago',
-    'just now', etc
-    """
-    now = datetime.now()
-    if type(time) is int:
-        diff = now - datetime.fromtimestamp(time)
-    elif isinstance(time, datetime):
-        diff = now - time
-    elif not time:
-        diff = now - now
-    second_diff = diff.seconds
-    day_diff = diff.days
-
-    if day_diff < 0:
-        return ''
-
-    if day_diff == 0:
-        if second_diff < 10:
-            return "just now"
-        if second_diff < 60:
-            return str(second_diff) + " seconds ago"
-        if second_diff < 120:
-            return "a minute ago"
-        if second_diff < 3600:
-            return str(second_diff / 60) + " minutes ago"
-        if second_diff < 7200:
-            return "an hour ago"
-        if second_diff < 86400:
-            return str(second_diff / 3600) + " hours ago"
-    if day_diff == 1:
-        return "Yesterday"
-    if day_diff < 7:
-        return str(day_diff) + " days ago"
-    if day_diff < 31:
-        return str(day_diff / 7) + " weeks ago"
-    if day_diff < 365:
-        return str(day_diff / 30) + " months ago"
-    return str(day_diff / 365) + " years ago"

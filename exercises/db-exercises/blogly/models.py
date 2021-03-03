@@ -1,3 +1,4 @@
+from enum import unique
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 
@@ -36,3 +37,23 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     # METHOD:
     created_by = db.relationship('User', backref='my_posts')
+    # RELATIONSHIP:
+    show_tags = db.relationship(
+        'Tag', secondary='posts_tags', backref='show_posts')
+
+
+class Tag(db.Model):
+    """relate tags to posts"""
+    __tablename__ = 'tags'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
+
+
+class PostTag(db.Model):
+    """relates posts with tags"""
+    __tablename__ = 'posts_tags'
+
+    post_id = db.Column(db.Integer, db.ForeignKey(
+        'posts.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)

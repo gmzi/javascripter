@@ -9,11 +9,10 @@
 4. [jsonify](##jsonify)
 5. [sessions-cookies](##flask_sessions)
 6. [form-session-flow](###form-session-flow)
-7. [form](##form)
+7. [form](##forms)
 8. [folders_structure](##dir)
 9. [flask_setup](#setup)
 10. [debug_toolbar_extension](#debug)
-
 
 # basics
 
@@ -465,6 +464,17 @@ If want to add things to a shopping cart, or stay authenticated in a website, mu
       - older browsers support
 
 ## forms
+
+Grab data from forms:
+
+```python
+# from input name:
+algo = request.form['algo']
+# from multiple checkboxes:
+muchos = request.getlist('muchos')
+# from url or other stuff:
+aver = request.get('aver')
+```
 
 `request.args` for GET requests
 `request.form` for POST requests

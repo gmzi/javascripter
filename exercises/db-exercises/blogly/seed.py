@@ -1,4 +1,6 @@
-from models import User, Post, db
+from flask.helpers import send_file
+from sqlalchemy.orm import selectinload_all
+from models import User, Post, db, Tag, PostTag
 from app import app
 
 # Create all tables
@@ -32,6 +34,24 @@ db.session.add(new_pet)
 db.session.add(house)
 db.session.add(car)
 
+db.session.commit()
+
+funny = Tag(name='funny')
+sad = Tag(name='sad')
+cool = Tag(name='cool')
+
+db.session.add(funny)
+db.session.add(sad)
+db.session.add(cool)
+db.session.commit()
+
+tagged1 = PostTag(post_id=1, tag_id=1)
+tagged2 = PostTag(post_id=2, tag_id=2)
+tagged3 = PostTag(post_id=3, tag_id=3)
+
+db.session.add(tagged1)
+db.session.add(tagged2)
+db.session.add(tagged3)
 db.session.commit()
 
 # run file: 'python seed.py', beware database will be erased

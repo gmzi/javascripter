@@ -25,6 +25,19 @@ ul {
   margin: 1rem 1rem;
 }
 
+.base-container {
+  border: 1px solid black;
+  margin: 1rem 1rem;
+}
+
+.base-container:first-of-type {
+  background-color: rgba(255, 127, 80, 0.685);
+}
+
+.base-container:last-of-type {
+  background-color: rgba(220, 20, 60, 0.445);
+}
+
 .base-title {
   text-decoration: underline;
 }
@@ -159,4 +172,22 @@ span {
 
 .post-container .row {
   margin: 1rem 0rem;
+}
+
+.tag-title {
+  color: black;
+  display: inline;
+  font-weight: bold;
+}
+
+.tags {
+  display: inline;
+  font-weight: lighter;
+  padding: 0.2rem 0.2rem;
+  background-color: skyblue;
+  color: red;
+}
+
+.radio-section {
+  margin: 0.5rem 0rem;
 }

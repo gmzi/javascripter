@@ -5,9 +5,14 @@
    - [delete_instance](#delete_instance)
    - [rollback](#rollback)
 2. models.py (DDL):
-   - [single_model_syntax](##single_model_syntax)
+   - [explicit_inner_joins](##explicit_joins)
+   - [explicit_outer_joins](##explicit_outer_joins)
+     Relationships definition:
+   - [one_to_one](##one_to_one_syntax)
    - [one_to_many](##one_to_many)
    - [many_to_many](##many_to_many)
+   - [append_to_relationship](##append_to_relationship)
+     Model definition and setup:
    - [models_setup](##models_setup)
 3. [seed_file](#seed_file)
 4. [routes_demo](#routes_demo)
@@ -156,7 +161,52 @@ When there's an error in the attempt to commit a new object to the database, we 
 
 # models
 
-## single_model_syntax
+## explicit_joins
+
+Default inner join (returns only the data where both tables overlap, leaves outside columns that are in one table only)
+To connect tables that hs foreign key constrains defined but not relationships. Or for outer joins.
+
+> returns a list of tuples
+
+```python
+ex1 = db.session.query(Employee.name, Department.phone).join(Department).all()
+ex1 # [('River Bottom', '232321321'), ('Lucas Luke', '232321321'), ('Sumer winter', '232321321')]
+
+ex3 = db.session.query(Department.dept_code,
+                       Employee.name).join(Employee).all()
+ex3 # [('MKTG', 'River Bottom'), ('FNNC', 'Lucas Luke'), ('MKTG', 'Sumer winter')]
+
+
+example = (db.session.query(Employee.name, Department.dept_name,
+                            Department.phone).join(Department).all())
+example # [('River Bottom', 'Marketing', '232321321'), ('Lucas Luke', 'Finance', '232321321'), ('Sumer winter', 'Marketing', '232321321')]
+
+# JOIN + METHOD
+ex4 = db.session.query(Department.dept_code,
+                       Employee.name).join(Employee).filter(Employee.state == 'AL').all()
+ex4 # [('FNNC', 'Lucas Luke')]
+
+# RETRIEVE FULL MODELS:
+ex5 = db.session.query(Department, Employee).join(Employee).all()
+ex5 #[(<Department MKTG>, <Employee 1>), (<Department FNNC>, <Employee 2>), (<Department MKTG>, <Employee 3>)]
+
+```
+
+## explicit_outer_joins
+
+Return all data, overlaping in tables or not.
+
+```python
+out1 = db.session.query(Employee.name, Department.dept_name,
+                        Department.phone).outerjoin(Department).all()
+out1  # [('River Bottom', 'Marketing', '232321321'), ('Arthur Miller', None, None), ('Mike Spencer', None, None)]
+
+out_full_method = db.session.query(
+    Employee, Department).outerjoin(Department).all()
+out_full_method # [(<Employee 1>, <Department MKTG>), (<Employee 6>, None), (<Employee 7>, None)]
+```
+
+## one_to_one_syntax
 
 ```python
 from flask_sqlalchemy import SQLAlchemy
@@ -303,6 +353,104 @@ ca.department_where_works.phone  # 23232323
 ```
 
 ## many_to_many
+
+![graphic](/images/m-m-example.jpg)
+
+```python
+class Project(db.Model):
+    __tablename__ = 'projects'
+
+    proj_code = db.Column(db.Text, primary_key=True)
+    proj_name = db.Column(db.Text, nullable=False, unique=True)
+
+    # RELATIONSHIP:
+    proj_assignments = db.relationship(
+        'EmployeeProject', backref='project_info')
+
+class EmployeeProject(db.Model):
+    __tablename__ = 'employees_projects'
+# Double primary key constraint:
+    emp_id = db.Column(db.Integer, db.ForeignKey(
+        'employees.id'), primary_key=True)
+    proj_code = db.Column(db.Text, db.ForeignKey(
+        'projects.proj_code'), primary_key=True)
+    role = db.Column(db.Text)
+
+class Employee(db.Model):
+    """ employee table """
+    __tablename__ = 'employees'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
+    state = db.Column(db.Text, nullable=False, default='CA')
+
+    # 1. FOREIGN KEY constraint:
+    dept_code = db.Column(db.Text, db.ForeignKey(
+        'departments.dept_code'), nullable=True)
+
+    # 2. RELATIONSHIP:
+    # syntax "one way only"
+    # department = db.relationship('Department')
+    # syntax to go both ways (from Employee to Department and from Department to Employee, and
+    # no need to add a relationship in Department)
+    # DIRECT RELATIONSHIPS (ONE TABLE TO ANOTHER):
+    department_where_works = db.relationship('Department', backref='emps')
+    assignments = db.relationship('EmployeeProject', backref='employee_info')
+    # THROUGH RELATIONSHIP:
+    # COMBINES THE THREE TABLES, THE 'SECONDARY' TABLE CONTAINS THE OTHER TWO TABLES.
+    projects = db.relationship(
+        'Project', secondary='employees_projects', backref='employees')
+
+#USE RELATIONSHIPS
+river = EmployeeProject.query.filter_by(emp_id=1).first()
+details = river.employee_info
+print(details.department_where_works)
+
+# USE THROUGH RELATIONSHIP:
+river = Employee.query.get(1)
+river_projs = river.projects
+river_projs # [<Project sps>, <Project csc>]
+
+car = Project.query.get('csc')
+car.employees  # [<Employee 1>, <Employee 5>, <Employee 6>]
+```
+
+## append_to_relationship
+
+THROUGH RELATIONSHIP MUST BE DEFINED ALREADY.
+
+```python
+#Example 1:
+# grab employee from db:
+nadine = Employee.query.get(8)
+# grab project from db:
+bsb_project = Project.query.get('bsb')
+# append the emp to the project:
+nadine.projects.append(bsb_project)
+# commit the operations:
+db.session.commit()
+nadine.projects  # [<Project bsb>]
+
+# Example 2:
+# grab project from db:
+bsb_proj = Project.query.get('bsb')
+# check project's employees using the through relationship:
+print(bsb_proj.employees)  # [<Employee 3>]
+# grab employee to be added:
+arthur = Employee.query.get(6)
+# append employee to project:
+bsb_proj.employees.append(arthur)
+# commit changes:
+db.session.commit()
+# check employees for project:
+print(bsb_proj.employees)  # [<Employee 3>, <Employee 9>, <Employee 10>]
+
+# Example 3, create and append:
+loyola = Employee(name='Marta Loyola', state='BA', dept_code='FNNC')
+loyola.assignments.append(EmployeeProject(proj_code='csc', role='director'))
+db.session.add(loyola)
+db.session.commit()
+```
 
 ## models_setup
 
