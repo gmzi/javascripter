@@ -206,3 +206,4 @@ def delete_post(post_id):
 # dieci.tag_id = 3
 # db.session.add(dieci)
 # db.session.commit()
+# this works, now make it in a loop for all tags in list
