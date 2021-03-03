@@ -111,6 +111,7 @@ def show_post(post_id):
 def show_posts_by(tag_id):
     tag = Tag.query.get(tag_id)
     posts = tag.show_posts
+    print(posts)
     tags = [tag]
     return render_template('show-post.html', posts=posts, tags=tags)
 
