@@ -34,12 +34,13 @@ class Post(db.Model):
     content = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=current_dt)
     # ForeIGN KEY CONSTRAINT
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # METHOD:
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        'users.id', ondelete='cascade'))
+    # RELATIONSHIPS:
     created_by = db.relationship('User', backref='my_posts')
-    # RELATIONSHIP:
     show_tags = db.relationship(
         'Tag', secondary='posts_tags', backref='show_posts')
+    # dependence = db.relationship('PostTag', ondelete='cascade')
 
 
 class Tag(db.Model):
@@ -55,5 +56,5 @@ class PostTag(db.Model):
     __tablename__ = 'posts_tags'
 
     post_id = db.Column(db.Integer, db.ForeignKey(
-        'posts.id'), primary_key=True)
+        'posts.id', ondelete='cascade'), primary_key=True)
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)

@@ -8,6 +8,15 @@
   <label for="content">Content</label>
   <textarea name="content" id="new-post-form" cols="20" rows="5"></textarea>
   <div class="radio-section">
+    <h5>Categories:</h5>
+    {%for tag in tags%}
+      <div class="choose">
+        <input type="checkbox" name='category' value='{{tag.name}}'>
+        <label for="{{tag.name}}">{{tag.name}}</label>
+      </div>
+    {% endfor %}
+  </div>
+  <!-- <div class="radio-section">
     <h5>Category:</h5>
     <div class="choose">
       <input type="checkbox" name='category' value='funny'>
@@ -21,7 +30,7 @@
       <input type="checkbox" name='category' value='cool'>
       <label for="cool">Cool</label>
     </div>
-  </div>
+  </div> -->
   <button>Cancel</button>
   <button>Add</button>
 </form>

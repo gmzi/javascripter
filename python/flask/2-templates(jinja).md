@@ -91,7 +91,7 @@ In a same template, add different content according to different conditions (use
 
 ```html
 <ul>
-  {% if (posts|le0)%} {% for post in%}
+  {% if (posts|le0)%} {% for post in posts%}
   <li>{{post.title}}</li>
   {%endfor%} {%else%}
   <p>No posts yet</p>

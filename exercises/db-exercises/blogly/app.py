@@ -40,7 +40,8 @@ def form():
 @app.route('/users/<int:user_id>/new-post-form')
 def new_post_form(user_id):
     user = User.query.get(user_id)
-    return render_template('new-post-form.html', user=user)
+    tags = Tag.query.all()
+    return render_template('new-post-form.html', user=user, tags=tags)
 
 
 @app.route('/new-tag-form')
@@ -198,14 +199,3 @@ def delete_post(post_id):
         db.session.rollback()
         return 'Oh no'
     return redirect(f"/users/{post.user_id}")
-
-
-# dieci = PostTag.query.filter_by(post_id=19).first()
-# tags = [1, 2, 3, 4, 5]
-# print(dieci.tag_id)
-# dieci.tag_id = 3
-# db.session.add(dieci)
-# db.session.commit()
-# this works, now make it in a loop for all tags in list
-
-# PostTag.query.filter_by(post_id=19).first()

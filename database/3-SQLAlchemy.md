@@ -367,6 +367,14 @@ class Project(db.Model):
     proj_assignments = db.relationship(
         'EmployeeProject', backref='project_info')
 
+# MIDDLE TABLE WITH CASCADE DELETION:
+class PostTag(db.Model):
+    """relates posts with tags"""
+    __tablename__ = 'posts_tags'
+    post_id = db.Column(db.Integer, db.ForeignKey(
+        'posts.id', ondelete='cascade'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+
 class EmployeeProject(db.Model):
     __tablename__ = 'employees_projects'
 # Double primary key constraint:
