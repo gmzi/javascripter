@@ -28,6 +28,7 @@
    - [flask-WTF](##flask-WTF)
    - [clone_project](##clone_project)
    - [global_install](##global_install)
+7. [DATABASE](#DATABASE)
 
 # git
 
@@ -319,6 +320,11 @@ Client url
    7. Install packages:
       1. `(venv)` prompt in terminal? -
       2. `pip install packageName` installs package
+         1. flask-sqlalchemy:
+            - `pip install psycopg2-binary`
+            - `pip install flask-sqlalchemy`
+         2. wtforms:
+            - `pip install flask-wtf`
          - `pip uninstall packageName` uninstalls package
          - `pip list` list of all installed packages
    8. `pip freeze` list all installed packages
@@ -409,3 +415,19 @@ Clone python project
     - `pip3 list` lists installed packages
 
 ---
+
+# DATABASE
+
+## create_database
+
+1. Option 1, in terminal:
+   1. cd to directory
+   2. `createdb my_database`
+   3. `psql`
+   4. `\c my_database`
+   5. `\dt` for db tables
+2. Option 2, in Posgres:
+   - activate Postgres server
+   - cd to directory
+   - `psql`
+   - `CREATE DATABASE my_database;`

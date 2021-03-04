@@ -35,9 +35,15 @@ debug = DebugToolbarExtension(app)
 # to stop debugger:
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
+
+# Reload with no cache for styling purposes:
+@app.after_request
+def apply_caching(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    return response
+
+
 # Root route
-
-
 @app.route('/')
 def home_page():
     """these functions are called 'view functions', because
@@ -356,7 +362,7 @@ If want to add things to a shopping cart, or stay authenticated in a website, mu
 
 # WTForm
 
-Three steps: forms.py, app.py and html template:
+Four steps: 1-forms.py, 2-app.py, 3-form.html, 4-form testing:
 
 1. forms.py:
 
@@ -366,7 +372,7 @@ from flask_wtf import FlaskForm
 # Import field types
 from wtforms import StringField, FloatField, IntegerField, BooleanField, DateField, RadioField, SelectField
 # Import validators:
-from wtforms.validators import InputRequired, Optional, Email
+from wtforms.validators import InputRequired, Optional, Email #(full list of validators in docs)
 
 
 #Field types (static):
@@ -399,37 +405,20 @@ states = ['AL', 'AK', 'AR', 'PA']
 #Dynamic SelectField:
 #1. in forms.py
 class AddEmployeeForm(FlaskForm):
-    state = StringField('State')
     name = StringField('Full name')
+    state = StringField('State')
     dept_code = SelectField('Department code')
-# 2. in app.py:
-@app.route('/emps/new', methods=['GET', 'POST'])
-def add_employee():
-    form = AddEmployeeForm()
-    # DYNAMIC SELECT FIELD SETUP:
-    depts = db.session.query(Department.dept_code, Department.dept_name)
-    form.dept_code.choices = depts
-    # Validation and grab data:
-    if form.validate_on_submit():
-        state = form.state.data
-        name = form.name.data
-        dept_code = form.dept_code.data
-        # ADD AND COMMIT:
-        new_emp = Employee(name=name, state=state, dept_code=dept_code)
-        db.session.add(new_emp)
-        db.session.commit()
-        flash('Employee added. Welcome aboard')
-        return redirect('/emps')
-    else:
-        return render_template('new-form.html', form=form)
-
 ```
 
 2. app.py:
 
+> ALL NON GET ROUTES RETURN REDIRECT
+
 ```python
 from forms import AddSnackForm
 # DUAL PURPOSE ROUTE: RENDERS THE FORM, VALIDATES THE FORM AND GRABS THE DATA FROM THE FORM:
+
+# STATIC SELECT FIELD:
 @app.route('/new-snack', methods=['GET', 'POST'])
 def new_snack():
     """renders form, validates form and handle data"""
@@ -453,27 +442,121 @@ def new_snack():
         print(errors)  # ['Not a valid integer number', etc]
         return render_template(
             "snack_add_form.html", form=form)
+
+
+# DYNAMIC SELECT FIELD:
+@app.route('/emps/new', methods=['GET', 'POST'])
+def add_employee():
+    form = AddEmployeeForm()
+    # DYNAMIC SELECT FIELD SETUP:
+    depts = db.session.query(Department.dept_code, Department.dept_name)
+    form.dept_code.choices = depts
+    # Validation and grab data:
+    if form.validate_on_submit():
+        state = form.state.data
+        name = form.name.data
+        dept_code = form.dept_code.data
+        # ADD AND COMMIT:
+        new_emp = Employee(name=name, state=state, dept_code=dept_code)
+        db.session.add(new_emp)
+        db.session.commit()
+        flash('Employee added. Welcome aboard')
+        return redirect('/emps')
+    else:
+        return render_template('new-form.html', form=form)
+
+# UPDATE FORM ROUTE
+#show form with fields filled with existing data from db for the user to edit.
+@app.route("/users/<int:u_id>/edit", methods=["GET", "POST"])
+def edit_user(u_id):
+    """Show user edit form and handle edit."""
+
+    user = User.query.get_or_404(uid)
+    form = UserForm(obj=user)
+
+    if form.validate_on_submit():
+        user.name = form.name.data
+        user.email = form.email.data
+        db.session.commit()
+        flash(f"User {uid} updated!")
+        return redirect(f"/users/{uid}/edit")
+
+    else:
+        return render_template("user_form.html", form=form)
+
 ```
 
 3. form.html:
 
-```jinja
+```markdown
+<!-- OPTION 1: RENDER ALL FORM FIELDS IN SAME LOOP: -->
+
 <h1>New snack</h1>
-    <form action="/new-snack" method="POST">
-        {{ form.hidden_tag() }} <!--Adds the hidden CSRF token-->
-        {% for field in form
-            if field.widget.input_type != 'hidden' %}
-        <p>
-            {{field.label}}
-            {{field}}
-            <!-- show validation errors if any, with the label: -->
-            {%for err in field.errors%}
-            {{err}}
-            {%endfor%}
-        </p>
-        {% endfor %}
-        <button>Add snack</button>
-    </form>
+<!-- Mind that for the double purpose route there's no need to add an 'action' attr to the form, since it will automatically direct to the route where the form is called -->
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <!--Adds the hidden CSRF token-->
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <div class="form-group">
+        <!-- mind 'class_' for styling purposes  -->
+        {{field.label(class_='style-me')}}
+        {{field(class_='style-me')}}
+        <!-- show validation errors if any, with the label: -->
+        {%for err in field.errors%}
+        <small class="form-text">
+            {{err(class_='style-this-message-please')}}
+        </small>
+        {%endfor%}
+    </div>
+    {% endfor %}
+    <button>Add snack</button>
+</form>
+
+<!-- ---------------------------------------------------------------- -->
+<!-- OPTION 2: RENDER FORM FIELDS INDIVIDUALLY ONE AT A TIME -->
+<form>
+    <!-- first the validation: -->
+    {{ form.hidden_tag() }}
+    <!-- then the fields: -->
+    {{form.name.label(class_='red')}}
+    {{form.name(class_='input-name')}}
+    {{form.state.label(class_='brown')}}
+    {{form.state(class_='input-state')}}
+    {{form.dept_code.label(class_='blue')}}
+    {{form.dept_code(class_='input-dept')}}
+</form>
+```
+
+4. tests.py:
+
+```python
+
+# Step 1, disable CSRF token for testing POST requests:
+app.config['WTF_CSRF_ENABLED'] = False
+
+# Step 2: Write tests:
+
+
+class SnackViewsTestCase(TestCase):
+    """Tests for views for Snacks."""
+
+    def test_new_snack(self):
+        with app.test_client() as client:
+            resp = client.get("/add")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<form id="snack-add-form"', html)
+
+    def test_snack_add(self):
+        with app.test_client() as client:
+            d = {"name": "Test2", "price": 2}
+            resp = client.post("/add", data=d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Added Test2 at 2", html)
+
 ```
 
 ---

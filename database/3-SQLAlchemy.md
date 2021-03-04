@@ -1,20 +1,11 @@
 1. app.py (DML):
 
    - [query_database](#query_database)
-     - `db.session.query(Module.column).all()` (specific columns from model)
-     - `Model.query.all()` (whole model)
-     - `Model.query.get(1)` (get by id)
-     - `Mode.query.get_or_404`
-     - `Model.query.filter_by(algo='something', algomas='other').all()`
-     - `Model.query.filter(Model.column == 'algo').first()`
-     - `Pet.query.filter(Pet.hunger > 20).all()`
-     - `Pet.query.filter((Pet.hunger < 15) & (Pet.species == 'dog')).all()`
-     - `Employee.query.filter(Employee.name.ilike('%jane%')).all()`
-     - `q.group_by('state').having(db.func.count(Employee.id) > 2)`
    - [create_instance_and_commit](#create_instance_and_commit)
    - [update_instance](#update_instance)
    - [delete_instance](#delete_instance)
    - [rollback](#rollback)
+   - [setup](#app.py)
 
 2. models.py (DDL):
    - [explicit_inner_joins](##explicit_joins)
@@ -27,11 +18,12 @@
      Model definition and setup:
    - [models_setup](##models_setup)
 3. [seed_file](#seed_file)
-4. [routes_demo](#routes_demo)
-5. [tests](#tests)
+4. [templates](#templates)
+5. [routes_demo](#routes_demo)
+6. [tests](#tests)
    - [model_test](##model_test)
    - [views_test](##views_test)
-6. [install](#install)
+7. [install](#install)
    [setup](#setup)
 
 # query_database
@@ -243,6 +235,7 @@ class Pet(db.Model):
                      unique=True)  # unique true same as UNIQUE
     species = db.Column(db.String(30), nullable=True)
     hunger = db.Column(db.Integer, nullable=False, default=20)  # default value
+    available = db.Column(db.Boolean, nullable=False, default=True)
 
     # REPRESENTATION OBJECT:
     def __repr__(self):
@@ -479,6 +472,19 @@ db.session.commit()
    ```python
    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///my_database'
    ```
+3. models.py:
+
+```python
+from flask_sqlalchemy import SQLAlchemy
+# 1. Configure the connection to the database
+db = SQLAlchemy()
+# 2. A function to Associate the app with the database:
+def connect_db(app):
+    db.app = app
+    db.init_app(app)
+# 3. Define model (o sea table) (class name in Singular, table name in plural):
+```
+
 3. Write models.
 4. check venv active
 5. check postgres server active
@@ -536,7 +542,7 @@ db.session.commit()
 # run file: 'python seed.py', beware database will be erased
 ```
 
-# routes_demo
+# app.py
 
 An app.py file demo with sqlalchemy queries:
 
@@ -612,6 +618,38 @@ def show_pet(pet_id):
     """show details about single pet"""
     pet = Pet.query.get_or_404(pet_id)
     return render_template('details.html', pet=pet)
+```
+
+---
+
+# templates
+
+Home page with list:
+
+```markdown
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    {% for msg in get_flashed_messages()%}
+    <p>
+        {{msg}}
+    </p>
+    {%endfor%}
+    <a href="/new-snack">Add new snack</a>
+</body>
+</html>
+```
+
+Form template
+
+```markdown
+
 ```
 
 ---
@@ -819,26 +857,23 @@ def connect_db(app):
 
 5. app.py:
 
-   ```python
-   from flask import Flask, request, render_template, redirect
-   # 1. Import models.py:
-   from models import db, connect_db, My_model_name
-
-   app = Flask(__name__)
-   # 2. Database config:
-   app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///movies_example'
-   app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-   app.config['SQLALCHEMY_ECHO'] = True
-   # Other configs:
-   app.config['SECRET_KEY'] = 'caca'
-
-   # 3. Call db:
-   connect_db(app)
-
-   # check if it's connecting to the database:
-   actors = db.session.execute('SELECT * FROM actors')
-   print(list(actors))
-   ```
+```python
+from flask import Flask, request, render_template, redirect
+# 1. Import models.py:
+from models import db, connect_db, My_model_name
+app = Flask(__name__)
+# 2. Database config:
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://movies_example'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
+# Other configs:
+app.config['SECRET_KEY'] = 'caca'
+# 3. Call db:
+connect_db(app)
+# check if it's connecting to the database:
+actors = db.session.execute('SELECT * FROM actors')
+print(list(actors))
+```
 
 6. Once models are written, to commit them in database, run in
    app.py or in seed.py:
