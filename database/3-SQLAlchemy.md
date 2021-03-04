@@ -1,9 +1,21 @@
 1. app.py (DML):
+
    - [query_database](#query_database)
+     - `db.session.query(Module.column).all()` (specific columns from model)
+     - `Model.query.all()` (whole model)
+     - `Model.query.get(1)` (get by id)
+     - `Mode.query.get_or_404`
+     - `Model.query.filter_by(algo='something', algomas='other').all()`
+     - `Model.query.filter(Model.column == 'algo').first()`
+     - `Pet.query.filter(Pet.hunger > 20).all()`
+     - `Pet.query.filter((Pet.hunger < 15) & (Pet.species == 'dog')).all()`
+     - `Employee.query.filter(Employee.name.ilike('%jane%')).all()`
+     - `q.group_by('state').having(db.func.count(Employee.id) > 2)`
    - [create_instance_and_commit](#create_instance_and_commit)
    - [update_instance](#update_instance)
    - [delete_instance](#delete_instance)
    - [rollback](#rollback)
+
 2. models.py (DDL):
    - [explicit_inner_joins](##explicit_joins)
    - [explicit_outer_joins](##explicit_outer_joins)

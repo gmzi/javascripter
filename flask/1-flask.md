@@ -9,7 +9,7 @@
 4. [jsonify](##jsonify)
 5. [sessions-cookies](##flask_sessions)
    Foms:
-6. [WTF_forms](#WTF_forms)
+6. [WTF_forms](#WTForm)
 7. [form-session-flow](###form-session-flow)
 8. [form](##forms)
    Setup:
@@ -354,9 +354,143 @@ If want to add things to a shopping cart, or stay authenticated in a website, mu
    - Are cryptographically signed, user's can't modify data. ("signed" means that is codified by an algorithm in the server)
      It's a dictionary that manage cookie creation, reading and sending. It's more secure than cookies.
 
-# WTF_forms
+# WTForm
 
-It's a
+Three steps: forms.py, app.py and html template:
+
+1. forms.py:
+
+```python
+# Import class:
+from flask_wtf import FlaskForm
+# Import field types
+from wtforms import StringField, FloatField, IntegerField, BooleanField, DateField, RadioField, SelectField
+# Import validators:
+from wtforms.validators import InputRequired, Optional, Email
+
+
+#Field types (static):
+class AddSnackForm(FlaskForm):
+    """Form for adding snacks."""
+
+    name = StringField("Snack Name (required)", validators=[
+                       InputRequired(message='Snack name cant be blank!')])
+    email = StringField('Your Email (optional)',
+                        validators=[Optional(), Email()])
+    qtty = IntegerField('How many?')
+    price = FloatField("Price in USD (required)", validators=[
+                       InputRequired(message='please enter a valid number')])
+    healthy = BooleanField('Healthy snack')  # return True/False
+    best_by = DateField('Date of consumption')
+    category = RadioField(
+        'Category', choices=[('ic', 'Ice Cream'), ('ch', 'Chocolate'), ('candy', 'Candybar')])  # 'ic' will be sent as value, 'Ice Cream' is the label
+    made_in = SelectField(
+        'State', choices=[("ca", "California"), ('nv', 'Nevada'), ('ny', 'New York')])
+    # Convert string to int from selectfield:
+    priority = SelectField('Priority', choices=[
+                           (1, 'high'), (2, 'low')], coerce=int)
+    # List comprehension for select field:
+    state = SelectField('State', choices=[(st, st) for st in states])
+
+
+states = ['AL', 'AK', 'AR', 'PA']
+
+
+#Dynamic SelectField:
+#1. in forms.py
+class AddEmployeeForm(FlaskForm):
+    state = StringField('State')
+    name = StringField('Full name')
+    dept_code = SelectField('Department code')
+# 2. in app.py:
+@app.route('/emps/new', methods=['GET', 'POST'])
+def add_employee():
+    form = AddEmployeeForm()
+    # DYNAMIC SELECT FIELD SETUP:
+    depts = db.session.query(Department.dept_code, Department.dept_name)
+    form.dept_code.choices = depts
+    # Validation and grab data:
+    if form.validate_on_submit():
+        state = form.state.data
+        name = form.name.data
+        dept_code = form.dept_code.data
+        # ADD AND COMMIT:
+        new_emp = Employee(name=name, state=state, dept_code=dept_code)
+        db.session.add(new_emp)
+        db.session.commit()
+        flash('Employee added. Welcome aboard')
+        return redirect('/emps')
+    else:
+        return render_template('new-form.html', form=form)
+
+```
+
+2. app.py:
+
+```python
+from forms import AddSnackForm
+# DUAL PURPOSE ROUTE: RENDERS THE FORM, VALIDATES THE FORM AND GRABS THE DATA FROM THE FORM:
+@app.route('/new-snack', methods=['GET', 'POST'])
+def new_snack():
+    """renders form, validates form and handle data"""
+
+    form = AddSnackForm()
+
+    # checks if is a post request, if CSRF token from form is valid, and runs validations:
+    if form.validate_on_submit():
+        # if it's a post request and token is valid: grab form's data, use it and redirect
+        # to 'success' page or wherever:
+        name = form.name.data
+        price = form.price.data
+        flash(f"Added {name} at {price}")
+        return redirect("/home")
+    # if it's not a post request, means that is a get request to just render
+    # the form for the user to complete, so will only render it, or if the CSRF token is
+    # invalid, will just render the form again:
+    else:
+        # access errors if you need them here, otherwise in template:
+        errors = form.errors
+        print(errors)  # ['Not a valid integer number', etc]
+        return render_template(
+            "snack_add_form.html", form=form)
+```
+
+3. form.html:
+
+```jinja
+<h1>New snack</h1>
+    <form action="/new-snack" method="POST">
+        {{ form.hidden_tag() }} <!--Adds the hidden CSRF token-->
+        {% for field in form
+            if field.widget.input_type != 'hidden' %}
+        <p>
+            {{field.label}}
+            {{field}}
+            <!-- show validation errors if any, with the label: -->
+            {%for err in field.errors%}
+            {{err}}
+            {%endfor%}
+        </p>
+        {% endfor %}
+        <button>Add snack</button>
+    </form>
+```
+
+---
+
+2. Install:
+   - (check venv active)
+   - `pip install flask-wtf`
+
+This generic python library provides templating, validation and security for forms.
+Flask-WTF is the specific integration for flask.
+[flask-WTF](https://flask-wtf.readthedocs.io/en/stable/)
+
+---
+
+[field_types](https://wtforms.readthedocs.io/en/2.3.x/fields/#basic-fields)
+
+CSRF (Cross Site Request Forgery) token: is a token that is sent with the form, but the user can't touch it because is hidden. With this token we make sure that the form received by our flask view is the same form coming from our served form template, with no hidden inputs nor anything that we didn't define. Prevents forging post requests to sites that we don't want to request. CSRF is checked by the server when submitted.
 
 ### form-session-flow
 

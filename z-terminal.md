@@ -25,6 +25,7 @@
 6. [PYTHON](#PYTHON)
    - [venv](##venv)
    - [flask](##flask)
+   - [flask-WTF](##flask-WTF)
    - [clone_project](##clone_project)
    - [global_install](##global_install)
 
@@ -375,6 +376,11 @@ Client url
    # to stop debugger:
    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
    ```
+
+## flask-WTF
+
+1.  (check venv active)
+2.  `pip install flask-wtf`
 
 ## clone_project
 
