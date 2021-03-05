@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Forms & lists</title>
+</head>
+<body>
+    <h1>Forms, lists, event delegation</h1>
+    <section class="event-delegation">
+        <h2>Event delegation</h2>
+        <h3>This is a list that listens:</h3>
+        <ul id="listen-list">
+          <li class="listen-item">Item 1<button>Remove Item</button></li>
+          <li class="listen-item">Item 2<button>Remove Item</button></li>
+          <li class="listen-item">Item 3<button>Remove Item</button></li>
+        </ul>
+        <form id="add">
+          <label>Add friend:</label>
+          <input type="text" name="friend-name" placeholder="here">
+          <input type="submit">
+        </form>
+      </section>
+  
+      <section class="multiple">
+        <h2>Event listener for multiple elements</h2>
+        <ul class="friends-list">
+          <li class="friend">Jose <button>UnFriend</button></li>
+          <li class="friend">Carla <button>UnFriend</button></li>
+          <li class="friend">Robert <button>UnFriend</button></li>
+          <li class="friend">Pipo <button>UnFriend</button></li>
+          <li class="friend">Roca <button>UnFriend</button></li>
+        </ul>
+        <h4>Add new friend</h4>
+        <form id="more-friend">
+          <label for="friend-name">Friend's name:</label>
+            <input type="text" name="friend-name1" placeholder="Type friend's name">
+            <button>Add friend</button>
+        </form>
+      </section>
+      <script src="app.js"></script>
+</body>
+</html>

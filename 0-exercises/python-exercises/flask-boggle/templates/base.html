@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Boggle!</title>
+</head>
+<body>
+    <h1>Boggle!</h1>
+    {% block content%}
+    <table>
+        {% for row in board%}
+        <tr>
+            {%for char in row%}
+            <td>{{char}}</td>
+            {%endfor%}
+        </tr>
+        {%endfor%}
+    </table>
+    {% endblock%}
+    <form action="">
+        <input type="text" id="word" name="word" placeholder="type word here">
+        <button type="submit">send</button>
+    </form>
+    <div class="feedback">
+        <h3></h3>
+    </div>
+    <div class="score">
+        <h3>total score: <span id="score-num"></span></h3>
+    </div>
+    <div class="timer-div">
+        <h3>seconds left: <span id="time-num"></span></h3>
+    </div>
+    <div class="stats">
+        <h3>|Stats|</h3>
+        <ul>
+            <li>Record score: <span class="stat-num">{%block highest%}{{session['score']}}{%endblock%}</span></li>
+            <li>Times played: <span class="stat-num">{%block played%}{{session['times']}}{%endblock%}</span></li>
+        </ul>
+    </div>
+    <div class="btn-again">
+        <button>Play again</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="/static/word-check.js"></script>
+</body>
+</html>

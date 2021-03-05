@@ -1,0 +1,25 @@
+body {
+  background-color: chocolate;
+}
+
+h1,
+h2,
+h3,
+.messages,
+.btn-container,
+form {
+  text-align: center;
+}
+
+.messages p {
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 0, 0, 0.913);
+}
+
+.messages .error {
+}
+.messages .success {
+  background-color: rgba(0, 255, 0, 0.1);
+}
