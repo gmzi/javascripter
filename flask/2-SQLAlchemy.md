@@ -10,19 +10,21 @@
 2. models.py (DDL):
    - [explicit_inner_joins](##explicit_joins)
    - [explicit_outer_joins](##explicit_outer_joins)
-     Relationships definition:
+     Relationships:
    - [one_to_one](##one_to_one_syntax)
    - [one_to_many](##one_to_many)
    - [many_to_many](##many_to_many)
    - [append_to_relationship](##append_to_relationship)
-     Model definition and setup:
-   - [models_setup](##models_setup)
-3. [seed_file](#seed_file)
+     setup:
+   - [setup](##models_setup)
+3. seed.py
+   - [seed_file](#seed_file)
 4. [templates](#templates)
-5. [routes_demo](#routes_demo)
-6. [tests](#tests)
+5. tests.py
+   - [tests](#tests)
    - [model_test](##model_test)
    - [views_test](##views_test)
+6. [routes_demo](#routes_demo)
 7. [install](#install)
    [setup](#setup)
 
@@ -467,22 +469,30 @@ db.session.commit()
 
 ## models_setup
 
-1. (cd to dir and create empty database)
-2. in app.py:
-   ```python
-   app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///my_database'
-   ```
-3. models.py:
+models.py:
 
 ```python
+
 from flask_sqlalchemy import SQLAlchemy
-# 1. Configure the connection to the database
+
 db = SQLAlchemy()
-# 2. A function to Associate the app with the database:
+
 def connect_db(app):
     db.app = app
     db.init_app(app)
-# 3. Define model (o sea table) (class name in Singular, table name in plural):
+
+class Pet(db.Model):
+    """pet available for adoption"""
+    __tablename__ = "pets"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(20), nullable=False)
+    species = db.Column(db.String(20), nullable=False)
+    photo_url = db.Column(db.String)
+    age = db.Column(db.Integer)
+    notes = db.Column(db.String)
+    available = db.Column(db.Boolean, nullable=False, default=True)
+
 ```
 
 3. Write models.
@@ -554,7 +564,7 @@ from models import db, connect_db, Pet
 
 app = Flask(__name__)
 # 2. Database config:
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///pet_shop_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///my_database'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 # Other configs:
@@ -563,7 +573,7 @@ app.config['SECRET_KEY'] = 'caca'
 # 3. Call db:
 connect_db(app)
 
-
+# routes:
 @app.route('/')
 def list_pets():
     """shows list of pets in database"""
@@ -863,7 +873,7 @@ from flask import Flask, request, render_template, redirect
 from models import db, connect_db, My_model_name
 app = Flask(__name__)
 # 2. Database config:
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://movies_example'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///movies_example'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 # Other configs:

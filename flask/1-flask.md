@@ -1,9 +1,4 @@
-1. [basics](#basics)
-   - routes
-   - requests
-   - forms
-   - variables in urls
-   - template rendering
+1. [routes](#basics)
 2. [redirect](##redirect)
 3. [flash](##flash)
 4. [jsonify](##jsonify)
@@ -12,11 +7,13 @@
 6. [WTF_forms](#WTForm)
 7. [form-session-flow](###form-session-flow)
 8. [form](##forms)
-   Setup:
-9. [folders_structure](##dir)
-10. [flask_setup](#setup)
+9. [templates](#templates)
+10. [API_requests](#API)
+    Setup:
+11. [folders_structure](##dir)
+12. [flask_setup](#setup)
     Debug:
-11. [debug_toolbar_extension](#debug)
+13. [debug_toolbar_extension](#debug)
 
 # basics
 
@@ -718,6 +715,193 @@ aver = request.get('aver')
 </form>
 {%endblock%}
 ```
+
+---
+
+## templates:
+
+base template:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/concha.css" />
+    <title>{%block title%}{%endblock%}</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/">home</a>
+      <a href="/form">Greeter form</a>
+      <a href="/lucky">lucky</a>
+      <a href="/hello">Hello</a>
+    </nav>
+
+    {% block content %} {% endblock %}
+
+    <!-- Cool if check with templates: -->
+    {% if request.cookies %}
+    <fieldset>
+      <label>Cookies Received By Flask</label>
+      <ul>
+        {% for name, value in request.cookies.items() %}
+        <li>{{ name }} = "{{ value }}"</li>
+        {% endfor %}
+      </ul>
+    </fieldset>
+    {% endif %}
+
+    <footer> this is a footer </footer>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
+```
+
+child template:
+
+```html5
+{% extends 'base.html' %}
+{%block title%}Greeter{%endblock%}
+{%block content%}
+<h1>Hi {{username}}!!</h1>
+{% if wants_compliments %}
+<h2>Ok here are your compliments:</h2>
+<ul>
+  {% for compliment in compliments %}
+  <li>{{compliment}}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+{%endblock%}
+```
+
+## template inheritance
+
+Prevent repetitio of html setting a parent template and extend that base template in other pages.
+
+```html
+<!-- Base template: -->
+{% block name_of_block %} {% endblock %}
+<!-- Child template: -->
+{% extends 'name_of_base.html' %} {% block name_of_block%} {% endblock %}
+```
+
+1. create a parent template with full markup:
+   - `base.html` (any name of file)
+2. add blocks for each particular route's content:
+   - `{% block name_of_block %} content {% endblock %}`
+3. in child templates: `{% block name_of_block %} content {% endblock %}`
+
+## jinja loops
+
+```html
+<body>
+  {% for char in word %}
+  <h3>{{char}}</h3>
+  {% endfor%}
+</body>
+```
+
+## jinja conditional expressions
+
+In a same template, add different content according to different conditions (user loged in or not, etc)
+
+```html
+<ul>
+  {% if (posts|length > 0)%} {% for post in posts%}
+  <li>{{post.title}}</li>
+  {%endfor%} {%else%}
+  <p>No posts yet</p>
+  {%endif%}
+</ul>
+
+{% if number == 2 %}
+<h2>That's extra cool!!</h2>
+{% else %}
+<h2>I don't like that number {{number}}</h2>
+{% endif %}
+```
+
+## dynamic variables
+
+```html
+Jinja will replace {{msg}} with the value of msg passed when rendering.
+```
+
+# jinja setup
+
+1. create template directory, in the same directory that the app.py file. This is the directory model:
+
+   - my_project_dir/
+     - venv/
+     - app.py
+     - templates/
+       - hello.html
+     - static
+       - my-css.css (in base.htm: `<link rel="stylesheet" href="/static/my-css.css">`)
+       - my-script.js
+
+2. Create hml files inside the templates directory
+3. import `render_template` to app.py
+
+Templates allows to return dynamic html, embeding variables and other stuff.
+Jinja comes with flask, no need to install it.
+
+---
+
+# API
+
+## python requests
+
+No flask, no server, just python
+
+1. check venv active
+2. `pip install requests`
+
+```python
+import requests
+
+# GET REQUESTS:
+
+resp1 = requests.get("https://itunes.apple.com/search", params={"term": "billy bragg", "limit": 3})
+resp1.text
+resp1.status_code
+resp1.json() #converts JSON response to Python dict
+
+data = resp1.json()
+
+for result in data['results']:
+print(result['trackName'])
+
+# --------------------------------------------
+
+# POST REQUESTS:
+# Option 1, with json
+pref = request.post('https://endpoint', json={'key':'value value', 'other': 2})
+
+mydict = {
+    'username': 'chicken',
+    'tweets': [
+        'hello', 'goodbye', 'my god'
+    ]
+}
+req1 = request.post('https://endpoint', json=mydict) # library will convert python dict into json
+
+# Option 2, with data:
+ver = request.post('https://endpoint', data={'key':'value', 'other': 2})
+```
+
+## API keys
+
+HTTP requests can be:
+
+1. - Client side requests (via AJAX), are done from the browser. Some api's don't allow this.
+2. - Server side requests:
+     ![graphic](/images/server-requests.jpg)
+     can manage passwords, privacy, keys and requests that are not admitted from browsers.
 
 # dir
 
