@@ -407,12 +407,65 @@ class AddEmployeeForm(FlaskForm):
     dept_code = SelectField('Department code')
 ```
 
-2. app.py:
+2. form.html:
+
+```markdown
+<!-- OPTION 1: RENDER ALL FORM FIELDS IN SAME LOOP: -->
+
+<h1>New snack</h1>
+<!-- Mind that for the double purpose route there's no need to add an 'action' attr to the form, since it will automatically direct to the route where the form is called -->
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <!--Adds the hidden CSRF token-->
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <div class="form-group">
+        <!-- mind 'class_' for styling purposes  -->
+        {{field.label(class_='style-me')}}
+        {{field(class_='style-me')}}
+        <!-- show validation errors if any, with the label: -->
+        {%for err in field.errors%}
+        <small class="form-text">
+            {{err(class_='style-this-message-please')}}
+        </small>
+        {%endfor%}
+    </div>
+    {% endfor %}
+    <button>Add snack</button>
+</form>
+
+<!-- ---------------------------------------------------------------- -->
+<!-- OPTION 2: RENDER FORM FIELDS INDIVIDUALLY ONE AT A TIME -->
+<form>
+    <!-- first the validation: -->
+    {{ form.hidden_tag() }}
+    <!-- then the fields: -->
+    {{form.name.label(class_='red')}}
+    {{form.name(class_='input-name')}}
+    {{form.state.label(class_='brown')}}
+    {{form.state(class_='input-state')}}
+    {{form.dept_code.label(class_='blue')}}
+    {{form.dept_code(class_='input-dept')}}
+</form>
+```
+
+3. app.py:
 
 > ALL NON GET ROUTES RETURN REDIRECT
 
 ```python
 from forms import AddSnackForm
+from flask import Flask, request, render_template, redirect
+
+app = Flask(__name__)
+# 2. Database config:
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///my_database'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
+# Form and others:
+app.config['SECRET_KEY'] = 'caca'
+
+# 3. Call db:
+connect_db(app)
 # DUAL PURPOSE ROUTE: RENDERS THE FORM, VALIDATES THE FORM AND GRABS THE DATA FROM THE FORM:
 
 # STATIC SELECT FIELD:
@@ -481,47 +534,6 @@ def edit_user(u_id):
     else:
         return render_template("user_form.html", form=form)
 
-```
-
-3. form.html:
-
-```markdown
-<!-- OPTION 1: RENDER ALL FORM FIELDS IN SAME LOOP: -->
-
-<h1>New snack</h1>
-<!-- Mind that for the double purpose route there's no need to add an 'action' attr to the form, since it will automatically direct to the route where the form is called -->
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <!--Adds the hidden CSRF token-->
-    {% for field in form if field.widget.input_type != 'hidden' %}
-    <div class="form-group">
-        <!-- mind 'class_' for styling purposes  -->
-        {{field.label(class_='style-me')}}
-        {{field(class_='style-me')}}
-        <!-- show validation errors if any, with the label: -->
-        {%for err in field.errors%}
-        <small class="form-text">
-            {{err(class_='style-this-message-please')}}
-        </small>
-        {%endfor%}
-    </div>
-    {% endfor %}
-    <button>Add snack</button>
-</form>
-
-<!-- ---------------------------------------------------------------- -->
-<!-- OPTION 2: RENDER FORM FIELDS INDIVIDUALLY ONE AT A TIME -->
-<form>
-    <!-- first the validation: -->
-    {{ form.hidden_tag() }}
-    <!-- then the fields: -->
-    {{form.name.label(class_='red')}}
-    {{form.name(class_='input-name')}}
-    {{form.state.label(class_='brown')}}
-    {{form.state(class_='input-state')}}
-    {{form.dept_code.label(class_='blue')}}
-    {{form.dept_code(class_='input-dept')}}
-</form>
 ```
 
 4. tests.py:
@@ -854,6 +866,52 @@ Jinja comes with flask, no need to install it.
 
 # API
 
+## server_side_requests(flask)
+
+Make requests from the server side
+Some APIs have an SDK (Software Development Kit), oriented to the use of the API in ios, android, python or JS, etc.
+
+app.py:
+
+```python
+
+import requests
+from keys import key
+from flask import Flask, render_template, request, redirect
+from forms import LocationForm
+
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
+app.config['SECRET_KEY'] = 'caca'
+
+
+API_BASE_URL = 'http://www.mapquestapi.com/geocoding/v1/address'
+
+
+def get_coordenates(address):
+    response = requests.get(API_BASE_URL,
+                            params={'key': key, 'location': address})
+    data = response.json()
+    lat = data['results'][0]['locations'][0]['latLng']['lat']
+    long = data['results'][0]['locations'][0]['latLng']['lng']
+    coords = {'lat': lat, 'lng': long}
+    return coords
+
+
+@app.route('/', methods=['GET', 'POST'])
+def get_location():
+    form = LocationForm()
+    if form.validate_on_submit():
+        address = form.address.data
+        coords = get_coordenates(address)
+        return redirect(f"/result/{coords}")
+    else:
+        return render_template('location-form.html', form=form)
+
+```
+
 ## python requests
 
 No flask, no server, just python
@@ -895,6 +953,29 @@ ver = request.post('https://endpoint', data={'key':'value', 'other': 2})
 ```
 
 ## API keys
+
+### secret_keys
+
+1. .gitignore:
+
+```
+secrets.py
+venv/
+```
+
+2. secrets.py:
+
+```python
+API_SECRET_KEY = 'fdsfsdf234234234234'
+```
+
+3. app.py:
+
+```python
+from secrets import API_SECRET_KEY
+```
+
+4. Warn other developers to make their own secret key.
 
 HTTP requests can be:
 

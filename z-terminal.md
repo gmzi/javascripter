@@ -22,6 +22,7 @@
 5. [Requests](#Requests)
    - [curl](##curl)
    - [local-server](##local-server)
+   - [secret_keys](##secret_keys)
 6. [PYTHON](#PYTHON)
    - [venv](##venv)
    - [flask](##flask)
@@ -290,15 +291,35 @@ Client url
 - `curl -d @file [URL...]` POST data as file in url server.
 - `-X` --request to specify HTTP verb (ex. '-X POST')
 - `-H` --header to specify additional headers (ex. '"Content-Type: application/json"')
-  (ex. of larger request:
-  "curl --header "Content-Type: application/json" \
-   --request POST \
-   --data '{"username":"xyz","password":"xyz"}' \
-   https://myapplication.com/login")
+  (ex. of POST request:
+  `curl --header "Content-Type: application/json" \ --request POST \ --data '{"username":"xyz","password":"xyz"}' \ https://myapplication.com/login`
 
 ## local-server
 
 - `python3 -m http.server` start server in local machine with python3.
+
+## secret_keys
+
+1. .gitignore:
+
+```
+secrets.py
+venv/
+```
+
+2. secrets.py:
+
+```python
+API_SECRET_KEY = 'fdsfsdf234234234234'
+```
+
+3. app.py:
+
+```python
+from secrets import API_SECRET_KEY
+```
+
+4. Warn other developers to make their own secret key.
 
 ---
 
