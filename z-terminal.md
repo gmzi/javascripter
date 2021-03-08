@@ -340,7 +340,7 @@ from secrets import API_SECRET_KEY
    6. [inside the venv, type `python` to run it's local python version, the venv will have the python version used when you created it.]
    7. Install packages:
       1. `(venv)` prompt in terminal? -
-      2. `pip install packageName` installs package
+      2. `pip install autopep8` installs package
          1. flask-sqlalchemy:
             - `pip install psycopg2-binary`
             - `pip install flask-sqlalchemy`

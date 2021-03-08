@@ -7,7 +7,7 @@
 1. app.py:
 
 ```python
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, jsonify, request, render_template
 
 from models import db, connect_db, Todo
 
@@ -314,6 +314,8 @@ class DessertViewsTestCase(TestCase):
                 {"dessert": {'name': 'TestCake2', 'calories': 20}})
 
             self.assertEqual(Dessert.query.count(), 2)
+
+            # Run: `python -m unittest -v tests`
 
 ```
 
