@@ -22,25 +22,35 @@
 3. seed.py
    - [seed_file](#seed_file)
 4. templates
-   - [templates](#templates)
+   - [templates](#jinja_templates)
+   - [render_wtform](##jinja_wtform)
+   - [loop](##jinja_loops)
+   - [if](##jinja_if)
 5. forms
    - [WTF_forms](#WTForm)
    - [form-session-flow](###form-session-flow)
    - [form](##forms)
-6. API
+6. authentication
+   - [authentication_authorization](##authentication_and_authorization)
+   - [models.py](####models.py)
+   - [app.py](####app.py)
+   - [templates](####templates)
+   - [forms.py](####forms.py)
+7. API
    - [API_requests](#API)
-7. flash
+8. flash
    - [flash](##flash)
-8. Cookies
+9. Cookies and session
+   - [cookies](##COOKIES)
    - [sessions-cookies](##flask_sessions)
-9. tests.py
-   - [tests](#tests)
-   - [model_test](##model_test)
-   - [views_test](##views_test)
-10. debug
+10. tests.py
+    - [tests](#tests)
+    - [model_test](##model_test)
+    - [views_test](##views_test)
+11. debug
     - [debug_toolbar_extension](#debug)
-11. [routes_demo](#routes_demo)
-12. [install](#install)
+12. [routes_demo](#routes_demo)
+13. [install](#install)
     [setup](#setup)
 
 # flask
@@ -1202,42 +1212,7 @@ def get_movies_json():
     return json_data
 ```
 
-## flask_sessions
-
-Http is a stateless protocol, it doesn't "remember" nothing. An http request has no history, and is entirely separate from what came before or after.
-If want to add things to a shopping cart, or stay authenticated in a website, must use cookies or sessions.
-
-1. Browser Sessions
-   Treat session just like a dictionary
-
-   ```python
-   from flask import Flask, session
-
-   app = Flask(__name__)
-   app.config['SECRET_KEY'] = "myPassword"
-
-   @app.route('/some-route')
-   def some_route():
-       """flask takes the session's key-value pair, it will serialize it, will digitally sign it, and send the result as a cookie as part of the response that the client gets back. That cookie will then be stored in the browser and sent along with future requests."""
-       # SET SESSION VALUES:
-       session['username'] = 'coriolano32'
-       session['tools'] = ['hammer', 'saw', 'screw driver']
-       return 'Ok'
-
-       # UPDATE SESSION VALUES:
-       session['username'] = 'pepito123'
-
-       #ON THE SERVER SIDE, TO READ A SESSION, JUST ACCESS IT LIKE IN A DICT:
-       session['username'] # 'pepito123'
-       session['tools'] # ['hammer', 'saw', 'screw driver']
-   ```
-
-   Session specs:
-
-   - contain info for the current browser
-   - Preserve data type (lists stays lists, etc)
-   - Are cryptographically signed, user's can't modify data. ("signed" means that is codified by an algorithm in the server)
-     It's a dictionary that manage cookie creation, reading and sending. It's more secure than cookies.
+---
 
 # WTForm
 
@@ -1523,62 +1498,6 @@ CSRF (Cross Site Request Forgery) token: is a token that is sent with the form, 
 
 5.  Server Sessions, not flask default, to import it check docs about flask Sessions.
 
-6.  Cookies
-
-    - ### set cookie from server side
-
-    ```python
-    from flask import Flask, make_response
-
-    @app.route('/demo')
-    def demo():
-        content = "<h1>Hello</h1>"
-        res = make_response(content)
-        res.set_cookie('fav-color', 'blue')
-        return res
-    ```
-
-    - ### read cookies
-
-      ```python
-      from flask import Flask, request
-
-      @app.before_request
-      def print_cookies():
-          print(request.cookies) # {'fav_color': 'blue', 'location': 'las totoras motel'}
-      ```
-
-    - ### cookie options
-
-      - Expiration
-        - default is "as long as browser is running" (session cookie)
-      - Domain (which domain should the cookie be sent to)
-      - HttpOnly (not accessible via javascript)
-
-    - Chrome: Dev Tools - Application - Storage - Cookies
-    - Key-value pair, stored in the browser (client side). When making a request to a website, the browser sends all the cookies it has in storage (in the header of the request), when the server receives them, uses only the ones that can understand, and ignore the rest. If not, the server will instruct the browser what to do about storing cookies and how they will be structured. The client will send those cookies to the server always with every single request. (similar to JS local storage, with the difference that cookies are sent to server). with this implementation we now have state in our http protocol. The server can also send something in the http response instructing the browser to store a cookie, and the browser will store it in the client side.
-
-7.  Types of browser storage:
-
-    1.  LocalStorage
-        - not sent to server
-        - Stores data with no expiration date, and gets cleared only through JavaScript, or clearing the broser cache.
-        - It's domain specific (can't use it accross different websites).
-        - Storage limit is much larger than cookies.
-        - For complex stuff or things we don't need to be in the server
-    2.  SessionStorage (different than flask session)
-        - not sent to server
-        - Stores data only for until the browser tab is closed.
-        - Storage limit larger than cookie.
-    3.  Cookie
-        - 4kb limit (must be light because:)
-        - They are sent to servers
-        - server and client can read them
-        - Are made secure by setting the OnlyHttpOnly flag as true for that cookie. This prevent client-side access to it.
-        - Sent from browser to server for every request to the same domain.
-        - Set usually from the server side.
-        - older browsers support
-
 ## forms
 
 Grab data from forms:
@@ -1612,84 +1531,522 @@ aver = request.get('aver')
 
 ---
 
-## templates:
+## authentication_and_authorization
 
-base template:
+## authentication
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/concha.css" />
-    <title>{%block title%}{%endblock%}</title>
-  </head>
-  <body>
-    <nav class="navbar">
-      <a href="/">home</a>
-      <a href="/form">Greeter form</a>
-      <a href="/lucky">lucky</a>
-      <a href="/hello">Hello</a>
-    </nav>
+#### flask-Bcrypt
 
-    {% block content %} {% endblock %}
+1. models.py:
 
-    <!-- Cool if check with templates: -->
-    {% if request.cookies %}
-    <fieldset>
-      <label>Cookies Received By Flask</label>
-      <ul>
-        {% for name, value in request.cookies.items() %}
-        <li>{{ name }} = "{{ value }}"</li>
-        {% endfor %}
+#### models.py
+
+```python
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+
+db = SQLAlchemy()
+
+bcrypt = Bcrypt()
+
+def connect_db(app):
+    db.app = app
+    db.init_app(app)
+
+
+class User(db.Model):
+    """site user"""
+
+    __tablename__ = "users"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.Text, nullable=False, unique=True)
+    password = db.Column(db.Text, nullable=False)
+
+    @classmethod
+    def register(cls, username, pwd):
+        """Register user w/hashed password & return user."""
+
+        hashed = bcrypt.generate_password_hash(pwd)
+        # turn bytestring into normal string:
+        hashed_utf8 = hashed.decode("utf8")
+
+        # return instance of user w/username and hashed pwd
+        return cls(username=username, password=hashed_utf8)
+
+    @classmethod
+    def authenticate(cls, username, pwd):
+        """Validate that user exists & password is correct.
+        Return user if valid; else return False.
+        """
+        u = User.query.filter_by(username=username).first()
+
+        if u and bcrypt.check_password_hash(u.password, pwd):
+            # return user instance
+            return u
+        else:
+            return False
+
+
+class Tweet(db.Model):
+    __tablename__ = 'tweets'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    text = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    user = db.relationship('User', backref="tweets")
+```
+
+2. app.py:
+
+#### app.py
+
+```python
+from flask import Flask, render_template, redirect, session, flash
+from flask_debugtoolbar import DebugToolbarExtension
+from models import connect_db, db, User
+from forms import RegisterForm, LoginForm
+from sqlalchemy.exc import IntegrityError
+
+app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgres:///hashing_login"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ECHO"] = True
+app.config["SECRET_KEY"] = "abc123"
+
+connect_db(app)
+db.create_all()
+
+toolbar = DebugToolbarExtension(app)
+
+@app.route("/")
+def homepage():
+    """Show homepage with links to site areas."""
+
+    return render_template("index.html")
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register user: produce form & handle form submission."""
+
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+        name = form.username.data
+        pwd = form.password.data
+
+        #save encrypted pwd in db:
+        user = User.register(name, pwd)
+        db.session.add(user)
+        try:
+            db.session.commit()
+        except IntegrityError:
+            form.username.errors.append('Username taken, please pick another')
+            return render_template('register.html', form=form)
+
+        session["user_id"] = user.id
+        flash('Welcome!', 'success')
+        return redirect("/secret")
+    else:
+        return render_template("register.html", form=form)
+
+
+# LOGIN USER AND KEEP HIM LOGGED IN:
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Produce login form or handle login."""
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        name = form.username.data
+        pwd = form.password.data
+        # authenticate will return a user or False
+        user = User.authenticate(name, pwd)
+
+        if user:
+            session["user_id"] = user.id  # keep user logged in
+            return redirect("/secret")
+        else:
+            form.username.errors = ["Bad name or password"]
+    return render_template("login.html", form=form)
+
+# CHECK IF USER'S LOGGED IN AND SHOW SECRET OR REDIRECT TO LOG IN PAGE:
+@app.route("/secret")
+def secret():
+    """Example hidden page for logged-in users only."""
+
+    if "user_id" not in session:
+        flash("You must be logged in to view!")
+        return redirect("/")
+        # alternatively, can return HTTP Unauthorized status:
+        #
+        # from werkzeug.exceptions import Unauthorized
+        # raise Unauthorized()
+    else:
+        return render_template("secret.html")
+
+
+@app.route("/logout")
+def logout():
+    """Logs user out and redirects to homepage."""
+
+    session.pop("user_id")
+    flash("Goodbye!", "info")
+    return redirect("/")
+
+
+# SHOW ALL TWEETS  CREATE TWEET FORM FOR LOGGED IN USER
+@app.route('/tweets', methods=['GET', 'POST'])
+def show_tweets():
+    if "user_id" not in session:
+        flash("Please login first!", "danger")
+        return redirect('/')
+    form = TweetForm()
+    all_tweets = Tweet.query.all()
+    if form.validate_on_submit():
+        text = form.text.data
+        new_tweet = Tweet(text=text, user_id=session['user_id'])
+        db.session.add(new_tweet)
+        db.session.commit()
+        flash('Tweet Created!', 'success')
+        return redirect('/tweets')
+
+    return render_template("tweets.html", form=form, tweets=all_tweets)
+
+# DELETE TWEET IF LOGGED IN AND user is OWNER OF TWEET:
+@app.route('/tweets/<int:id>', methods=["POST"])
+def delete_tweet(id):
+    """Delete tweet"""
+    if 'user_id' not in session:
+        flash("Please login first!", "danger")
+        return redirect('/login')
+    tweet = Tweet.query.get_or_404(id)
+    if tweet.user_id == session['user_id']: # CHECK IF OWNER OF TWEET TO GIVE PERMISSION TO DELETE IT.
+        db.session.delete(tweet)
+        db.session.commit()
+        flash("Tweet deleted!", "info")
+        return redirect('/tweets')
+    flash("You don't have permission to do that!", "danger")
+    return redirect('/tweets')
+```
+
+3. templates:
+
+#### templates
+
+3.1 base.html
+
+```markdown
+<body>
+  <nav class="navbar navbar-light bg-primary justify-content-between ">
+    <!-- CHECK USER LOGGED IN -->
+    <div class="container">
+      <a href="/" class="navbar-brand text-light">Stupid Twitter</a>
+      <ul class="nav navbar-nav flex-row float-right">
+        {% if session['user_id'] %}
+        <li class="nav-item">
+          <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link pr-3 text-light" href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/register">Sign up</a>
+        </li>
+        {% endif %}
       </ul>
-    </fieldset>
-    {% endif %}
+    </div>
+  </nav>
 
-    <footer> this is a footer </footer>
+  <!-- FLASH MESSAGES -->
+  <div class="container" style="margin-top: 2em">
+    <!-- 'category' is the second arg passed for flash messages in views, then style by category name-->
+    {% for category, msg in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{category}}">{{ msg }}</div>
+    {% endfor %}
 
-    <script src="/static/app.js"></script>
-  </body>
+    {% block content %}
+    {% endblock %}
+
+  </div>
+</body>
+```
+
+4. forms.py:
+
+#### forms.py
+
+```python
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField
+from wtforms.validators import InputRequired
+
+
+class UserForm(FlaskForm):
+    username = StringField("Username", validators=[InputRequired()])
+    password = PasswordField("Password", validators=[InputRequired()])
+
+
+class TweetForm(FlaskForm):
+    text = StringField("Tweet Text", validators=[InputRequired()])
+```
+
+#### flask-bcrypt_basic_syntax
+
+- `pip install flask-bcrypt`
+
+```python
+from flask_bcrypt import Bcrypt
+
+# Instantiate:
+bcrypt = Bcryp()
+
+# Capture user's input and generate hashed salted password:
+my_hash = bcrypt.generate_password_hash("boquita123")
+
+# hash to store in db:
+my_hash # b'$2b$12$s.tjeALK2I7rfI2gV27me.mkZu5IQd1Y1EBAXsbTvNExIEQcID/te'
+
+# User login check:
+bcrypt.check_password_hash(my_hash, "boquita123") #True
+bcrypt.check_password_hash(my_hash, "boquita124") #False
+
+```
+
+Will use this algorithm to manage our passwords.
+
+#### plain python bcrypt:
+
+- `pip install bcrypt`
+
+```python
+import bcrypt
+salt = bcrypt.gensalt(rounds=14) # will generate random salt every time its called.
+salt # b'$2b$12$uYNRTDE7RrMvwDcF9f1Yyu' (string of bytes, binary)
+
+users_password = b'monkey123' # get the pswrd from the user and convert it in binary string.
+# call method to generate salted and hashed password:
+bcrypt.hashpw(users_password, salt) # b'$2b$12$uYNRTDE7RrMvwDcF9f1Yyuvuu48PzANrWy88Iz3z1tRTfdXi6DlNW' (this is the string that we will store as user's password)
+```
+
+![bcrypt_hash_structure](/images/bcrypt.jpg)
+
+### cryptographic hashing functions
+
+The tiniest change in the input will provike a hughe change in the output, so it's impossible to reverse engineer it. We can't compare results. Popular cryptographic hashes:
+
+- MD5, - SHA (used for cryptocurrencies). Popular password hashes: - Argon2, - Bcrypt, - Scrypt.
+
+### hashing functions
+
+Salt and hash: take the password, add random characters to it, and lastly hash it, so this will prevent repeated passwords and reverse engineering of the hash.
+![popular_hashing_algorythms](/images/hash.jpg)
+
+Built-in python hash function (no good for passwords): `import hash` `hash('something') #21312312312`
+NEVER store passwords in plain text. Use a hash function (hash function is any function that can be used to map data of arbitrary size to fixed-size values. It's deterministic: from one value, you have to obtain always the same output from the same input). Cryptographic hash functions: input --- crypto hash function -- output. You can't deduct the input from the output. Hashing performs a one-way transformation of the password. Will hash the stored password and also what the user types, if both match, login, else not allowed.
+
+AUTHENTICATION verify that a person is who he says he is, and sign in. (passwords, username, email, etc). NEVER store passwords in plain text. Use hashing.
+AUTHORIZATION once you're verified, you have permissions to do things, and not to do others (you can create a post, but can't delete other people's posts). Moderators have other tier of permissions once authenticated. (if user, permission to do something, etc.)
+
+---
+
+## COOKIES
+
+### set cookie from server side
+
+    ```python
+    from flask import Flask, make_response
+
+    @app.route('/demo')
+    def demo():
+        content = "<h1>Hello</h1>"
+        res = make_response(content)
+        res.set_cookie('fav-color', 'blue')
+        return res
+    ```
+
+### read cookies
+
+      ```python
+      from flask import Flask, request
+
+      @app.before_request
+      def print_cookies():
+          print(request.cookies) # {'fav_color': 'blue', 'location': 'las totoras motel'}
+      ```
+
+### cookie options
+
+      - Expiration
+        - default is "as long as browser is running" (session cookie)
+      - Domain (which domain should the cookie be sent to)
+      - HttpOnly (not accessible via javascript)
+
+    - Chrome: Dev Tools - Application - Storage - Cookies
+    - Key-value pair, stored in the browser (client side). When making a request to a website, the browser sends all the cookies it has in storage (in the header of the request), when the server receives them, uses only the ones that can understand, and ignore the rest. If not, the server will instruct the browser what to do about storing cookies and how they will be structured. The client will send those cookies to the server always with every single request. (similar to JS local storage, with the difference that cookies are sent to server). with this implementation we now have state in our http protocol. The server can also send something in the http response instructing the browser to store a cookie, and the browser will store it in the client side.
+
+7.  Types of browser storage:
+
+    1.  LocalStorage
+        - not sent to server
+        - Stores data with no expiration date, and gets cleared only through JavaScript, or clearing the broser cache.
+        - It's domain specific (can't use it accross different websites).
+        - Storage limit is much larger than cookies.
+        - For complex stuff or things we don't need to be in the server
+    2.  SessionStorage (different than flask session)
+        - not sent to server
+        - Stores data only for until the browser tab is closed.
+        - Storage limit larger than cookie.
+    3.  Cookie
+        - 4kb limit (must be light because:)
+        - They are sent to servers
+        - server and client can read them
+        - Are made secure by setting the OnlyHttpOnly flag as true for that cookie. This prevent client-side access to it.
+        - Sent from browser to server for every request to the same domain.
+        - Set usually from the server side.
+        - older browsers support
+    4.  Flask-session.
+
+## flask_sessions
+
+Http is a stateless protocol, it doesn't "remember" nothing. An http request has no history, and is entirely separate from what came before or after.
+If want to add things to a shopping cart, or stay authenticated in a website, must use cookies or sessions.
+
+1. Browser Sessions
+   Treat session just like a dictionary
+
+   ```python
+   from flask import Flask, session
+
+   app = Flask(__name__)
+   app.config['SECRET_KEY'] = "myPassword"
+
+   @app.route('/some-route')
+   def some_route():
+       """flask takes the session's key-value pair, it will serialize it, will digitally sign it, and send the result as a cookie as part of the response that the client gets back. That cookie will then be stored in the browser and sent along with future requests."""
+       # SET SESSION VALUES:
+       session['username'] = 'coriolano32'
+       session['tools'] = ['hammer', 'saw', 'screw driver']
+       return 'Ok'
+
+       # UPDATE SESSION VALUES:
+       session['username'] = 'pepito123'
+
+       #ON THE SERVER SIDE, TO READ A SESSION, JUST ACCESS IT LIKE IN A DICT:
+       session['username'] # 'pepito123'
+       session['tools'] # ['hammer', 'saw', 'screw driver']
+   ```
+
+   Session specs:
+
+   - contain info for the current browser
+   - Preserve data type (lists stays lists, etc)
+   - Are cryptographically signed, user's can't modify data. ("signed" means that is codified by an algorithm in the server)
+     It's a dictionary that manage cookie creation, reading and sending. It's more secure than cookies.
+
+---
+
+# jinja_templates
+
+1. index.html:
+
+```markdown
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>This is index page!!!</h1>
+
+{% endblock %}
+```
+
+2. base.html:
+
+```markdown
+<html>
+<head>
+  <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css">
+</head>
+
+<body>
+  <nav class="navbar navbar-light bg-primary justify-content-between ">
+    <!-- CHECK USER LOGGED IN -->
+    <div class="container">
+      <a href="/" class="navbar-brand text-light">Stupid Twitter</a>
+      <ul class="nav navbar-nav flex-row float-right">
+        {% if session['user_id'] %}
+        <li class="nav-item">
+          <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link pr-3 text-light" href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/register">Sign up</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <!-- FLASH MESSAGES -->
+  <div class="container" style="margin-top: 2em">
+    {% for category, msg in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{category}}">{{ msg }}</div>
+    {% endfor %}
+
+    {% block content %}
+    {% endblock %}
+
+  </div>
+
+</body>
 </html>
 ```
 
-child template:
+3. further-htmls:
 
-```html5
-{% extends 'base.html' %}
-{%block title%}Greeter{%endblock%}
-{%block content%}
-<h1>Hi {{username}}!!</h1>
-{% if wants_compliments %}
-<h2>Ok here are your compliments:</h2>
-<ul>
-  {% for compliment in compliments %}
-  <li>{{compliment}}</li>
+## jinja_wtform
+
+```markdown
+{% extends 'base.html'  %}
+
+{% block content %}
+
+<h1 class="display-1">Login</h1>
+<p class="lead">Login Below. Don't have an account? <a href="/register">Register here</a></p>
+
+<form method="POST">
+
+{{ form.hidden_tag() }}
+
+{% for field in form
+    if field.widget.input_type != 'hidden' %}
+
+  <p>
+    {{ field.label }}
+    {{ field(class_="form-control") }}
+
+    {% for error in field.errors %}
+    <span class="form-text text-danger">{{ error }}</span>
+    {% endfor %}
+
+  </p>
   {% endfor %}
-</ul>
-{% endif %}
-{%endblock%}
+
+<button class="btn btn-success" type="submit">Login</button>
+
+</form>
+{% endblock %}
 ```
 
-## template inheritance
-
-Prevent repetitio of html setting a parent template and extend that base template in other pages.
-
-```html
-<!-- Base template: -->
-{% block name_of_block %} {% endblock %}
-<!-- Child template: -->
-{% extends 'name_of_base.html' %} {% block name_of_block%} {% endblock %}
-```
-
-1. create a parent template with full markup:
-   - `base.html` (any name of file)
-2. add blocks for each particular route's content:
-   - `{% block name_of_block %} content {% endblock %}`
-3. in child templates: `{% block name_of_block %} content {% endblock %}`
-
-## jinja loops
+## jinja_loops
 
 ```html
 <body>
@@ -1699,19 +2056,20 @@ Prevent repetitio of html setting a parent template and extend that base templat
 </body>
 ```
 
-## jinja conditional expressions
+## jinja_if
 
 In a same template, add different content according to different conditions (user loged in or not, etc)
 
-```html
+```markdown
 <ul>
-  {% if (posts|length > 0)%} {% for post in posts%}
+  {% if (posts|length > 0)%} 
+  {% for post in posts%}
   <li>{{post.title}}</li>
-  {%endfor%} {%else%}
+  {%endfor%} 
+  {%else%}
   <p>No posts yet</p>
   {%endif%}
 </ul>
-
 {% if number == 2 %}
 <h2>That's extra cool!!</h2>
 {% else %}
