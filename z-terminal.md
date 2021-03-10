@@ -344,6 +344,7 @@ from secrets import API_SECRET_KEY
          1. flask-sqlalchemy:
             - `pip install psycopg2-binary`
             - `pip install flask-sqlalchemy`
+            - `pip install flask-bcrypt`
          2. wtforms:
             - `pip install flask-wtf`
          - `pip uninstall packageName` uninstalls package

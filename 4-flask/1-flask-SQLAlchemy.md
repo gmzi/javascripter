@@ -33,7 +33,7 @@
 6. authentication
    - [authentication_authorization](##authentication_and_authorization)
    - [models.py](####models.py)
-   - [app.py](####app.py)
+   - [app.py](####aapp.py)
    - [templates](####templates)
    - [forms.py](####forms.py)
 7. API
@@ -67,6 +67,7 @@
 
 1. Fetching records:
    - `.get(pk)`
+   - `.get_or_404(pk)`
    - `.all()` all records that match
    - `.first()` first record that match or **None** if nothing matches
    - `.one()` get first record, **Error** if no results or if there's more than one result, "there should be only one thing that matches this, otherwise give me error".
@@ -1600,7 +1601,7 @@ class Tweet(db.Model):
 
 2. app.py:
 
-#### app.py
+#### aapp.py
 
 ```python
 from flask import Flask, render_template, redirect, session, flash
