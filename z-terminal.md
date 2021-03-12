@@ -30,6 +30,8 @@
    - [clone_project](##clone_project)
    - [global_install](##global_install)
 7. [DATABASE](#DATABASE)
+8. [DEPLOY](#DEPLOY)
+   - [flask_app](##deploy_flask_app)
 
 # git
 
@@ -335,11 +337,15 @@ from secrets import API_SECRET_KEY
    1. cd to desired directory
    2. `python3 -m venv venv` ("using the 'venv' module create a folder called 'venv' and put default stuff in there)
    3. `source venv/bin/activate` ("activate the venv folder just created" (no need to cd to the venv folder))
-   4. Create .gitignore file in main folder and add `venv/` in it.
+   4. .gitignore file in main dir with:
+      - `venv/`
+      - `.vscode/`
+      - `__pycache__/`
+      - `keys.py`
    5. [every time you want to run the venv you have to source it (step 3)]
    6. [inside the venv, type `python` to run it's local python version, the venv will have the python version used when you created it.]
    7. Install packages:
-      1. `(venv)` prompt in terminal? -
+      1. `(venv)` prompt in terminal?
       2. `pip install autopep8` installs package
          1. flask-sqlalchemy:
             - `pip install psycopg2-binary`
@@ -347,6 +353,8 @@ from secrets import API_SECRET_KEY
             - `pip install flask-bcrypt`
          2. wtforms:
             - `pip install flask-wtf`
+         3. External projects:
+            - `pip install -r requirementsXX.txt`
          - `pip uninstall packageName` uninstalls package
          - `pip list` list of all installed packages
    8. `pip freeze` list all installed packages
@@ -453,3 +461,75 @@ Clone python project
    - cd to directory
    - `psql`
    - `CREATE DATABASE my_database;`
+
+# DEPLOY
+
+## deploy_flask_app
+
+### heroku
+
+Setup heroku
+
+1. - install homebrew
+2. - venv active
+3. - `brew install heroku/brew/heroku` special heroku CLI
+4. - `pip install gunicorn` production-ready server
+5. - `pip freeze > requirements.txt`
+6. - gitignore:
+   ```
+   venv/
+   .vscode/
+   keys.py
+   `__pycache__/`
+   ```
+7. - `echo "web: gunicorn app:app" > Procfile` creates Procfile file to administer app
+8. check which python version is being run in your venv (type `python`).
+9. - `echo "python-1.1.1[My local version]" > runtime.txt` for heroku to grab the correct python version.
+
+Push
+
+10. - venv active
+11. - (`git init`)
+12. - `git add .`
+13. - `git commit -m 'name of commit'`
+14. - `heroku login`
+15. - `heroku create NAME-OF-APP`
+16. - `git remote -v`
+17. - `git push heroku master`
+18. (if not in master branch) - `git push heroku my-branch:master`
+19. - `heroku open` (open app in browser)
+
+Setup environmten/server
+
+20. venv active
+21. - `heroku config:set SECRET_KEY=nevertell FLASK_ENV=production`
+22. - `heroku config` see all environment variables.
+23. App.py:
+
+```python
+import os
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", 'defaultvalue')
+```
+
+Setup postgres database
+
+- Set path to remote db:
+
+24. - `heroku addons:create heroku-postgresql:hobby-dev` (hobby dev is the free db plan of heroku, keep it)
+25. - `heroku config` should see the database here.
+26. - app.py:
+
+```python
+import os
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL', 'postgres:///my_db_name')
+```
+
+- Connect to heroku psql and run seed.py on the heroku db:
+
+27. - `heroku pg:psql`
+28. - `heroku run python seed.py`
+
+Debug
+
+29. - `heroku logs --tail` shows the server logs, app prints and errors there.

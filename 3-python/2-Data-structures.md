@@ -121,6 +121,12 @@
    - [packing/spreading](##pack/spread)
      - [pack_dictionary](##pack_dict)(\*\*)
      - [spread_in_function_call](##spread_in_function)
+9. Type hints
+   - [type_hints](#type_hints)
+10. Generator functions
+    - [generators](#generator_functions)
+11. Operator overloading
+    - [overloading](#operator_overloading)
 
 ---
 
@@ -1035,3 +1041,120 @@ Spread / pack in function call
 nums = [1,2,3]
 print(*nums) # 1 2 3 (no comas, passes arguments as separate values, one by one)
 ```
+
+# type_hints
+
+```python
+def add(x: int, y: int) -> int:
+    """Add x and y and return results."""
+    return num1 + num2
+```
+
+# generator_functions
+
+```python
+def firstngen(n):
+    num = 0
+    while num < n:
+        yield num
+        num += 1
+
+firstngen(10) # <generator objct firsngen> **I can loop over this object **
+
+it = firstngen(5)
+
+next(it) # 0
+next(it) # 1
+next(it) # 2
+
+for n in firstngen(3):
+    print n
+
+# 0, 1, 2
+
+# the python loop will keep calling 'next' in every parcial result till it hits the condition.
+
+sum(firstngen(1000)) # 499500
+
+# --------------------------------------
+# Show numbers until user types 'y':
+
+def find_liked_num(nums):
+    for num in nums:
+        if input(f"Do you like {num}?") == 'y':
+            return num
+
+find_liked_num([1, 21, 12, 43])
+
+# Insted of hard coding the list, pass a generator function to make the list:
+
+def create_evens(start):
+    """yield even numbers starting at start"""
+    while True:
+        yield start
+        start = start + 2
+
+find_liked_num(create_evens(start=2)) # will run undefinitely until user choose 'y'
+```
+
+# operator_overloading
+
+Change the value of an existing operator or method. We can overload the default behavoir of methods.
+
+Example, take the `__eq__` (equality) method and use it to compare strings on upper or lower case:
+
+```python
+class CIString(str):
+    """Subclass of string that is case-insensitive.
+
+        >>> CIString("apple") == CIString("Apple")
+        True
+
+        >>> CIString("apple") < CIString("Banana")
+        True
+    """
+
+    def __eq__(self, other):
+        "Is self == other?"
+        return self.lower() == other.lower()
+
+    def __lt__(self, other):
+        "Is self < other?"
+        return self.lower() < other.lower()
+
+    def __le__(self, other):
+        "Is self <= other?"
+        return self.lower() <= other.lower()
+
+
+# ----------------------------------
+# Translate color rgb code into string:
+class Color:
+    def __init_(self, color_name, r, g, b):
+        self.color_name = color_name
+        self.rgb = (r, g, b)
+
+    def get_css_str(self):
+        return f"rgb{self.rgb}"
+
+```
+
+Zen Of Python
+
+Beautiful is better than ugly
+Readability counts
+
+Explicit is better than implicit
+
+Simple is better than complex
+Complex is better than complicated
+
+Special cases aren't special enough to break the rules
+Although practicality beats purity
+
+Errors should never pass silently
+
+In the face of ambiguity, refuse the temptation to guess
+
+If the implementation is hard to explain, it's a bad idea
+If the implementation is easy to explain, it may be a good idea
