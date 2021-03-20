@@ -11,6 +11,7 @@
 [isPalindrome](###isPalindrome)  
 [alphabetical](###alphabetical)  
 [first_letter_uppercase](###first_letter_uppercase)  
+[snake_to_camel](###snakeToCamelCase)
 [longest_word](###longest_word)  
 [num_of_vowels](###num_of_vowels)
 [vowelCount](###vowelCount)
@@ -18,6 +19,7 @@
 [containsVowels](###containsVowels)  
 [str_letter_count](###str_letter_count)
 [letterCount](###letterCount)
+[grid_star](###grid_star)
 
 [swap_variables](###swap_variables)  
 [random_itm](##PICK_RANDOM_ITEM_FROM_ARRAY:)  
@@ -265,6 +267,26 @@ function firstLetterUppercase(str) {
 
 console.log(firstLetterUppercase('the quick brown fox'));
 // "The Quick Brown Fox"
+```
+
+### snakeToCamelCase
+
+Convert snake case to camel case
+
+```javascript
+function snakeToCamel(str) {
+  result = '';
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === '_') {
+      result += str[i + 1].toUpperCase();
+      i = i + 1;
+    } else {
+      result += str[i];
+    }
+  }
+  return result;
+}
+snakeToCamel('awsome_sauce'); // awesomeSauce
 ```
 
 ### longest_word
@@ -1341,6 +1363,53 @@ function vowelCount(str) {
 // vowelCount('Elie') // {e:2,i:1};
 // vowelCount('Tim') // {i:1};
 // vowelCount('Matt') // {a:1})
+```
+
+### grid_star
+Star rows and columns where is a star
+
+```javascript
+function starOutGrid(grid) {
+  cols = [];
+  rows = [];
+  // capture cols and rows to star:
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid.length; j++) {
+      if (grid[i][j] === '*') {
+        cols.push(grid.indexOf(grid[j]));
+        rows.push(grid.indexOf(grid[i]));
+      }
+    }
+  }
+
+  // star cols:
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < cols.length; j++) {
+      grid[i][cols[j]] = '*';
+    }
+  }
+
+  // star rows:
+  for (let i = 0; i < rows.length; i++) {
+    grid[rows[i]] = ['*', '*', '*'];
+  }
+
+  return grid;
+}
+
+console.log(
+  starOutGrid([
+    ['A', 'B', 'C'],
+    ['D', 'E', '*'],
+    ['G', 'H', 'I'],
+  ])
+);
+/*
+["A", "B", "*"]
+["*", "*", "*"]
+["G", "H", "*"]
+*/
+
 ```
 
 ### subset_of_str

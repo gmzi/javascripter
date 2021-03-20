@@ -294,7 +294,11 @@ Client url
 - `-X` --request to specify HTTP verb (ex. '-X POST')
 - `-H` --header to specify additional headers (ex. '"Content-Type: application/json"')
   (ex. of POST request:
-  `curl --header "Content-Type: application/json" \ --request POST \ --data '{"username":"xyz","password":"xyz"}' \ https://myapplication.com/login`
+  `curl --header "Content-Type: application/json" \ --request POST \ --data '{"username":"xyz","password":"xyz"}' \ https://myapplication.com/login`)
+
+-curl -H "Authorization: Bearer s67W7ZDeLsskF1tcPe29mxTOSkuul2lk5vpp-AIUyz5xxaUe-gUssy3A_SEDBiD58mJG9kXz5QRpCk3H9edcrPuRqBEFpizqk5Z-LMoQXPDtElXoswmaBnySAXlSYHYx" \
+-X GET \
+https://api.yelp.com/v3/businesses/search?term=delis&latitude=37.786882&longitude=-122.399972
 
 ## local-server
 
@@ -348,6 +352,8 @@ from secrets import API_SECRET_KEY
       1. `(venv)` prompt in terminal?
       2. `pip install autopep8` installs package
          1. flask-sqlalchemy:
+            - `pip install requests`
+            - `pip install flask`
             - `pip install psycopg2-binary`
             - `pip install flask-sqlalchemy`
             - `pip install flask-bcrypt`
