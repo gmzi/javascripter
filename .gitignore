@@ -1,3 +1,5 @@
 images/
 mocks/
 apis.js
+.vscode/
+__pycache__/
