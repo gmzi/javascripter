@@ -50,6 +50,8 @@ Git tracks all version history (will stay local unless is pushed to a remote rep
    - `git config --global user.name userName` create global usr
    - `git config --global user.email` existing global email.
    - `git config --global user.email email@address.com` add global email.
+     Remove global configs:
+   - `git config --global --unset user.name git config --global --unset user.email `
 
 5. (`git diff` highlight changes to be staged.)
 
@@ -121,7 +123,10 @@ Clone a github repo into local machine, it will be your own version of the repo.
 
 1. Copy repo's url.
 2. check in terminal where you are and where you want the clone, and git status not initialized there.
-3. `git clone projectUrl` clones in local folder.
+
+- `git clone projectUrl` clones master in local folder.
+- `git clone -b branchName https://adress.git` clones desired branch
+
 4. Create or remove files and folders, stage them and commit them with no problem. Just can't push the changes unless with permission from the owner.
 
 ## pull
@@ -467,6 +472,8 @@ Clone python project
    - cd to directory
    - `psql`
    - `CREATE DATABASE my_database;`
+3. Connect to remote db:
+   - `psql \ --host w2g-db.cv4xcvh0gz73.us-east-2.rds.amazonaws.com \ --port 5432 \ --username gmzi \ --password password \ --dbname w2g_db`
 
 # DEPLOY
 
