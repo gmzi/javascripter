@@ -14,6 +14,11 @@
    - [move/rename](###move/rename)
    - [copy](###copy)
    - [source/clear/q](###cource/clear/q)
+   - [links](###links)
+     - hard link
+     - symlink
+   - [find](###find)
+   - [grep](###grep)
 4. [shortcuts](#shortcuts)
    - [terminal](##terminal)
    - [VSCode](##VSCode)
@@ -122,7 +127,7 @@ Git tracks all version history (will stay local unless is pushed to a remote rep
 Clone a github repo into local machine, it will be your own version of the repo.
 
 1. Copy repo's url.
-2. check in terminal where you are and where you want the clone, and git status not initialized there.
+2. cd to desired dir, check not git already.
 
 - `git clone projectUrl` clones master in local folder.
 - `git clone -b branchName https://adress.git` clones desired branch
@@ -149,13 +154,13 @@ You can contribute reporting a bug, suggesting a new feature, translating
 documentation or text in general, or with actual code. These are the steps:
 
 1.  fork the repo in to your github account.
-2.  clone repo in your local computer vscode.
-3.  Make the changes, stage them and push them.
-4.  Now, after your changes are pushed and visible in your github, make the PULL REQUEST.
-5.  Put the title and description of the change that you propose.
-6.  Now the owner of the repo will decide about merging in your change or not (you should see your requeest on the owner's repo).
-
-`git clone https://....` clone a repository in local folder
+2.  clone yopur forked repo in your local computer.
+3.  Make the changes, stage them and push them yo your github fork.
+4.  Now, after your changes are pushed and visible in your fork, click on the the PULL REQUEST button (github).
+    This will take you to the project's original fork in the owner's github. Click CREATE PULL REQUEST.
+5.  Put the title and description of the change that you propose, and click CREATE PULL REQUEST.
+6.  Now the owner of the repo will decide about merging in your change or not (you should see your requeest on the owner's repo). You still have your
+    own forked version with your changes.
 
 ---
 
@@ -239,6 +244,70 @@ documentation or text in general, or with actual code. These are the steps:
 `src` source
 `clear` cleans console.
 `q` get out of there exit quit
+
+### links
+
+1. hard link:
+   Creates a new file in carbon copy. Can move or delete original, the copies persist, copies use their own storage space.
+   - `ln path_to_file name_of_link` can access to "name_of_link" from anywhere
+     - ex. : `ln ../settings.txt settings.txt`
+2. symlink:
+   Symbolik link. Doesn't make copy. Creates reference only. Can't move or delete the original file or the symlink will disappear.
+   - `ln -s path_to_file name_of_link` symlink to file
+   - `ln -s path_to_dir name_of_link` symlink to directory
+   - ex. : `ln -s ../colors.txt colors.txt`
+
+View all links:
+
+- `ls -la` shows all files links included
+- `colors.txt -> ../colors.txt` Response showing symlink and where it is referencing to.
+
+### find
+
+- `find name_of_dir -name "*.css"` find in name_of_dir all files which name ends with ".css".
+- `find . -name "*.css"` find in local dir and below all files which name ends with ".css"
+- `find . -name "*dog*"` find in local dir and below with "dog" somewhere in file name
+- `find . -iname "*dog*"` CASE INSENSITIVE same search as above.
+- `find . -name "first.txt"` find in local dir and below files that match "first.txt" in the name
+- `find Downloads` find in local directory only, full name must match.
+
+- `find . -name "*.??"` find in local and below all files that has any characters, a dot, and two characters (any).
+- `find . -name "[fts]*"` find in local and below all files that has "f", "t" or "s" at the beginning of the name and any character after.
+
+### grep
+
+regex search.(Regular expressions search. (Search whithin file content.))
+
+1. Single file search:
+
+   - `grep "1.2" requirements.txt` find "1.2" inside requirements.txt
+   - `grep -i "sql" requirements.txt` CASE INSENSITIVE find "sql" in requirements.txt
+
+   - `grep -v "Flask" requirements.txt` display all lines that DOESN'T CONTAIN "Flask"
+   - `grep -iv "flask" requirements.txt` CASE INSENSITIVE
+
+   - `grep -c "Jane" names.txt` count number of matches with "Jane" in names.txt
+   - `grep -n "def" app.py` display line numbers where "def" appears in app.py
+   - `grep -n -C "def" app.py` line numbers and count of matches.
+
+   - `grep -A 3 "Beth" names.txt` display 3 lines AFTER "Beth" is matched in names.txt, (Beth included)
+   - `grep -B 3 "Beth" names.txt` display 3 lines BEFORE "Beth" is matched in names.txt, (Beth included)
+   - `grep -C 3 "Beth" names.txt` display 3 lines before and 3 lines after "Beth" is matched in names.txt, (Beth included)
+
+   - `grep "def" app.py`
+
+   - `grep -wc "^T.*" names.txt`
+   - `grep -w "Samantha" names.txt` match exact word
+   - `grep -wc "T.* names.txt` count all words that starts with "T" in names.txt
+   - `grep -wc "[LME].*" names.txt` count all matching words starting with L, M or E
+
+   - `grep "\d" requirements.txt` find lines having a dot and digits (.1.0.2)
+   - `grep ".(.*)" app.py` match one character, parens, one character and any characters after that and closing parens in app.py.
+
+2. Recursive Grep Search (multiple files search)
+   - `grep -rw 'bcrypt' .` display all exact matches in all files from current directory onwards
+   - `grep -ir 'cat' .`
+   - `grep -r 'bcrypt'` display all matches in all files from home directory onwards (not reccomended)
 
 ---
 
