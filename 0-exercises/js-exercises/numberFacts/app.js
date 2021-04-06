@@ -2,12 +2,19 @@ function numberFacts() {
   const url = 'http://numbersapi.com';
 
   function getFacts(rangeStart, rangeEnd) {
-    let allFacts;
     let facts = axios
       .get(`${url}/${rangeStart}..${rangeEnd}`, { json: 'json' })
       .then((data) => {
         fillHtml(data.data, 'num-list');
       });
+  }
+  function fillHtml(object, listId) {
+    const list = document.querySelector(`#${listId}`);
+    for (k in object) {
+      item = document.createElement('li');
+      item.innerText = object[`${k}`];
+      list.append(item);
+    }
   }
 
   function favNumFacts(num) {
@@ -27,46 +34,40 @@ function numberFacts() {
       .catch((err) => console.log(err));
   }
 
-  function fillHtml(object, listId) {
-    const list = document.querySelector(`#${listId}`);
-    for (k in object) {
-      item = document.createElement('li');
-      item.innerText = object[`${k}`];
-      list.append(item);
-    }
-  }
   getFacts(10, 15);
   favNumFacts(55);
 }
 
 numberFacts();
 
-function getDeck() {
-  return axios.get(
-    'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1'
-  );
-}
+function cards() {
+  function getDeck() {
+    return axios.get(
+      'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1'
+    );
+  }
 
-function getCard(deck) {
-  return axios.get(`https://deckofcardsapi.com/api/deck/${deck}/draw/?count=1`);
-}
+  function getCard(deck) {
+    return axios.get(
+      `https://deckofcardsapi.com/api/deck/${deck}/draw/?count=1`
+    );
+  }
 
-getDeck().then((res) => {
-  myDeck = res.data.deck_id;
-  console.log('deck ' + myDeck);
-  const btnDraw = document.querySelector('#btn-draw');
-  const cardsDiv = document.querySelector('.cards-container');
-  const remains = document.querySelector('#remains');
-  btnDraw.addEventListener('click', function () {
-    const newCard = document.createElement('img');
-    getCard(myDeck).then((drawedCard) => {
-      console.log(drawedCard.data);
-      console.log(drawedCard.data.remaining);
-      console.log(drawedCard.data.cards[0].image);
-      newCard.setAttribute('class', 'card');
-      newCard.setAttribute('src', `${drawedCard.data.cards[0].image}`);
-      cardsDiv.append(newCard);
-      remains.innerText = `${drawedCard.data.remaining} cards left in deck`;
+  getDeck().then((res) => {
+    myDeck = res.data.deck_id;
+    const btnDraw = document.querySelector('#btn-draw');
+    const cardsDiv = document.querySelector('.cards-container');
+    const remains = document.querySelector('#remains');
+
+    btnDraw.addEventListener('click', function () {
+      const newCard = document.createElement('img');
+      getCard(myDeck).then((drawedCard) => {
+        newCard.setAttribute('class', 'card');
+        newCard.setAttribute('src', `${drawedCard.data.cards[0].image}`);
+        cardsDiv.append(newCard);
+        remains.innerText = `${drawedCard.data.remaining} cards left in deck`;
+      });
     });
   });
-});
+}
+cards();

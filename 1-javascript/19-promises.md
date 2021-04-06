@@ -1,5 +1,12 @@
 # promises
 
+- [promise_methods](##Promise_methods)
+- [building_promises](##building_promises)
+- [promise_chaining](##promise_chaining)
+- [custom_axios_request](##custom_axios_request)
+- [.then/.catch](##.then/.catch)
+- [callbacks](##callbacks)
+
 ## Promise_methods
 
 Promise objects have built in methods:
