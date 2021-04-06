@@ -19,7 +19,6 @@ function numberFacts() {
     Promise.all(allFacts)
       .then((data) => {
         for (fact of data) {
-          console.log(fact.data);
           item = document.createElement('li');
           item.innerText = fact.data;
           list.append(item);
@@ -41,3 +40,33 @@ function numberFacts() {
 }
 
 numberFacts();
+
+function getDeck() {
+  return axios.get(
+    'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1'
+  );
+}
+
+function getCard(deck) {
+  return axios.get(`https://deckofcardsapi.com/api/deck/${deck}/draw/?count=1`);
+}
+
+getDeck().then((res) => {
+  myDeck = res.data.deck_id;
+  console.log('deck ' + myDeck);
+  const btnDraw = document.querySelector('#btn-draw');
+  const cardsDiv = document.querySelector('.cards-container');
+  const remains = document.querySelector('#remains');
+  btnDraw.addEventListener('click', function () {
+    const newCard = document.createElement('img');
+    getCard(myDeck).then((drawedCard) => {
+      console.log(drawedCard.data);
+      console.log(drawedCard.data.remaining);
+      console.log(drawedCard.data.cards[0].image);
+      newCard.setAttribute('class', 'card');
+      newCard.setAttribute('src', `${drawedCard.data.cards[0].image}`);
+      cardsDiv.append(newCard);
+      remains.innerText = `${drawedCard.data.remaining} cards left in deck`;
+    });
+  });
+});

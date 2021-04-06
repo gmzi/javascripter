@@ -1,0 +1,24 @@
+.container {
+  position: relative;
+}
+
+.cards-container {
+  /* Absolute position */
+  left: 0px;
+  position: absolute;
+  top: 0px;
+
+  /* Take full size */
+  height: 100%;
+  width: 100%;
+
+  /* Displayed under the container */
+  z-index: -1;
+
+  /* Background and border colors */
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+
+  /* Rotate it. Change the number of degrees for the following cards */
+  transform: rotate(5deg);
+}
