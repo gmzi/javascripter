@@ -543,6 +543,8 @@ Clone python project
    - `CREATE DATABASE my_database;`
 3. Connect to remote db:
    - `psql \ --host w2g-db.cv4xcvh0gz73.us-east-2.rds.amazonaws.com \ --port 5432 \ --username gmzi \ --password password \ --dbname w2g_db`
+   - `psql -U username -h localhost -p 5432 dbname`
+   - `psql postgresql://[user[:password]@][host][:port][,...][/dbname][?param1=value1&...]`
 
 # DEPLOY
 

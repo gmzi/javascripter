@@ -1,364 +1,374 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <script src="https://kit.fontawesome.com/8004f58d59.js" crossorigin="anonymous"></script> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <title>Javascripter</title>
-  </head>
 
-  <body>
-    <section class="ajax-section">
-      <div class="container border border-dark">
-        <div id="dogs-div">
-          <h3>dog life</h3>
-          <iframe id="dogs">
-          </iframe>
-          <h3>Get dog by breed</h3>
-          <form action="" id='dogSearchform'>
-            <input id='breed' type="text">
-            <button>search</button>
-          </form>
-          <iframe id="dog-by-breed"></iframe>
-        </div>
-        <div id="nasa" class="border-bottom border-5 border-warning">
-          <h4>Image of the day</h4>
-            <p id="description"></p>
-        </div>
-        <div class="spacex">
-          <h1 class="display-4">SpaceX</h1>
-      
-      <div class="container border-b border-dark">
-        <h2>Upcoming launch:</h2>
-        <span id="launch-date" class="d-block"></span>
-        <span id="launch-time" class="d-block"></span>
-        <span id="mission-name" class="d-block"></span>
-        <h5>Countdown: <span id="countdown" class="d-block"></span></h5>
-      </div>
-      <div id="crewed-missions" class="border mt-4">
-        <h3 class="text-center">Crewed Missions</h3>
-      </div>
-        
-        </div>
-        
-      </div>
-    </section>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- <script src="https://kit.fontawesome.com/8004f58d59.js" crossorigin="anonymous"></script> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <title>Javascripter</title>
+</head>
 
-    <section class="icon-section">
-      <h1 class="display-6 text-danger" >Here's an icon: <i class="fas fa-key"></i></h1>
-      <h1 class="display-6 text-dark" >Colored icon: <i class="fab fa-instagram text-danger"></i></h1>
-      <div class="container">
-        <div class="row">
-          <div class="col-6">
+<body>
+  <section class="ajax-section">
+    <div class="container border border-dark">
+      <div id="dogs-div">
+        <h3>dog life</h3>
+        <iframe id="dogs">
+        </iframe>
+        <h3>Get dog by breed</h3>
+        <form action="" id='dogSearchform'>
+          <input id='breed' type="text">
+          <button>search</button>
+        </form>
+        <iframe id="dog-by-breed"></iframe>
+      </div>
+      <div id="nasa" class="border-bottom border-5 border-warning">
+        <h4>Image of the day</h4>
+        <p id="description"></p>
+      </div>
+      <div class="spacex">
+        <h1 class="display-4">SpaceX</h1>
+
+        <div class="container border-b border-dark">
+          <h2>Upcoming launch:</h2>
+          <span id="launch-date" class="d-block"></span>
+          <span id="launch-time" class="d-block"></span>
+          <span id="mission-name" class="d-block"></span>
+          <h5>Countdown: <span id="countdown" class="d-block"></span></h5>
+        </div>
+        <div id="crewed-missions" class="border mt-4">
+          <h3 class="text-center">Crewed Missions</h3>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section class="icon-section">
+    <h1 class="display-6 text-danger">Here's an icon: <i class="fas fa-key"></i></h1>
+    <h1 class="display-6 text-dark">Colored icon: <i class="fab fa-instagram text-danger"></i></h1>
+    <div class="container">
+      <div class="row">
+        <div class="col-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="fas fa-user"></i>
+              </span>
+            </div>
+            <input type="text" class="form-control" placeholder="user name">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span class="fa-stack fa-2x">
+      <i class="fas fa-camera fa-stack-1x"></i>
+      <i class="fas fa-ban fa-stack-2x" style="color: Tomato"></i>
+    </span>
+
+    <h1 class="display-6">And here's a tooltip:</h1>
+    <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+      title="short text of tooltip">
+      Tooltip on top</button>
+  </section>
+  <section class="navbar-section">
+    <!-- <div class="container"> to limit the width -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link" href="#">Features</a>
+            <a class="nav-link" href="#">Pricing</a>
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </section>
+  <section class="forms-section">
+    <h1>Forms!!!</h1>
+    <div class="container">
+      <h1 class="display-6">Forms with bootstrap</h1>
+      <div class="row justify-content-center m-2">
+        <div class="col-md-8 col-xl-5 border shadow rounded m-4 p-3">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="first-name">
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="last-name">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Enter an email</label>
+            <input type="text" id="email" class="form-control form-control-lg" placeholder="email">
+          </div>
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input type="text" id="name" class="form-control" placeholder="name">
+          </div>
+          <div class="form-group mb-3">
+            <label for="select">Select number</label>
+            <select name="select" id="select" class="form-control">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select>
+          </div>
+
+          <div class="form-group">
             <div class="input-group">
               <div class="input-group-prepend">
-                <span class="input-group-text">
-                  <i class="fas fa-user"></i>
-                </span>
+                <span class="input-group-text">$</span>
               </div>
-              <input type="text" class="form-control" placeholder="user name">
+              <input type="text" class="form-control mb-3">
             </div>
           </div>
+          <button class="btn btn-success btn-block btn-lg">Submit</button>
         </div>
       </div>
-
-      <span class="fa-stack fa-2x">
-        <i class="fas fa-camera fa-stack-1x"></i>
-        <i class="fas fa-ban fa-stack-2x" style="color: Tomato"></i>
-      </span>
-      
-      <h1 class="display-6">And here's a tooltip:</h1>
-      <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="short text of tooltip">
-        Tooltip on top</button>
-    </section>
-    <section class="navbar-section">
-      <!-- <div class="container"> to limit the width -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-              <a class="nav-link" href="#">Features</a>
-              <a class="nav-link" href="#">Pricing</a>
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </div>
-          </div>
-        </div>
-      </nav>
-    </section>
-    <section class="forms-section">
-      <h1>Forms!!!</h1>
-      <div class="container">
-        <h1 class="display-6">Forms with bootstrap</h1>
-        <div class="row justify-content-center m-2">
-          <div class="col-md-8 col-xl-5 border shadow rounded m-4 p-3">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <input type="text" class="form-control" placeholder="first-name">
-                </div>
-                <div class="col-6">
-                  <input type="text" class="form-control" placeholder="last-name">
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="email">Enter an email</label>
-              <input type="text" id="email" class="form-control form-control-lg" placeholder="email">
-            </div>
-            <div class="form-group">
-              <label for="name">Your name</label>
-              <input type="text" id="name" class="form-control" placeholder="name">
-            </div>
-            <div class="form-group mb-3">
-              <label for="select">Select number</label>
-              <select name="select" id="select" class="form-control">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">$</span>
-                </div>
-                <input type="text" class="form-control mb-3">
-              </div>
-            </div>
-            <button class="btn btn-success btn-block btn-lg">Submit</button>  
-          </div>
-        </div>
-      </div>
-
-    </section>
-    <section class="jquery-section">
-      <h1>Brand new section title</h1>
-      <p>Paragraph for further information</p>
-      <ul>
-        <li>Mainpulating DOM</li>
-        <li>Adding event listeners</li>
-        <li>Animating elements</li>
-        <li>Making HTTP Requests</li>
-      </ul>
-      <button id="add-input">Add input</button>
-      <img src="./images/dog4.JPG" alt="dog" id="dog-4">
-    </section>
-    <section class="canvas-section">
-      <h2>Canvas experiment below </h2>
-      <div class="canvas-div">
-        <canvas id="canvas"></canvas>
-      </div>
-    </section>
-    <section class="data-attributes">
-      <h1>Data attributes</h1>
-      <ul id="cars">
-        <li data-model="crv" data-year="2018" data-color="black">Toyota</li>
-        <li data-model="focus" data-year="2015" data-color="red">Ford</li>
-        <li data-model="civic" data-year="2020" data-color="blue">Honda</li>
-      </ul>
-    </section>
-    <section class="event-delegation">
-      <h2>Event delegation</h2>
-      <h3>This is a list that listens:</h3>
-      <ul id="listen-list">
-        <li class="listen-item">Item 1<button>Remove Item</button></li>
-        <li class="listen-item">Item 2<button>Remove Item</button></li>
-        <li class="listen-item">Item 3<button>Remove Item</button></li>
-      </ul>
-      <form id="add">
-        <label>Add friend:</label>
-        <input type="text" name="friend-name" placeholder="here">
-        <input type="submit">
-      </form>
-    </section>
-
-    <section class="multiple">
-      <h2>Event listener for multiple elements</h2>
-      <ul class="friends-list">
-        <li class="friend">Jose <button>UnFriend</button></li>
-        <li class="friend">Carla <button>UnFriend</button></li>
-        <li class="friend">Robert <button>UnFriend</button></li>
-        <li class="friend">Pipo <button>UnFriend</button></li>
-        <li class="friend">Roca <button>UnFriend</button></li>
-      </ul>
-      <h4>Add new friend</h4>
-      <form id="add-friend">
-        <label for="friend-name">Friend's name:</label>
-          <input type="text" name="friend-name" placeholder="Type friend's name">
-          <button>Add friend</button>
-      </form>
-    </section>
-    <section class="key-event">
-      <h2>Key events</h2>
-    </section>
-
-    <section class="forms">
-      <H1>Forms</H1>
-      <form>
-        Name: <input id="first-name" type="text">
-       <input type="submit">
-      </form>
-
-      <a href="https://www.infobae.com/america/">Go to shit</a>
-
-      <form id="no-input">
-        <h3>The no check checkbox</h3>
-        <p>Click one of the checkboxes below:</p>
-        <input type="checkbox">
-        <input type="checkbox">
-        <input type="checkbox">
-        <input type="checkbox">
-        <input type="button" value="submit" id="no">
-      </form>
-      <hr>
-      <form action="/mouseMapChallenge/index.html">
-        <input type="text">
-        <input type="submit" />
-      </form>
-    </section>
-
-
-    <section class="event-object">
-      <h3>Event object</h3>
-      <p>Click me!!!!</p>
-    </section>
-    <section class="events">
-      <h3>Events</h3>
-      <button onclick="alert('hi')">On click</button>
-      <button ondblclick="alert('dbl clicked')">Double click</button>
-      <button onclick="bodyColor('purple')">Make body purple</Button>
-        <hr>
-      <button id="teal">change to teal</button>
-      <button id="pink">change to pink</button>
-        <hr>
-      <button id="body-title">change body and title at once</button>
-      <h2>Change meeeeeee</h2>
-    </section>
-    <section class="finder">
-      <h1>Here is a main heading</h1>
-      <div>
-        <p>
-          Here is a paragraph inside a div
-        </p>
-        <ul>
-          <li>First list item in a div</li>
-          <li>Second list item in a div</li>
-          <li>Last list item with this 
-            And will be deleted with this:
-            <button>Delete</button>
-            When it's ready, of course. 
-          </li>
-        </ul>
-      </div>
-      <div class="second-div">Here is the second div</div>
-    </section>
-
-
-    <div class="startline">
-      <h1 class="small">STARTLINE</h1>
     </div>
 
-    <h1 class="changer">XXXXXXX</h1>
-
-    <h2 class="todo-title">Todo List</h2>
-    <ul class="todo-list">
-      <li class="todo-item">task 1</li>
-      <li class="todo-item">task 2</li>
-      <li class="todo-item">task 3</li>
-      <li class="todo-item">task 4</li>
+  </section>
+  <section class="jquery-section">
+    <h1>Brand new section title</h1>
+    <p>Paragraph for further information</p>
+    <ul>
+      <li>Mainpulating DOM</li>
+      <li>Adding event listeners</li>
+      <li>Animating elements</li>
+      <li>Making HTTP Requests</li>
     </ul>
+    <button id="add-input">Add input</button>
+    <img src="./images/dog4.JPG" alt="dog" id="dog-4">
+  </section>
+  <section class="canvas-section">
+    <h2>Canvas experiment below </h2>
+    <div class="canvas-div">
+      <canvas id="canvas"></canvas>
+    </div>
+  </section>
+  <section class="data-attributes">
+    <h1>Data attributes</h1>
+    <ul id="cars">
+      <li data-model="crv" data-year="2018" data-color="black">Toyota</li>
+      <li data-model="focus" data-year="2015" data-color="red">Ford</li>
+      <li data-model="civic" data-year="2020" data-color="blue">Honda</li>
+    </ul>
+  </section>
+  <section class="event-delegation">
+    <h2>Event delegation</h2>
+    <h3>This is a list that listens:</h3>
+    <ul id="listen-list">
+      <li class="listen-item">Item 1<button>Remove Item</button></li>
+      <li class="listen-item">Item 2<button>Remove Item</button></li>
+      <li class="listen-item">Item 3<button>Remove Item</button></li>
+    </ul>
+    <form id="add">
+      <label>Add friend:</label>
+      <input type="text" name="friend-name" placeholder="here">
+      <input type="submit">
+    </form>
+  </section>
 
-    <form class="name">
-      <input type="text" placeholder="#" />
-      <label>name</label>
-      <input type="range" id="range" min="1" max="10">
-      <button id="submit">Send</button>
+  <section class="multiple">
+    <h2>Event listener for multiple elements</h2>
+    <ul class="friends-list">
+      <li class="friend">Jose <button>UnFriend</button></li>
+      <li class="friend">Carla <button>UnFriend</button></li>
+      <li class="friend">Robert <button>UnFriend</button></li>
+      <li class="friend">Pipo <button>UnFriend</button></li>
+      <li class="friend">Roca <button>UnFriend</button></li>
+    </ul>
+    <h4>Add new friend</h4>
+    <form id="add-friend">
+      <label for="friend-name">Friend's name:</label>
+      <input type="text" name="friend-name" placeholder="Type friend's name">
+      <button>Add friend</button>
+    </form>
+  </section>
+  <section class="key-event">
+    <h2>Key events</h2>
+  </section>
+
+  <section class="forms">
+    <H1>Forms</H1>
+    <form>
+      Name: <input id="first-name" type="text">
+      <input type="submit">
     </form>
 
+    <a href="https://www.infobae.com/america/">Go to shit</a>
 
-
-    <h1>Old text</h1>
-
-    <form class="address">
-      <label for="address">address</label>
-      <input type="text" id="address" placeholder="cague aqui"/>
-      <button type="submit">Caca</button>
+    <form id="no-input">
+      <h3>The no check checkbox</h3>
+      <p>Click one of the checkboxes below:</p>
+      <input type="checkbox">
+      <input type="checkbox">
+      <input type="checkbox">
+      <input type="checkbox">
+      <input type="button" value="submit" id="no">
     </form>
+    <hr>
+    <form action="/mouseMapChallenge/index.html">
+      <input type="text">
+      <input type="submit" />
+    </form>
+  </section>
+
+
+  <section class="event-object">
+    <h3>Event object</h3>
+    <p>Click me!!!!</p>
+  </section>
+  <section class="events">
+    <h3>Events</h3>
+    <button onclick="alert('hi')">On click</button>
+    <button ondblclick="alert('dbl clicked')">Double click</button>
+    <button onclick="bodyColor('purple')">Make body purple</Button>
+    <hr>
+    <button id="teal">change to teal</button>
+    <button id="pink">change to pink</button>
+    <hr>
+    <button id="body-title">change body and title at once</button>
+    <h2>Change meeeeeee</h2>
+  </section>
+  <section class="finder">
+    <h1>Here is a main heading</h1>
     <div>
-      <article id="content">
-        <p><i class="latin">Sequoiadendron giganteum</i>(giant sequoia; also known
-          as giant redwood, Sierra redwood.) 
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias 
-        voluptate fugit quibusdam voluptatum quasi unde repudiandae fugiat, sit voluptatibus, 
+      <p>
+        Here is a paragraph inside a div
+      </p>
+      <ul>
+        <li>First list item in a div</li>
+        <li>Second list item in a div</li>
+        <li>Last list item with this
+          And will be deleted with this:
+          <button>Delete</button>
+          When it's ready, of course.
+        </li>
+      </ul>
+    </div>
+    <div class="second-div">Here is the second div</div>
+  </section>
+
+
+  <div class="startline">
+    <h1 class="small">STARTLINE</h1>
+  </div>
+
+  <h1 class="changer">XXXXXXX</h1>
+
+  <h2 class="todo-title">Todo List</h2>
+  <ul class="todo-list">
+    <li class="todo-item">task 1</li>
+    <li class="todo-item">task 2</li>
+    <li class="todo-item">task 3</li>
+    <li class="todo-item">task 4</li>
+  </ul>
+
+  <form class="name">
+    <input type="text" placeholder="#" />
+    <label>name</label>
+    <input type="range" id="range" min="1" max="10">
+    <button id="submit">Send</button>
+  </form>
+
+
+
+  <h1>Old text</h1>
+
+  <form class="address">
+    <label for="address">address</label>
+    <input type="text" id="address" placeholder="cague aqui" />
+    <button type="submit">Caca</button>
+  </form>
+  <div>
+    <article id="content">
+      <p><i class="latin">Sequoiadendron giganteum</i>(giant sequoia; also known
+        as giant redwood, Sierra redwood.)
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias
+        voluptate fugit quibusdam voluptatum quasi unde repudiandae fugiat, sit voluptatibus,
         enim minus omnis iusto a aliquid placeat reiciendis id vero non.</p>
-      </article>
-    </div>
+    </article>
+  </div>
 
-    <div class="quotes">
-      <blockquote class="slang">
-        "Es prudente el que calla lo que escucha y un otario el que agranda lo que cuenta."
-        <span class="author">Virgilio Expósito</span>
-      </blockquote>
-      <blockquote class="regular">
-        "Al pan pancho y al vino vinardo"
-        <span class="author">Anónimo</span>
-      </blockquote>
-    </div>
+  <div class="quotes">
+    <blockquote class="slang">
+      "Es prudente el que calla lo que escucha y un otario el que agranda lo que cuenta."
+      <span class="author">Virgilio Expósito</span>
+    </blockquote>
+    <blockquote class="regular">
+      "Al pan pancho y al vino vinardo"
+      <span class="author">Anónimo</span>
+    </blockquote>
+  </div>
 
-    <div class="craigs-list first">
-      <h2>Now something completely different</h2>
-      <h2 class="section-title">Craig's list</h2>
-      <h3 class="section-subtitle">by Craig</h3>
-      <ol>
-        <li>craig 1</li>
-        <li>craig 2</li>
-      </ol>
-    </div>
+  <div class="craigs-list first">
+    <h2>Now something completely different</h2>
+    <h2 class="section-title">Craig's list</h2>
+    <h3 class="section-subtitle">by Craig</h3>
+    <ol>
+      <li>craig 1</li>
+      <li>craig 2</li>
+    </ol>
+  </div>
 
-    <div class="craigs-list second">
-      <h2>Second craig's list</h2>
-      <p>Actually not a list but a paragraph</p>
-    </div>
+  <div class="craigs-list second">
+    <h2>Second craig's list</h2>
+    <p>Actually not a list but a paragraph</p>
+  </div>
 
-    <h1>Javascripter</h1>
-    <h2>Notes on learning path</h2>
-    <div class="display">
-      <h3 class="process">showing the process</h3>
-      <p id="par1">This is Paragraph 1</p>
-    </div>
-    <div class="leaf">
-      <img src="https://img.icons8.com/ios/500/000000/leaf.png" class="leaf-icon"/>
-      <img src="./images/dog1.jpeg" class="leaf-icon"/>
+  <h1>Javascripter</h1>
+  <h2>Notes on learning path</h2>
+  <div class="display">
+    <h3 class="process">showing the process</h3>
+    <p id="par1">This is Paragraph 1</p>
+  </div>
+  <div class="leaf">
+    <img src="https://img.icons8.com/ios/500/000000/leaf.png" class="leaf-icon" />
+    <img src="./images/dog1.jpeg" class="leaf-icon" />
 
-    </div>
-    <div class="javascript">
-      <h1>Calculator</h1>
-      <form class="calculator">
-        <input type="number" class="number-A"> 
-        <span>+</span>
-        <input type="number" class="number-B">
-        <button class="sum">Make it!!</button>
-        <span>=</span>
-        <span class="result">Result</span>
-      </form>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="apis.js"></script>
-    <script src="app.js"></script>
-    <script src="experiments.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-  </body>
+  </div>
+  <div class="javascript">
+    <h1>Calculator</h1>
+    <form class="calculator">
+      <input type="number" class="number-A">
+      <span>+</span>
+      <input type="number" class="number-B">
+      <button class="sum">Make it!!</button>
+      <span>=</span>
+      <span class="result">Result</span>
+    </form>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+  <script type="text/javascript" src="apis.js"></script>
+  <script src="app.js"></script>
+  <script src="experiments.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>
