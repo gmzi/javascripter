@@ -8,6 +8,16 @@ function numberFacts() {
         fillHtml(data.data, 'num-list');
       });
   }
+
+  // ASYNC VERSION:
+  async function getFactAsync(rangeStart, rangeEnd) {
+    let facts = await axios.get(`${url}/${rangeStart}..${rangeEnd}`, {
+      json: 'json',
+    });
+    // console.log(facts);
+  }
+  getFactAsync(1, 3);
+
   function fillHtml(object, listId) {
     const list = document.querySelector(`#${listId}`);
     for (k in object) {
@@ -33,6 +43,18 @@ function numberFacts() {
       })
       .catch((err) => console.log(err));
   }
+
+  // ASYNC VERSION:
+  async function favNumFactsAsync(num) {
+    let allFacts = [];
+    const list = document.getElementById('fav-num-list');
+    for (let i = 0; i < 4; i++) {
+      let fact = await axios.get(`${url}/${num}`);
+      allFacts.push(fact);
+    }
+    // console.log(allFacts);
+  }
+  favNumFactsAsync(5);
 
   getFacts(10, 15);
   favNumFacts(55);
@@ -71,3 +93,24 @@ function cards() {
   });
 }
 cards();
+
+// ASYNC VERSION:
+async function cardsAsync() {
+  function getDeck() {
+    return axios.get(
+      'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1'
+    );
+  }
+
+  function getCard(deck) {
+    return axios.get(
+      `https://deckofcardsapi.com/api/deck/${deck}/draw/?count=1`
+    );
+  }
+  let deck = await getDeck();
+  let deckId = deck.data.deck_id;
+
+  let card = await getCard(deckId);
+  console.log(card);
+}
+cardsAsync();
