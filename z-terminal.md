@@ -28,14 +28,15 @@
    - [curl](##curl)
    - [local-server](##local-server)
    - [secret_keys](##secret_keys)
-6. [PYTHON](#PYTHON)
+6. [NODE](#NODE)
+7. [PYTHON](#PYTHON)
    - [venv](##venv)
    - [flask](##flask)
    - [flask-WTF](##flask-WTF)
    - [clone_project](##clone_project)
    - [global_install](##global_install)
-7. [DATABASE](#DATABASE)
-8. [DEPLOY](#DEPLOY)
+8. [DATABASE](#DATABASE)
+9. [DEPLOY](#DEPLOY)
    - [flask_app](##deploy_flask_app)
 
 # git
@@ -400,6 +401,35 @@ from secrets import API_SECRET_KEY
 ```
 
 4. Warn other developers to make their own secret key.
+
+---
+
+# NODE
+
+- `node myScript.js` execute file (no need to start server)
+- `node` opens node shell and run javascript.help
+- `.help` to display commands
+- `console` to display console methods specific to node
+- `.exit` stop node execution
+
+## npm
+
+Create project:
+
+1. package.json:
+   - cd to project's folder
+   - `npm init` creates package.json file with questionnaire.
+   - `npm init --yes` creates package.json with default values.
+2. install packages:
+   - CD TO PROJECT FOLDER
+   - `npm install nameOfPackage` installs pckg, creates node_modules dir, creates package-lock.json
+     - ex. `npm install axios`
+3. - add node_modules to .gitignore
+
+Clone project:
+
+1. - cd to project clone folder
+2. - `npm install` installs all package.json libraries and dependencies.
 
 ---
 
