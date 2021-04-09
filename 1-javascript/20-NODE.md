@@ -13,6 +13,8 @@
 - [node_callbacks](##node_callbacks)
 - [global](##global)
 - [npm](##npm)
+- testing:
+  - [jest](#jest)
 
 ## file_system_module
 
@@ -260,3 +262,136 @@ Not so good for very complex server-side computation.
 
 - `npm install nameOfPackage`
   - ex. `npm install axios`
+
+# jest
+
+It's built on top of Jasmine. It's to test environments that are not browser based.
+
+1. myfile.js:
+
+```javascript
+function add(x, y) {
+  return x + y;
+}
+
+// MIND EXPORTING THE FILE
+module.exports = { add };
+```
+
+2. myfile.test.js:
+
+```javascript
+const { add, sustract, getRandomToy } = require('./math');
+
+describe('add function', function () {
+  const value = add(2, 2);
+  test('should return sum of two nums', function () {
+    expect(value).toBeGreaterThan(3);
+    expect(value).toBeGreaterThanOrEqual(3.5);
+    expect(value).toBeLessThan(5);
+    expect(value).toBeLessThanOrEqual(4.5);
+
+    // toBe and toEqual are equivalent for numbers
+    expect(value).toBe(4);
+    expect(value).toEqual(4);
+  });
+});
+
+describe('flavors', function () {
+  test('the best flavor is not coconut', () => {
+    expect(bestLaCroixFlavor()).not.toBe('coconut');
+    expect(bestLaCroixFlavor()).toContain('choco');
+    expect(bestLaCroixFlavor()).toContain('choco');
+  });
+});
+
+describe('sustract function', function () {
+  test('shoud return x - y', function () {
+    const res = sustract(3, 2);
+    expect(res).toEqual(1);
+    const res2 = sustract(5, 5);
+    expect(res2).toEqual(0);
+  });
+});
+
+test('drinking La Croix leads to having thirst info', () => {
+  drinkSomeLaCroix();
+  expect(thirstInfo()).toBeTruthy();
+});
+
+// -----------
+// ANY
+test('playing with any', function () {
+  let num = Math.random() * 6;
+  expect(num).toEqual(expect.any(Number));
+  expect('ASKD').toEqual(expect.any(String));
+  // MIND PASSING A CONSTRUCTOR after "any"
+});
+
+test('random toy', function () {
+  let toy = getRandomToy();
+  expect(toy).toEqual({
+    toy: {
+      name: expect.any(String),
+      price: 34.99,
+    },
+  });
+});
+
+// ---------------
+// NOT
+test('play with not', function () {
+  const numLives = 9;
+  expect(numLives).not.toEqual(0);
+});
+
+// npm run test
+```
+
+## before/after
+
+can go in or outside the describes
+
+```javascript
+describe('my set of tests', function () {
+  // to access a value from every test, in general scope:
+  let cart;
+
+  beforeAll(function () {
+    console.log('Run before all tests');
+  });
+  // tests here
+  beforeEach(function () {
+    console.log('Run before each it');
+    cart = { item: 'my-clean-item', value: 'my-clean-value' };
+  });
+  // test here
+  afterEach(function () {
+    console.log('Run after each it');
+  });
+
+  afterAll(function () {
+    console.log('Run after all tests');
+  });
+});
+```
+
+[docs](https://jestjs.io/docs/en/using-matchers)
+
+## install_and_configure_jest
+
+1. Install jest:
+
+- `npm install --save-dev jest`
+
+2. if file test:
+   - `NAME_OF_FILE.test.js`
+     if folder:
+   - `__tests__`
+3. Configuration:
+   - If you have a package.json, you don’t need additional configuration, check:
+     `json { "scripts": { "test": "jest" } } `
+   - If not, create jest.config.js file. It can be empty, you just need one.
+4. Run:
+
+- `npm run test`

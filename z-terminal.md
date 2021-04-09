@@ -431,6 +431,14 @@ Clone project:
 1. - cd to project clone folder
 2. - `npm install` installs all package.json libraries and dependencies.
 
+## jest
+
+Local install:
+
+- `npm i jest`
+  Global install:
+- `npm i --global jest`
+
 ---
 
 # PYTHON
