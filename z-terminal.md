@@ -431,6 +431,14 @@ Clone project:
 1. - cd to project clone folder
 2. - `npm install` installs all package.json libraries and dependencies.
 
+## express.js
+
+Install:
+
+1. cd to dir
+2. npm init (so package.json is created)
+3. `npm install express`
+
 ## jest
 
 Local install:

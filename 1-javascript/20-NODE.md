@@ -1,4 +1,22 @@
-# Node.js
+# Express and Node
+
+EXPRESS
+
+- [syntax](##syntax)
+  - 1 configs(top)
+  - 2 query-string
+  - 3 request-body
+  - 4 url-params
+  - 5 headers
+  - 6 get
+  - 7 post
+  - 8 API
+  - 9 configs(bottom)
+- [validation](##validation)
+- [error_handling](##error_handling)
+- [debugging](##debugging)
+
+NODE:
 
 - file system:
   - [reading_files](###reading_files)
@@ -15,6 +33,296 @@
 - [npm](##npm)
 - testing:
   - [jest](#jest)
+
+# EXPRESS
+
+## syntax
+
+```javascript
+// 1- configs
+const express = require('express');
+
+// SERVER CONFIGURATIONS:
+const app = express();
+app.listen();
+// REQUESTS CONFIGURATION:
+app.use(express.json()); // to receive and understand json reqs (APi endpoints, etc)
+app.use(express.urlencoded({ extended: true })); // receive and understand form data
+
+// ROUTES:
+
+// home page:
+app.get('/', (req, res) => {
+  res.send('Homepage');
+});
+
+// 2- QUERY STRING
+// listen to '/search?term=someterm&sort=somesort'
+app.get('/search', (req, res) => {
+  console.log(req.query); // { term: 'luca', sort: 'prodan' }
+  const { term = 'my-default-term', sort = 'my-default-sort' } = req.query;
+  return res.send(`Search page for ${term}, ${sort}`);
+});
+
+// 3- REQUEST BODY
+// Mind configuring express requests at the top
+// for POST requests data from forms, API endpoints, etc
+app.post('/register', (req, res) => {
+  console.log(req.body);
+  let param1 = req.body.myparam1;
+});
+
+// 4- URL parameters
+const greetings = {
+  en: 'hello',
+  fr: 'bonjour',
+  ic: 'halló',
+};
+app.get('/greet/:lang', function (req, res) {
+  console.log(req.params); // {lang:"en"}
+  const lang = req.params.lang; // "en"
+  const greeting = greetings[lang];
+  if (!greeting) return res.send('invalid language');
+  return res.send(greeting);
+});
+
+// 5- HEADERS
+
+app.get('/detect-lang', (req, res) => {
+  const lang = req.headers['accept-language'];
+  res.send(lang); // en-US,en;q=0.9
+});
+
+app.get('/show-headers', (req, res) => {
+  console.log(req.rawHeaders); // shows array with raw headers
+  console.log(req.headers); // headers object with key-value pairs.
+  res.send(req.headers); // sends headers as json
+});
+
+// 6- GET
+app.get('/dogs', function (req, res) {
+  // express makes request object ('req'), and response object 'res' automatically, you can use them or not, but
+  // will always be in that order.
+  console.log(req); // JS object containing request data
+  return res.send('<H1>Dogs go Yamn brk brk</H1>'); // response content. Express sets the response object type
+  // dinamically according to the content of the response
+});
+
+// this will never get matched, because express executes first match only
+app.get('/dogs', function (req, res) {
+  return res.send('but what about these dogs???');
+});
+
+// 7- POST
+app.post('/chickens', function createChicken(req, res) {
+  res.send('Chicken created! (POST verb)');
+});
+
+// 8-  API
+// for a json API, all data will be formatted as json
+const CANDIES = [
+  { name: 'snickers', qty: 23, price: 1.5 },
+  { name: 'tita', qty: 901, price: 23.5 },
+];
+
+app.get('/candies', (req, res) => {
+  res.send(CANDIES); // express sends json because the passed, object is json
+  res.json('this will be converted to json by express'); // converts any passed argument to json
+});
+
+app.post('/candies', (req, res) => {
+  // capture invalid condition:
+  if (req.body.name.toLowerCase() === 'mediahora') {
+    res.status(403).json({ msg: 'horrible choice. Mediahora forbidden' });
+  }
+  // if validation pass, save the incoming data to database:
+  CANDIES.push(req.body);
+  //respond with status code 'created' and updated database:
+  res.status(201).json(CANDIES);
+});
+
+//******* LOOK HERE!!!!!!!!!!!!!!! */
+// 9. CONFIGURATIONS (BOTTOM):
+
+// 9.0 MIDLEWARE FOR 404 ERROR:
+// this route will run if none of the above routes are matched:
+// (mind that this relies on custom error class we called ExpressError or whatever)
+app.use((req, res, next) => {
+  const e = new ExpressError('Page Not Found', 404);
+  next(e);
+});
+
+// 9.1 MIDLEWARE (FOR ERRORS):
+app.use((error, req, res, next) => {
+  console.log(error.msg);
+  // default status is 500 internal server error
+  let status = res.status || 500;
+  let message = error.message;
+
+  //set the status and alert the user:
+  return res.status(status).json({ error: { message, status } });
+});
+
+// 9.2 SERVER (always at the bottom of file):
+app.listen(3000, function () {
+  // callback func to run when server started:
+  console.log('Server running on port 3000');
+});
+
+// to run server: 'node fileName.js' Browser: localhost:3000
+// nodemon fileName.js
+```
+
+## validation
+
+```javascript
+const USERS = [
+  { username: 'Rosana', city: 'PA' },
+  { username: 'Juanca', city: 'BA' },
+];
+app.get('/users/:username', function (req, res, next) {
+  const user = USERS.find((u) => u.username === req.params.username);
+  if (!user) return res.status(404).send('NOT FOUND');
+  // simpler: if (!user) throw "invalid username";
+  return res.send({ user });
+});
+
+app.get('/secret', (req, res) => {
+  if (req.query.password != 'popcorn') {
+    res.status(403).send('Invalid pass');
+  }
+  res.send('Access granted');
+});
+```
+
+## error_handling
+
+Express has a default error handling, but always return status code 500 (internal server erro). Can custom our own error handling on top of default behavoir.
+
+```javascript
+const USERS = [
+  { username: 'Rosana', city: 'PA' },
+  { username: 'Juanca', city: 'BA' },
+];
+
+// -------------------------------------------------------------------
+// the basic way: (relies on express default error handling behavoir)
+app.get('/users/:username', function (req, res, next) {
+  const user = USERS.find((u) => u.username === req.params.username);
+  if (!user) throw 'Not found!';
+  return res.send({ user });
+});
+
+// --------------------------------------------------------
+// custom error classes:
+
+// in 'expressError.js':
+
+class ExpressError extends Error {
+  constructor(message, status) {
+    super();
+    this.message = message;
+    this.status = status;
+    console.error(this.stack); // method in the Error class to lead us in the debugging
+  }
+}
+
+module.exports = ExpressError;
+
+// in app.js:
+
+app.use(express.json());
+
+const ExpressError = require('./expressError');
+
+app.get('/users/:username', function (req, res, next) {
+  try {
+    const user = USERS.find((u) => u.username === req.params.username);
+    // throw the error if needed:
+    if (!user) throw new ExpressError('invalid username', 404);
+    // return value if no erros:
+    return res.send({ user });
+    // catch the error thrown above:
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.get('/savetodb', (req, res, next) => {
+  try {
+    attemptToSaveToDB();
+    return res.send('Saved succesfully');
+  } catch (e) {
+    return next(new ExpressError('Database Error', 500));
+  }
+});
+
+// CONFIGURATIONS BOTTOM:
+/ 9.0 MIDLEWARE FOR 404 ERROR:
+// this route will run if none of the above routes are matched:
+// (mind that this relies on custom error class we called ExpressError or whatever)
+app.use((req, res, next) => {
+  const e = new ExpressError('Page Not Found', 404);
+  next(e);
+});
+
+// 9.1 MIDLEWARE (FOR ERRORS):
+app.use((error, req, res, next) => {
+  console.log(error.msg);
+  // default status is 500 internal server error
+  let status = res.status || 500;
+  let message = error.message;
+
+  //set the status and alert the user:
+  return res.status(status).json({ error: { message, status } });
+});
+
+// 9.2 SERVER (always at the bottom of file):
+app.listen(3000, function () {
+  // callback func to run when server started:
+  console.log('Server running on port 3000');
+});
+```
+
+## debugging
+
+COMMANDS:
+
+- `node --inspect` runs file stopping at keyword "debugger"
+- `node --inspect-brk myFile.js` (adds breakpoint in first line of app)
+  for express:
+- `nodemon --inspect myFile.js` same but with nodemon
+
+```javascript
+function add(x, y) {
+  debugger; // will pass execution here and we can inspect it with chrome debugger
+  return x + y;
+}
+
+console.log(1, 2, 3);
+```
+
+Debug node only:
+
+- `node --inspect-brk sumEvens.js`
+
+Debug Express:
+
+## route_methods
+
+One for each HTTP verb:
+
+- app.get(path, callback)
+- app.post(path, callback)
+- app.put(path, callback)
+- app.patch(path, callback)
+- app.delete(path, callback)
+
+When you start the server, Express runs through the file and registers all the event listeners before app.listen at the bottom.
+Whenever a user makes a request, Express invokes the first matching route handler it finds until a response is issued via a method on the response object.
+This is called the request-response cycle for Express.
+
+# NODE
 
 ## file_system_module
 
