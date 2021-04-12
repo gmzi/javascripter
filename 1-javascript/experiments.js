@@ -1,5 +1,3 @@
-console.log('hi from expers');
+const morgan = require('morgan');
 
-for (let i = 0; i < 5; i++) {
-  console.log('puto');
-}
+app.use(morgan('dev'));

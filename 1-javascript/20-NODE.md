@@ -12,9 +12,12 @@ EXPRESS
   - 7 post
   - 8 API
   - 9 configs(bottom)
+- [middleware](##middleware)
+- [router](##router)
 - [validation](##validation)
 - [error_handling](##error_handling)
 - [debugging](##debugging)
+- [testing](##testing)
 
 NODE:
 
@@ -32,6 +35,7 @@ NODE:
 - [global](##global)
 - [npm](##npm)
 - testing:
+  Unittests:
   - [jest](#jest)
 
 # EXPRESS
@@ -46,7 +50,7 @@ const express = require('express');
 const app = express();
 app.listen();
 // REQUESTS CONFIGURATION:
-app.use(express.json()); // to receive and understand json reqs (APi endpoints, etc)
+app.use(express.json()); // middleware to receive and understand json reqs (APi endpoints, etc)
 app.use(express.urlencoded({ extended: true })); // receive and understand form data
 
 // ROUTES:
@@ -173,7 +177,100 @@ app.listen(3000, function () {
 // nodemon fileName.js
 ```
 
+## middleware
+
+It's the code that runs in the middle of the request/response cycle. (Between we receive a request and send the response)
+
+1. middleware.js:
+
+```javascript
+const ExpressError = require('./expressError');
+
+function logger(req, res, next) {
+  console.log(`Sending ${req.method} request to ${req.path}.`);
+  return next();
+}
+
+function checkForPassword(req, res, next) {
+  try {
+    if (req.query.password !== 'monkeys') {
+      throw new ExpresssError('Missing password', 402);
+    } else {
+      return next();
+    }
+  } catch (e) {
+    return next(e);
+  }
+}
+
+module.exports = { logger, checkForPassword };
+```
+
+2. app.js:
+
+```javascript
+const middleware = require('./middleware');
+
+// middleware for all routes:
+app.use(middleware.logger); // mind putting this above all routes
+
+// middleware called in specific route:
+app.get('/secret', middleware.checkForPassword, (req, res, next) => {
+  return res.send('Access granted, password correct');
+});
+```
+
+## router
+
+Put all routes in one specific file:
+
+1. routes.js:
+
+```javascript
+//config:
+const express = require('express');
+const routes = new express.Router();
+
+// database
+let USERS = [{ name: 'lala' }, { name: 'toto' }];
+// Routes:
+routes.get('/', function (req, res) {
+  return res.json(USERS);
+});
+
+routes.delete('/:id', function (req, res) {
+  const idx = users.findIndex((u) => u.id === +req.params.id);
+  users.splice(idx, 1);
+  return res.json({ message: 'Deleted' });
+});
+
+module.exports = routes;
+```
+
+2. app.js:
+
+```javascript
+const routes = require('./routes');
+
+// To pass a prefix for all routes:
+app.use('/users', routes);
+// this will add "users" to all routes definded with "/" in routes.js
+
+// Use the route:
+app.use('/users', routes);
+```
+
 ## validation
+
+npm install morgan, then:
+
+1. app.js:
+
+```javascript
+const morgan = require('morgan');
+
+app.use(morgan('dev'));
+```
 
 ```javascript
 const USERS = [
@@ -321,6 +418,137 @@ One for each HTTP verb:
 When you start the server, Express runs through the file and registers all the event listeners before app.listen at the bottom.
 Whenever a user makes a request, Express invokes the first matching route handler it finds until a response is issued via a method on the response object.
 This is called the request-response cycle for Express.
+
+## testing
+
+Setup Supertest:
+
+1. `npm i --save-dev supertest`
+2. export app.js: module.exports = app;
+3. Make server.js file:
+
+```javascript
+const app = require('./app');
+
+app.listen(3000, function () {
+  console.log('Server starting on port 3000');
+});
+// now to run the server: 'node server.js'
+```
+
+4. myApp-routes.test.js:
+
+```javascript
+process.env.NODE_ENV = 'test';
+
+const request = require('supertest');
+
+const app = require('../app');
+let cats = require('../fakeDb');
+
+let pickles = { name: 'Pickles' };
+
+beforeEach(function () {
+  cats.push(pickles);
+});
+
+afterEach(function () {
+  // make sure this *mutates*, not redefines, `cats`
+  cats.length = 0;
+});
+// end afterEach
+
+/** GET /cats - returns `{cats: [cat, ...]}` */
+
+describe('GET /cats', function () {
+  test('Gets a list of all cats', async function () {
+    const resp = await request(app).get(`/cats`);
+    expect(resp.statusCode).toBe(200);
+
+    expect(resp.body).toEqual({ cats: [pickles] });
+  });
+});
+// end
+
+/** GET /cats/[name] - return data about one cat: `{cat: cat}` */
+
+describe('GET /cats/:name', function () {
+  test('Gets a single cat', async function () {
+    const resp = await request(app).get(`/cats/${pickles.name}`);
+    expect(resp.statusCode).toBe(200);
+
+    expect(resp.body).toEqual({ cat: pickles });
+  });
+
+  test("Responds with 404 if can't find cat", async function () {
+    const resp = await request(app).get(`/cats/0`);
+    expect(resp.statusCode).toBe(404);
+  });
+});
+// end
+
+/** POST /cats - create cat from data; return `{cat: cat}` */
+
+describe('POST /cats', function () {
+  test('Creates a new cat', async function () {
+    const resp = await request(app).post(`/cats`).send({
+      name: 'Ezra',
+    });
+    expect(resp.statusCode).toBe(201);
+    expect(resp.body).toEqual({
+      cat: { name: 'Ezra' },
+    });
+  });
+
+  test('Responds 404 if empty name creating cat', async function () {
+    const resp = await (await request(app).post('/cats')).send({});
+    expect(res.statusCode).toBe(400);
+  });
+});
+// end
+
+/** PATCH /cats/[name] - update cat; return `{cat: cat}` */
+
+describe('PATCH /cats/:name', function () {
+  test('Updates a single cat', async function () {
+    const resp = await request(app).patch(`/cats/${pickles.name}`).send({
+      name: 'Troll',
+    });
+    expect(resp.statusCode).toBe(200);
+    expect(resp.body).toEqual({
+      cat: { name: 'Troll' },
+    });
+  });
+
+  test('Responds with 404 if id invalid', async function () {
+    const resp = await request(app).patch(`/cats/wrongCatName`);
+    expect(resp.statusCode).toBe(404);
+  });
+});
+// end
+
+/** DELETE /cats/[name] - delete cat,
+ *  return `{message: "Cat deleted"}` */
+
+describe('DELETE /cats/:name', function () {
+  test('Deletes a single a cat', async function () {
+    const resp = await request(app).delete(`/cats/${pickles.name}`);
+    expect(resp.statusCode).toBe(200);
+    expect(resp.body).toEqual({ message: 'Deleted' });
+  });
+
+  test('Responds with 404 for deleting invalid cat', async function () {
+    const resp = await request(app).patch(`/cats/wrongCatName`);
+    expect(resp.statusCode).toBe(404);
+  });
+});
+// end
+
+// RUN TESTS: 'npm run test' or 'jest myfile.test.js'
+// CHROME DEBUGGER: node --inspect-brk $(which jest) --runInBand NAME_OF_FILE
+```
+
+Integration test to check if all elements work together as expected
 
 # NODE
 

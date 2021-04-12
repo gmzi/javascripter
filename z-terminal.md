@@ -419,7 +419,7 @@ Create project:
 1. package.json:
    - cd to project's folder
    - `npm init` creates package.json file with questionnaire.
-   - `npm init --yes` creates package.json with default values.
+   - `npm init --y` creates package.json with default values.
 2. install packages:
    - CD TO PROJECT FOLDER
    - `npm install nameOfPackage` installs pckg, creates node_modules dir, creates package-lock.json
@@ -446,6 +446,10 @@ Local install:
 - `npm i jest`
   Global install:
 - `npm i --global jest`
+
+## supertest
+
+- `npm i --save-dev supertest`
 
 ---
 
