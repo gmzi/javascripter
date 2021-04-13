@@ -119,6 +119,7 @@ app.get('/dogs', function (req, res) {
 
 // 7- POST
 app.post('/chickens', function createChicken(req, res) {
+  const receiveJson = req.body;
   res.send('Chicken created! (POST verb)');
 });
 
@@ -423,6 +424,7 @@ This is called the request-response cycle for Express.
 
 Setup Supertest:
 
+0. check if jest installed (install it if not)
 1. `npm i --save-dev supertest`
 2. export app.js: module.exports = app;
 3. Make server.js file:
@@ -802,6 +804,8 @@ Not so good for very complex server-side computation.
 # jest
 
 It's built on top of Jasmine. It's to test environments that are not browser based.
+
+0. - `npm i --save-dev jest`
 
 1. myfile.js:
 
