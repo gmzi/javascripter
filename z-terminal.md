@@ -431,6 +431,11 @@ Clone project:
 1. - cd to project clone folder
 2. - `npm install` installs all package.json libraries and dependencies.
 
+## nodemon
+
+- `nodemon myFile.js` runs file continuously
+- `nodemon -e js,html,css` listens for changes in all the specified files, so any change in one of those will update the server, no need to pause it and run again.
+
 ## express.js
 
 Install:
@@ -438,6 +443,10 @@ Install:
 1. cd to dir
 2. npm init (so package.json is created)
 3. `npm install express`
+
+## pg
+
+- `npm install pg`
 
 ## jest
 
@@ -595,6 +604,10 @@ Clone python project
    - `psql \ --host w2g-db.cv4xcvh0gz73.us-east-2.rds.amazonaws.com \ --port 5432 \ --username gmzi \ --password password \ --dbname w2g_db`
    - `psql -U username -h localhost -p 5432 dbname`
    - `psql postgresql://[user[:password]@][host][:port][,...][/dbname][?param1=value1&...]`
+4. Run sql file:
+   - cd to dir
+   - active psql
+   - `psql < my_file.sql`
 
 # DEPLOY
 

@@ -1,4 +1,16 @@
-# Express and Node
+# node - express - pg(postgres)
+
+PG(POSTGRES)
+
+- [pg](##pg)
+- [full_demo_OO_smarter](##OO_smarter)
+- [full_demo_OO_simple](##OO_simple)
+- [queries](##queries)
+  - 1. Install
+  - 2. db.js
+  - 3. routes.js
+- [relationships](##relationships)
+- [testing](##testing_pg)
 
 EXPRESS
 
@@ -14,10 +26,10 @@ EXPRESS
   - 9 configs(bottom)
 - [middleware](##middleware)
 - [router](##router)
-- [validation](##validation)
+- [valdation/authentication](##validation/authentication)
 - [error_handling](##error_handling)
 - [debugging](##debugging)
-- [testing](##testing)
+- [testing](##testing_express)
 
 NODE:
 
@@ -37,6 +49,353 @@ NODE:
 - testing:
   Unittests:
   - [jest](#jest)
+
+# PG
+
+## OO_smarter
+
+Like a mini ORM. (Like SQLAlchemy in python)
+Checkout DOGS model and route:
+
+[full_demo](/Users/xxx/projects/demos/node-express/OO_full_app)
+
+For a full ORM checkout Sequelize.
+
+## OO_simple
+
+Checkout CATS model and route:
+
+[full_demo](/Users/xxx/projects/demos/node-express/OO_full_app)
+
+(checkout cool architecture with models on a folder and routes in another.)
+
+## queries
+
+1. install pg
+2. db.js:
+
+```javascript
+const { Client } = require('pg');
+
+let DB_URI;
+
+if (process.env.NODE_ENV === 'test') {
+  DB_URI = 'postgresql:///usersdb_test'; // for tests
+} else {
+  DB_URI = 'postgresql:///usersdb'; // the prod db
+}
+
+let db = new Client({
+  connectionString: DB_URI,
+});
+
+db.connect();
+
+module.exports = db;
+```
+
+3. in router.js:
+
+### not_OO
+
+Keeps SQL and routes together, kind of messy.
+
+```javascript
+const express = require('express');
+const app = require('.');
+const router = new express.Router();
+// IMPORT DB:
+const db = require('./db');
+const ExpressError = require('./expressError');
+
+router.get('/', async (req, res, next) => {
+  try {
+    const results = await db.query('SELECT * FROM USERS');
+    return res.json({ users: results.rows });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const results = await db.query(`SELECT * FROM users WHERE id=$1`, [id]);
+    if (results.rows.length === 0) {
+      throw new ExpressError(`Can't find user with id of ${id}`, 404);
+    }
+    return res.send({ user: results.rows[0] });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+// parameterized query:
+router.get('/search', async (req, res, next) => {
+  try {
+    const type = req.query.type;
+    const results = await db.query(`SELECT * FROM users WHERE type=$1`, [type]);
+    return res.json(results.rows);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+router.post('/', async (req, res, next) => {
+  try {
+    const { name, type } = req.body;
+    // create user, commit it to db and get back the new state of db thanks to the "RETURNING" clause
+    const newUser = await db.query(
+      `INSERT INTO users (name, type) VALUES ($1, $2) RETURNING *`,
+      [name, type]
+    );
+    return res.status(201).json({ user: newUser.rows[0] });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+router.patch('/:id', async (req, res, next) => {
+  try {
+    const { name, type } = req.body;
+    const id = req.params.id;
+    const results = await db.query(
+      `UPDATE users SET name=$1, type=$2 WHERE id=$3 RETURNING id, name, type`,
+      [name, type, id]
+    );
+    if (results.rows.length === 0) {
+      throw new ExpressError(`Can't update user with id of ${id}`, 404);
+    }
+    return res.send({ user: results.rows[0] });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const userToDel = await db.query(`SELECT * FROM users WHERE id=$1`, [id]);
+    if (userToDel.rows.length === 0) {
+      throw new ExpressError(`Can't find user with id of ${id}`, 404);
+    }
+    const results = await db.query(`DELETE FROM users WHERE id=$1`, [
+      userToDel.id,
+    ]);
+    return res.send({ msg: 'deleted' });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+module.exports = router;
+```
+
+## relationships
+
+### 1:M
+
+```javascript
+router.get('/:id', async function (req, res, next) {
+  try {
+    // request to one table
+    const userRes = await db.query(`SELECT name, type FROM users WHERE id=$1`, [
+      req.params.id,
+    ]);
+
+    // request to the other table (mind all requests can be parallel):
+    const messagesRes = await db.query(
+      `SELECT id, msg FROM messages 
+             WHERE user_id = $1`,
+      [req.params.id]
+    );
+    if (userRes.rows.length === 0) {
+      throw new ExpressError('User not found', 404);
+    }
+    const user = userRes.rows[0];
+    // ******** RELATIONSHIP DEFINED HERE:
+    user.messages = messagesRes.rows;
+    return res.json(user);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/* result:
+{
+  name: "Juanita",
+  type: "admin",
+  messages: [
+    {id: 1, msg: 'msg #1'},
+    {id: 2, msg: 'msg #2'}
+  ]
+} */
+```
+
+### M:M
+
+```javascript
+router.get('/:id', async (req, res, next) => {
+  try {
+    const results = await db.query(
+      `
+      SELECT m.id, m.msg, t.tag  
+      FROM messages AS m
+      LEFT JOIN messages_tags AS mt 
+      ON m.id = mt.message_id
+      LEFT JOIN tags AS t
+      ON  mt.tag_code = t.code
+      WHERE m.id = $1`,
+      [req.params.id]
+    );
+    if (results.rows.length === 0) {
+      throw new ExpressError(`Message not found with id ${req.params.id}`, 404);
+    }
+    const { id, msg } = results.rows[0];
+    // **** MAKE ARRAY OF TAGS FOR EACH MESSAGE:
+    const tags = results.rows.map((r) => r.tag);
+    return res.send({ id, msg, tags });
+  } catch (e) {
+    return next(e);
+  }
+});
+/*result:
+{
+  "id": 1,
+  "msg": "Help me with my coding interview!",
+  "tags": [
+    "Python",
+    "JavaScript"
+  ]
+} */
+
+router.patch('/:id', async (req, res, next) => {
+  try {
+    const result = await db.query(
+      `UPDATE messages SET msg = $1 WHERE id = $2
+        RETURNING id, user_id, msg`,
+      [req.body.msg, req.params.id]
+    );
+    if (result.rows.length === 0) {
+      throw new ExpressError('Message not found', 404);
+    }
+    return res.json(result.rows[0]);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+/* result:
+{
+  "id": 1,
+  "user_id": 1,
+  "msg": "new message here"
+} */
+```
+
+## testing_pg
+
+Test database.
+
+1. Create test database.
+2. check db.js for connection to db.
+3. install supertest and create server.js like other tests configs
+4. router.test.js:
+
+```javascript
+process.env.NODE_ENV = 'test';
+const request = require('supertest');
+const app = require('./index');
+const db = require('./db');
+
+let testUser;
+
+beforeEach(async () => {
+  const result = await db.query(
+    `INSERT INTO users (name, type) VALUES ('Peanut', 'admin') RETURNING id, name, type`
+  );
+  testUser = result.rows[0];
+});
+
+afterEach(async () => {
+  await db.query(`DELETE FROM users`);
+});
+
+afterAll(async () => {
+  await db.end();
+});
+
+describe('GET /users', function () {
+  test('Gets a list of 1 user', async function () {
+    const response = await request(app).get(`/users`);
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toEqual({ users: [testUser] });
+  });
+});
+
+describe('GET /users/:id', function () {
+  test('Gets single user', async function () {
+    const response = await request(app).get(`/users/${testUser.id}`);
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toEqual({ user: testUser });
+  });
+
+  test('Reponds with 404 for invalid id', async function () {
+    const response = await request(app).get(`/users/0`);
+    expect(response.statusCode).toBe(404);
+  });
+});
+
+describe('POST /users', () => {
+  test('Creates a single user', async () => {
+    const res = await request(app)
+      .post('/users')
+      .send({ name: 'Billy', type: 'user' });
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toEqual({
+      user: { id: expect.any(Number), name: 'Billy', type: 'user' },
+    });
+  });
+});
+
+describe('PATCH /users/:id', () => {
+  test('Updates single user', async () => {
+    const res = await request(app)
+      .patch(`/users/${testUser.id}`)
+      .send({ name: 'Billo', type: 'staff' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({
+      user: { id: testUser.id, name: 'Billo', type: 'staff' },
+    });
+  });
+
+  test('Responsd with 404 for invalid id', async () => {
+    const res = await request(app)
+      .patch(`/users/0`)
+      .send({ name: 'Billo', type: 'staff' });
+    expect(res.statusCode).toBe(404);
+  });
+});
+
+describe('DELETE /users/:id', () => {
+  test('Deletes single user', async () => {
+    const res = await request(app).delete(`/users/${testUser.id}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({
+      msg: 'deleted',
+    });
+  });
+
+  test('Responds 404 if user not found', async () => {
+    const res = await request(app).delete(`/users/0`);
+    expect(res.statusCode).toBe(404);
+  });
+});
+```
+
+Postgres for Node. Connects and executes SQL queries from Node. Lightest library to manage databases. Not an ORM. If need an ORM (like SQLAlchemy in python) you can try Sequalize.
+
+---
 
 # EXPRESS
 
@@ -258,10 +617,67 @@ app.use('/users', routes);
 // this will add "users" to all routes definded with "/" in routes.js
 
 // Use the route:
-app.use('/users', routes);
+app.get('/users', routes);
 ```
 
-## validation
+## validation/authentication
+
+Using bcrypt.
+bcrypt.hash(password-to-hast, work-factor)
+bcrypt.compare(password, hashed-password)
+
+1. - `npm install bcrypt`
+2. - `npm install jsonwebtoken`
+3. Full demo:
+
+`cd /Users/xxx/projects/demos/node-express/authentication`
+
+### JWT
+
+Using Json Web Tokens (JWT). Once authenticated, one same token works for the different services. Once validated, the user gets a token that is stored client-side (in a variable, or localStorage, etc). For every future requests, browser will send the token in the request, the server will get that token and validate it or not. All the different services can have their own validations, checking for the one single token from the client.
+Parts of the JWT:
+
+- Header: metadata about the token (signing algorithm used, type of token)
+- Payload: data to be stored in token (typically an object).
+  - It's not encrypted (it's encoded), so don't put sercret info here.
+- Signature: contains the header and payload combined and hashed. If something changes in the header or the payload, the signature will be different and also contains the SECRET that the server will require to grant auth.
+
+### token_methods:
+
+Create token:
+jwt.sign(payload, secret-key, jwt-options) // returns a string.
+
+Verify token:
+jwt.verify(token, secret-key) // Checks if token matches with the secret key in server, and returns the payload if corretc, if not match returns error
+
+Decode:
+jwt.decode(token) // returns the payload. Doens't verify the signature.
+
+Create Token:
+
+```javascript
+const jwt = require('jsonwebtoken');
+
+const SECRET_KEY = 'my-secret-phrase';
+const JWT_OPTIONS = { expiresIn: 60 * 60 }; // 1 hour
+
+let payload = { username: 'jane' };
+let token = jwt.sign(payload, SECRET_KEY, JWT_OPTIONS);
+
+// IN THE REQUEST SIDE:
+
+// get token from login route
+let resp = await axios.post('/login', { username: 'jane', password: 'secret' });
+let token = resp.data;
+
+// use that tOken for future requests:
+await axios.get('/secret', { params: { token: token } });
+await axios.post('/other', { token: token });
+```
+
+---
+
+### morgan
 
 npm install morgan, then:
 
@@ -389,7 +805,7 @@ COMMANDS:
 - `node --inspect` runs file stopping at keyword "debugger"
 - `node --inspect-brk myFile.js` (adds breakpoint in first line of app)
   for express:
-- `nodemon --inspect myFile.js` same but with nodemon
+- `nodemon --inspect myFile.js` same but with nodemon (mind refreshing chrome to catch the debugger tags)
 
 ```javascript
 function add(x, y) {
@@ -420,7 +836,7 @@ When you start the server, Express runs through the file and registers all the e
 Whenever a user makes a request, Express invokes the first matching route handler it finds until a response is issued via a method on the response object.
 This is called the request-response cycle for Express.
 
-## testing
+## testing_express
 
 Setup Supertest:
 
