@@ -1,3 +1,12 @@
-const morgan = require('morgan');
+const express = require('express');
+const app = express()
+cons nunjucks = require('nunjucks')
 
-app.use(morgan('dev'));
+nunjucks.configure('views', {
+    autoescape: true,
+    express: app
+})
+
+app.get('/', (req, res, next) => {
+    res.render("index.html")
+}) 

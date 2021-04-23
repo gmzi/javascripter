@@ -26,8 +26,13 @@ EXPRESS
   - 9 configs(bottom)
 - [middleware](##middleware)
 - [router](##router)
-- [valdation/authentication](##validation/authentication)
+- [validation/authentication-users](##validation/authentication)
+- [validation-data](##validation-data-jsonschema)
+- [security](##security)
 - [error_handling](##error_handling)
+- [templates](##templates)
+- [static_files](##static_files)
+- [cookies](##cookies)
 - [debugging](##debugging)
 - [testing](##testing_express)
 
@@ -632,6 +637,142 @@ bcrypt.compare(password, hashed-password)
 
 `cd /Users/xxx/projects/demos/node-express/authentication`
 
+routes/auth.js:
+
+```javascript
+/** Routes for demonstrating authentication in Express. */
+
+const express = require('express');
+const router = new express.Router();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const ExpressError = require('../expressError');
+const db = require('../db');
+const { ensureLoggedIn, ensureAdmin } = require('../middleware/auth');
+const { SECRET_KEY, BCRYPT_WORK_FACTOR } = require('../config');
+
+/** Register user.
+ *   {username, password} => {username} */
+
+router.post('/register', async function (req, res, next) {
+  try {
+    const { username, password } = req.body;
+
+    // hash password:
+    const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
+
+    // save username and hashed pwd to db:
+    const result = await db.query(
+      `INSERT INTO users (username, password)
+             VALUES ($1, $2)
+             RETURNING username`,
+      [username, hashedPassword]
+    );
+
+    return res.json(result.rows[0]);
+  } catch (e) {
+    if (e.code === '23505') {
+      return next(new ExpressError('Username taken, please pick another', 400));
+    }
+  }
+  return next(e);
+});
+// end
+
+// this version of login does not use JWTs --- it's just a demo
+// from the first part of the lecture, pre-JWTs
+
+/** Login: returns {message} on success. */
+
+router.post('/login-1', async function (req, res, next) {
+  try {
+    const { username, password } = req.body;
+    const result = await db.query(
+      `SELECT password FROM users WHERE username = $1`,
+      [username]
+    );
+    const user = result.rows[0];
+
+    if (user) {
+      if ((await bcrypt.compare(password, user.password)) === true) {
+        return res.json({ message: 'Logged in!' });
+      }
+    }
+    throw new ExpressError('Invalid user/password', 400);
+  } catch (err) {
+    return next(err);
+  }
+});
+// end
+
+/** (Fixed) Login: returns JWT on success. */
+
+router.post('/login', async function (req, res, next) {
+  try {
+    const { username, password } = req.body;
+    const result = await db.query(
+      'SELECT password FROM users WHERE username = $1',
+      [username]
+    );
+    let user = result.rows[0];
+
+    if (user) {
+      if ((await bcrypt.compare(password, user.password)) === true) {
+        let token = jwt.sign({ username }, SECRET_KEY);
+        return res.json({ token });
+      }
+    }
+    throw new ExpressError('Invalid user/password', 400);
+  } catch (err) {
+    return next(err);
+  }
+});
+// end
+
+/** Secret-1 route than only users can access */
+
+router.get('/secret-1', async function (req, res, next) {
+  try {
+    // try to get the token out of the body
+    const tokenFromBody = req.body._token;
+
+    // verify this was a token signed with OUR secret key
+    // (jwt.verify raises error if not)
+    jwt.verify(tokenFromBody, SECRET_KEY);
+
+    return res.json({ message: 'Made it!' });
+  } catch (err) {
+    return next({ status: 401, message: 'Unauthorized' });
+  }
+});
+// end
+
+/** Secret route: only users can access */
+
+router.get('/secret', ensureLoggedIn, async function (req, res, next) {
+  try {
+    return res.json({ message: 'Made it!' });
+  } catch (err) {
+    return next(err);
+  }
+});
+// end
+
+/** Secret-admin route: only admins can access */
+
+router.get('/secret-admin', ensureAdmin, async function (req, res, next) {
+  try {
+    return res.json({ message: 'Made it!' });
+  } catch (err) {
+    return next(err);
+  }
+});
+// end
+
+module.exports = router;
+```
+
 ### JWT
 
 Using Json Web Tokens (JWT). Once authenticated, one same token works for the different services. Once validated, the user gets a token that is stored client-side (in a variable, or localStorage, etc). For every future requests, browser will send the token in the request, the server will get that token and validate it or not. All the different services can have their own validations, checking for the one single token from the client.
@@ -708,6 +849,64 @@ app.get('/secret', (req, res) => {
   res.send('Access granted');
 });
 ```
+
+---
+
+## validation-data-jsonschema
+
+jsonschema.validate(JSON_obj, schema_to_validate_against).valid // tre/false
+
+1. - `npm install jsonschema`
+2. Make a json example with the format you want the json data to be sent to your database. (Mind making different schemas for different data sets)
+3. generate schema from above example in https://jsonschema.net/
+4. copy schema and paste it in `schemas/mySchemaName.json`
+5. in routes/books.js:
+
+```javascript
+const express = require('express');
+const router = new express.Router();
+const ExpressError = require('../expressError');
+const jsonschema = require('jsonschema'); // impoty package
+const bookSchema = require('../schemas/bookSchema.json'); // IMPORT SCHEMA!!!!!
+
+router.post('/add-book', function (req, res, next) {
+  const result = jsonschema.validate(req.body, bookSchema);
+
+  if (!result.valid) {
+    // loop over errors getting the stack one:
+    let listOfErrors = result.errors.map((error) => error.stack);
+    let error = new ExpressError(listOfErrors, 400);
+    return next(error);
+  }
+
+  // now we now the input is clean and valid:
+  const { book } = req.body;
+  return res.json(book);
+});
+
+module.exports = router;
+```
+
+[full_demo](/Users/xxx/projects/demos/node-express)
+
+Schema validator: https://www.jsonschemavalidator.net
+Validate data before sending it to database.
+Use jsonschema. "JSON Schema is a vocabulary that allows you to annotate and validate JSON documents."
+Docs: https://json-schema.org
+
+---
+
+## security
+
+CSRF and other security concerns, protect app with:
+
+- [helmet](https://www.npmjs.com/package/helmet)
+
+Authentication and login for third party login:
+
+- [Passport](https://www.passportjs.org)
+
+---
 
 ## error_handling
 
@@ -798,6 +997,64 @@ app.listen(3000, function () {
 });
 ```
 
+---
+
+## templates
+
+Tools:
+
+- nunjucks (syntax like jinja)
+
+  ```javascript
+  const express = require('express');
+  const app = express()
+  cons nunjucks = require('nunjucks')
+
+  nunjucks.configure('views', {
+  autoescape: true,
+  express: app
+  })
+
+  app.get('/', (req, res, next) => {
+  res.render("index.html")
+  })
+  ```
+
+- Pug (different syntax)
+
+## static_files
+
+style.css, and other static files (like in flask). Needs middleware configuration:
+
+1. app.js:
+
+```javascript
+app.use(express.static('nameOfFolderThatContainsStyle.css'));
+app.use(express.static('nameOfFolderThatContainesMyScript.js'));
+// to serve with path to folder:
+app.use('/folderName', express.static('fileName'));
+```
+
+2. index.html:
+
+```html
+<link rel="stylesheet" href="app.css" />
+<!-- all body of file -->
+<script src='MyScript.js'>
+```
+
+## cookies
+
+```javascript
+const cookieParser = require('cookie-parser');
+
+app.use(cookieParser());
+
+app.get('/', function (req, res, next) {
+  console.log('Cookies: ', req.cookies);
+});
+```
+
 ## debugging
 
 COMMANDS:
@@ -844,6 +1101,8 @@ Setup Supertest:
 1. `npm i --save-dev supertest`
 2. export app.js: module.exports = app;
 3. Make server.js file:
+
+[cool_tests_demo](/Users/xxx/projects/demos/node-express/messagely-VALIDATION-00-TESTS)
 
 ```javascript
 const app = require('./app');
@@ -967,6 +1226,81 @@ describe('DELETE /cats/:name', function () {
 ```
 
 Integration test to check if all elements work together as expected
+
+### mocking
+
+Mock in jest:
+
+rollDice.test.js:
+
+```javascript
+const rollDice = require('./dice');
+
+describe('#rollDice returning values', function () {
+  // set the mock value that will return every time:
+  Math.random = jest.fn(() => 0.5);
+
+  // test assuming the value of 0.5:
+  test('it rolls the correct amount of dice', function () {
+    expect(rollDice(6)).toEqual(3);
+    expect(rollDice(2)).toEqual(1);
+    expect(Math.random).toHaveBeenCalled(); // test that the function is called
+    expect(Math.random.mock.calls.length).toBe(2); // test that function has been called 2 times
+  });
+});
+```
+
+Docs: jestjs.io/docs/mock-functions
+
+Mocking is primarily used in unit testing
+An object under test may have dependencies on other (complex) objects
+To isolate the behavior, you replace other objects by mocks that simulate their behavior
+This is useful if the real objects are impractical to incorporate into the unit test.
+
+### E2E
+
+end_to_end_tests
+
+Tools:
+
+- Cypress (recomended)
+  1. `npm install --save-dev cypress`
+  2. package.json:
+  ```json
+  "scripts": {
+  "cypress:open": "cypress open"
+  },
+  ```
+  3. Run: `npm run cypress open`
+- Selenium
+
+End-to-end testing tests an application’s flow from start to end.
+The purpose of E2E testing is to simulate an entire real user scenario.
+
+### CI
+
+continuous integration
+
+Continuous Integration is the practice of merging in small code changes frequently, rather than merging in a large change at the end of a development cycle.
+The goal is to build better software by developing and testing in smaller increments.
+What can CI do for you?
+Automate running your tests when pushing your code
+Reject deployments if your tests do not pass
+Easily notify you when changes to your test suite occur
+How does it work?
+It integrates with tools like GitHub and carries out a series of tasks to build and test your code
+If one or more of those tasks fails, the build is considered broken
+If none of the tasks fail, the build is considered passed, and Travis CI can deploy your code
+Common CI Tools:
+
+- Travis CI
+- Jenkins
+- Circle CI
+- Buddy
+
+### TDD (test driven development)
+
+Write test first, develop the code afterwards to make the test pass, and keep going this way: red-green-refactor (first will fail, then make it pass, green, then refactor the code)
 
 # NODE
 

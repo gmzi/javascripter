@@ -456,6 +456,11 @@ Local install:
   Global install:
 - `npm i --global jest`
 
+Run tests:
+
+- `npm test` runs all tests
+- `npm test -- myFile.test.js` runs signle test file
+
 ## supertest
 
 - `npm i --save-dev supertest`
