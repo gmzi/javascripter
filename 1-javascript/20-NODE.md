@@ -1,5 +1,7 @@
 # node - express - pg(postgres)
 
+[full_app_demo](/Users/xxx/projects/demos/node-express/jobly-demo)
+
 PG(POSTGRES)
 
 - [pg](##pg)
@@ -51,9 +53,13 @@ NODE:
 - [node_callbacks](##node_callbacks)
 - [global](##global)
 - [npm](##npm)
+  - [npm_scripts](###npm_scripts)
 - testing:
   Unittests:
   - [jest](#jest)
+- [dateAndTime](##moment.js)
+- [string_validation](##validator.js)
+- [websocket](##websocket_protocol)
 
 # PG
 
@@ -1029,6 +1035,9 @@ style.css, and other static files (like in flask). Needs middleware configuratio
 1. app.js:
 
 ```javascript
+// serve all stuff in static/ folder
+app.use(express.static('static/')); // will serve style.css, .js, etc. Checkout demos/node-express/websocket-groupchat for full setup
+
 app.use(express.static('nameOfFolderThatContainsStyle.css'));
 app.use(express.static('nameOfFolderThatContainesMyScript.js'));
 // to serve with path to folder:
@@ -1551,6 +1560,25 @@ Not so good for very complex server-side computation.
 - `npm install nameOfPackage`
   - ex. `npm install axios`
 
+### npm_scripts
+
+package.json:
+
+```json
+"scripts": {
+  "whatever":"whatever will run",
+  // standards:
+  "test": "jest",
+  // "npm run test"
+  "start":"nodemon -e html,css,js,json app.js",
+  // trigger with "npm start"
+  "debug":"nodemon --inspect app.js",
+  // "npm run debug"
+}
+```
+
+to run it: cd to package.json dir, and `npm run whatever`, or `npm run test`
+
 # jest
 
 It's built on top of Jasmine. It's to test environments that are not browser based.
@@ -1685,3 +1713,76 @@ describe('my set of tests', function () {
 4. Run:
 
 - `npm run test`
+
+## moment.js
+
+manage the pain of dates and times
+
+[moment](https://momentjs.com)
+
+## validator.js
+
+Is all uppercas?
+Is email?
+is url?
+[validator.js](https://github.com/validatorjs/validator.js)
+
+## websocket_protocol
+
+Websocket protocol.
+
+HTTP is a pretty wordy, heavy protocol
+So many things in headers!
+HTTP is stateless
+Ask for answer, get answer, close connection.
+Websockets are tiny and stateful — they stay connected!
+They’re often used for “tell the browser something has changed”. The connection remains permanently open, like a tunnel between client and server. Real time notifications, push notifications, real time maps with things moving around in them, you get updates inmediately.
+It's multidirectoinal, client-server and server-client.
+
+In client:
+client.js:
+
+```javascript
+const ws = new WebSocket(`ws://localhost:3000/chat`); // mind 'ws' declaring the websocket protocol
+
+ws.onopen = function(evt) {
+  // runs when browser connects to server
+};
+
+ws.onmessage = function(evt) {
+  // runs when browser receives a "message"
+  console.log("got", evt.data);
+
+ws.onclose = function(evt) {
+  // runs when server closes connection
+}
+
+// TO SEND MESSAGE TO SERVER:
+ws.send("this is a message from browser");
+```
+
+In server:
+app.js:
+
+```javascript
+const wsExpress = require('express-ws')(app);
+
+app.ws('/chat', function (ws, req, next) {
+  ws.on('open', function () {
+    // runs when connection is opened
+  });
+
+  ws.on('message', function (data) {
+    // runs when message is received from browser
+    console.log('message received');
+    console.log(data);
+  });
+
+  ws.on('close', function () {
+    // runs when browser closes connection
+  });
+});
+
+// TO SEND MESSAGE TO BROWSER:
+ws.send('this is a message from server');
+```

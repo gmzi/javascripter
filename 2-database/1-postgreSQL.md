@@ -133,6 +133,16 @@ Insert new rows in our tables.
 - `INSERT INTO books (title, author) VALUES ('The Iliad', 'Homer');`
 - `INSERT INTO books (title, author) VALUES ('chickens', 'John Chicken'), ('animals', 'Darwin'), ('birds', 'charly bird');`
 
+Retrieve an array with JSON from db: `{name, hobbies: [hobby, ...]}`
+
+```sql
+SELECT name, json_agg(hobby) AS hobbies
+FROM users AS u
+  JOIN hobbies AS h ON (u.name = h.user_name)
+GROUP BY name;
+
+```
+
 ## SELECT...FROM
 
 - `SELECT * FROM table_name;` all cols and rows of table
