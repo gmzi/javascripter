@@ -38,6 +38,7 @@
 8. [DATABASE](#DATABASE)
 9. [DEPLOY](#DEPLOY)
    - [flask_app](##deploy_flask_app)
+10. [run_local_server](#run_server)
 
 # git
 
@@ -685,3 +686,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 Debug
 
 29. - `heroku logs --tail` shows the server logs, app prints and errors there.
+
+# run_server
+
+1. cd to project folder
+2. `python3 -m http.server`
+3. in browser: http://localhost:8000/
