@@ -273,6 +273,14 @@ They should always be unique and not change (also called stable)
   - null (can't use undefined)
 
 ```jsx
+const Comp = () => <p>Implicit return</p>;
+
+const Other = () => (
+  <div>
+    <h3>Multiple lines implicit return</h3>
+  </div>
+);
+
 const App = () => {
   return <p> Hi from function </p>;
 };
