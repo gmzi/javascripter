@@ -1,5 +1,15 @@
 # react
 
+1. [CRA](#CRA)
+   - [demo](/Users/xxx/projects/demos/react/cra-1)
+   - [modules](##modules)
+   - [webpack](##webpack)
+   - [CSS](##CSS)
+     - [dynamic_styles](###dynamic_styles)
+     - [pattern](###patern)
+   - [React.Fragment](##React.Fragment)
+   - [react_developer_tools](##React_developer_tools)
+   - [setup](##setup)
 2. [style](#style)
 3. [state](#state)
 4. [JSX](#JSX)
@@ -14,6 +24,139 @@
 7. [components](##components)
 8. [setup](###basic-dev-setup)
 9. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
+
+# CRA
+
+## modules
+
+import-export .js files:
+
+```jsx
+// math.js:
+const sum = (a, b) => a + b;
+const mult = (a, b) => a * b;
+export { sum, mult };
+
+// other.js
+const cacs = {
+  1: 'ca',
+  2: 'fdsf',
+};
+const mew = () => 'Mew!!!';
+
+export default cacs;
+export { mew };
+
+// app.js:
+import { sum, mult } from './math.js';
+import cacs, { mew } from './other.js';
+```
+
+import non-js files:
+
+```jsx
+import myName from './my-image.jpg';
+import logo from './my-logo.svg';
+
+// use it:
+function App() {
+  return (
+    <div>
+      <img src={myName} />
+    </div>
+  );
+}
+```
+
+Import - export code from different files in app. It's the modern version of node's "require".
+
+## webpack
+
+webpack is a JS utility that helps us to manage our dependencies. Allows to use import/export modules in react apps. It bundles code together. It makes sure that the components loads in the correct order, etc. Also can bundle all JS or all CSS code in one single JS file or CSS file. Also has hot reloading and enables testing environment.
+
+## CSS
+
+### dynamic_styles
+
+[demo](/Users/xxx/projects/demos/react/cra-1/src/Alert.js) && /Alert.css
+
+### pattern:
+
+- Make a CSS file for each React component (eg: House.js --> House.css):
+- import House.css at the top of House.js
+- Name classes as the component:
+
+```jsx
+<div className="House">
+  <p className="House-title">{props.title}</p>
+  <p className="House-address">{props.addr}</p>
+</div>
+```
+
+Classes are 'className':
+
+```jsx
+<h1 className="cart-header">{username}</h1>
+```
+
+Import CSS files:
+
+```jsx
+import './App.css';
+
+// or to style a specific component individually, import in that component file:
+
+import './MyComponent.css';
+```
+
+---
+
+## React.Fragment
+
+```jsx
+import React from 'react';
+
+// NEWEST SYNTAX:
+const BookTitlesNew = () => {
+  return (
+    <>
+      <h2>SIBLING</h2>
+      <h2>SIBLING</h2>
+      <h2>SIBLING</h2>
+    </>
+  );
+};
+
+// OLDER SYNTAX:
+const BookTitlesOld = () => {
+  return (
+    <React.Fragment>
+      <h2>SIBLING</h2>
+      <h2>SIBLING</h2>
+      <h2>SIBLING</h2>
+    </React.Fragment>
+  );
+};
+
+export { BookTitlesOld, BookTitlesNew };
+```
+
+In general we return one single element from a component (a parent div with children, etc.)
+
+## React_developer_tools
+
+In google chrome store find and install the extension.
+
+## setup
+
+0. cd to dir
+1. - `npx create-react-app myAppName`
+2. Work on the 'src' folder.
+
+[docs](https://create-react-app.dev)
+
+Creates a skeleton of the full app with all the setup.
+It's not required for very lightweight projects. Create React App. Is a library to help creating react apps, that is efficient and scalable, and optimized for production.
 
 # style
 
