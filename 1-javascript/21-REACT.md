@@ -10,20 +10,19 @@
    - [React.Fragment](##React.Fragment)
    - [react_developer_tools](##React_developer_tools)
    - [setup](##setup)
-2. [style](#style)
-3. [state](#state)
-4. [JSX](#JSX)
-   - [props](##props)
+2. [STATE](#state)
+3. [EVENTS](#events)
+4. [COMPONENTS](#components)
+5. [PROPS](#props)
    - [props.children](##props.children)
    - [props_with_default_values](##props_with_default_values)
    - [loops](##loops)
    - [conditionals](##conditionals)
    - [expressions](##expressions)
-5. [components](#components)
-6. [key_prop](##key_prop)
-7. [components](##components)
-8. [setup](###basic-dev-setup)
-9. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
+   - [key_prop](##key_prop)
+6. [style](#style)
+7. [setup](###basic-dev-setup)
+8. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
 
 # CRA
 
@@ -171,11 +170,150 @@ Libraries:
 
 # state
 
+NumberGame demo:
+
+```jsx
+import React, { useState } from 'react';
+import './NumberGame.css';
+
+const NumberGame = (props) => {
+  const genRandom = () => Math.floor(Math.random() * 10) + 1;
+
+  const restart = () => {
+    setTarget(genRandom());
+    setGuess(0);
+    setGuessCount(0);
+  };
+
+  const makeGuess = () => {
+    setGuess(genRandom());
+    setGuessCount(guessCount + 1);
+  };
+
+  const [guess, setGuess] = useState(genRandom());
+  const [target, setTarget] = useState(genRandom());
+  const [guessCount, setGuessCount] = useState(0);
+  const isWinner = target === guess;
+  return (
+    <div className="NumberGame">
+      <h1>Target Num: {target} </h1>
+      <h1 className={isWinner ? 'winner' : 'loser'}>Your Guess: {guess}</h1>
+      <h4>Guess #{guessCount}</h4>
+      {/* Hide or show button according to win or loose: */}
+      {!isWinner && <button onClick={makeGuess}>Generate Num</button>}
+      <button onClick={restart}>New Game</button>
+    </div>
+  );
+};
+export default NumberGame;
+```
+
+Counter:
+
+```jsx
+import React, { useState } from 'react';
+const Counter = (props) => {
+  const [count, setCount] = useState(99);
+  return (
+    <>
+      <h1>Count is: {count}</h1>
+      <button onClick={() => setCount(count + 1)}>Add</button>
+      <button onClick={() => setCount(count - 1)}>Subtract</button>
+    </>
+  );
+};
+
+export default Counter;
+```
+
+A state is created using "useState()". Which returns an array with two values:
+
+- What the piece of state is.
+- A function to change it.
+
+When the state in a component changes, the component is re rendered in the browser.
+
+```jsx
+import React, { UseState } from 'react';
+
+const [mood, setMood] = useState('happy'); // 'happy' is the initial state
+```
+
+Mind that:
+
+- You must call useState in the component
+- You cannot call useState in loops or conditionals
+- Try to do state initialization early in your function component
+
+Data specific to a component. CAN CHANGE!!!
+Use cases:
+
+- Toggle data.
+- Fetch data from API.
+- Themes, colors or styles that change based on an event.
+
+# events
+
+[full_list_of_events](https://reactjs.org/docs/events.html#supported-events)
+
+Pass function witha arguments on event:
+
+```jsx
+import React from 'react';
+
+const ButtonGroup = () => {
+  const printColor = (color) => {
+    console.log(`YOU CLICKED: ${color}`);
+  };
+  return (
+    <div>
+      <button onClick={() => printColor('Red')}>Red</button>
+      <button onClick={() => printColor('Yellow')}>Yellow</button>
+      <button onClick={() => printColor('Green')}>Green</button>
+    </div>
+  );
+};
+
+export default ButtonGroup;
+```
+
+```jsx
+import React from 'react';
+
+// define any function:
+function handleClick() {
+  console.log('GoodClick clicked!');
+}
+
+// Call the function on click event:
+function GoodClick() {
+  return <button onClick={handleClick}>GoodClick</button>;
+}
+
+export default GoodClick;
+
+// ---------------------
+// Synthetic event:
+// console.log the synthetic event 'e':
+function clickDetails(e) {
+  console.log(e); // the whole synthetic event.
+  console.log(e.currentTarget); // will be the element of the click. Mind that react nullifies values after execution.
+  console.log(e.nativeEvent);
+}
+
+function clickerFire() {
+  // react will send the synthetic event:
+  return <button onClick={clickDetails}>Get details</button>;
+}
+```
+
+Attach event handlers to React components.
+
 # JSX
 
 The state can pass new values as props, so a component will re render with the new values.
 
-## props
+# props
 
 ```jsx
 const Animal = (props) => {
