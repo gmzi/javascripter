@@ -27,9 +27,13 @@
 
 # CRA
 
+(Create React App)
+
 ## modules
 
 import-export .js files:
+
+Might have to add `"type": "module"`
 
 ```jsx
 // math.js:
