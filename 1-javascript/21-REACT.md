@@ -23,6 +23,18 @@
 6. [style](#style)
 7. [setup](###basic-dev-setup)
 8. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
+9. [testing](#testing_react)
+   - [run_tests](##run_tests)
+     General testing:
+   - [smoke_tests](###smoke_tests)
+   - [snapshot_tests](###snapshot_tests)
+     Specialized testing:
+   - [select_things_in_rendered_page](###select_things_in_rendered_page)
+   - [matchers](###matchers)
+   - [fireEvent](###fireEvent)
+     Debug:
+   - [debug_tests](###debug_tests)
+   - [add_breakpoints](###add_breakpoints)
 
 # CRA
 
@@ -170,6 +182,67 @@ Libraries:
 
 # state
 
+EightBall demo:
+
+```jsx
+import React, { useState } from 'react';
+import './EightBalls.css';
+
+const EightBall = ({ answers }) => {
+  // Random index number maker:
+  const idx = () => Math.floor(Math.random() * answers.length);
+
+  const changeBall = () => {
+    const num = idx();
+    // Create params from chosen ball:
+    const ball = {
+      msg: answers[num].msg,
+      color: answers[num].color,
+    };
+    // Instead of 'return', 'setball', like a return but specifig for the ball
+    setBall(ball);
+  };
+  // set the initial params for the ball:
+  const [ball, setBall] = useState({
+    msg: 'Think of a queston',
+    color: 'black',
+  });
+  // On click, make new ball params and apply them:
+  return (
+    <div className="EightBalls">
+      <div
+        className="EightBalls-ball"
+        onClick={changeBall}
+        style={{ backgroundColor: `${ball.color}` }}
+      >
+        <p>{ball.msg}</p>
+      </div>
+    </div>
+  );
+};
+
+export default EightBall;
+
+// APP.JS:
+
+// import React from 'react';
+// import Pokedex from './Pokedex.js';
+// import EightBall from './EightBall.js';
+// import balls from './balls.js';
+// import './App.css';
+
+// function App() {
+//   return (
+//     <div className="App">
+//       <Pokedex />
+//       <EightBall answers={balls} />
+//     </div>
+//   );
+// }
+
+// export default App;
+```
+
 NumberGame demo:
 
 ```jsx
@@ -208,7 +281,7 @@ const NumberGame = (props) => {
 export default NumberGame;
 ```
 
-Counter:
+Counter demo:
 
 ```jsx
 import React, { useState } from 'react';
@@ -558,18 +631,41 @@ They should always be unique and not change (also called stable)
   - null (can't use undefined)
 
 ```jsx
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  const increment = () => setCount(count + 1);
+
+  return (
+    <div>
+      <h1>Let's count!</h1>
+      <h2>Current count: {count}</h2>
+      <button onClick={increment}>Add</button>
+      <label htmlFor="usr">Username</label>
+      <input id="usr" type="text" placeholder="username" />
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+// Super basic:
 const Comp = () => <p>Implicit return</p>;
 
 const Other = () => (
+
   <div>
     <h3>Multiple lines implicit return</h3>
   </div>
 );
 
 const App = () => {
-  return <p> Hi from function </p>;
+return <p> Hi from function </p>;
 };
-```
+
+````
 
 Newest version (2019)
 
@@ -583,7 +679,7 @@ class App extends React.Component {
     return <p> Hi from a class </p>;
   }
 }
-```
+````
 
 ## basic-dev-setup
 
@@ -646,3 +742,215 @@ const App = () => {
 
 React helps to create reusable components. We build components that have HTM, JS and CSS working together.
 React is a front end framework. Integrates JS in the front end rendering of the app. Offers a blueprint to build an app in it.
+
+---
+
+# testing_react
+
+Can use any kind of testing frameworks. Create-react-app ships with jest and Testing-Library
+[Testing_Library_docs](https://testing-library.com)
+
+## run_tests
+
+- `npm test` run all tests:
+- `npm test myFile.test.js` run single file:
+- `q` quit test
+- `w` list of commands available
+
+### smoke_tests
+
+("Does the component render?")
+
+One test file per Component file.
+
+Counter.test.js:
+
+```jsx
+import React from 'react';
+// 'render' creates a <div>, renders your JSX into the div, returns an object of methods.
+import { render, screen } from '@testing-library/react';
+import Counter from './Counter';
+
+it('renders withouth crashing', function () {
+  render(<Counter />);
+});
+```
+
+### snapshot_tests
+
+(Did the rendering change?)
+
+First time it runs, creates the snapshot. Afeter that, compares the test to the snapshot.
+
+```jsx
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import Dog from './Dog.js';
+
+// Check if renders:
+it('should render', () => {
+  render(<Dog name="julian" isAdopted={true} />);
+});
+
+// Snapshot with one set of values:
+it('should match snapshot', () => {
+  const { asFragment } = render(<Dog name="julian" isAdopted={true} />);
+  expect(asFragment()).toMatchSnapshot();
+});
+
+// Snapshot test with other set of values:
+it('should match snapshot', () => {
+  const { asFragment } = render(<Dog name="newName" isAdopted={false} />);
+  expect(asFragment()).toMatchSnapshot();
+});
+```
+
+### select_things_in_rendered_page
+
+User interactions: inputs, form submissions, clicks, doubleclicks, etc. What shows up after the users actions.
+
+```jsx
+import React from 'react';
+import { getByPlaceholderText, render, screen } from '@testing-library/react';
+import Counter from './Counter';
+
+it('renders withouth crashing', function () {
+  render(<Counter />);
+});
+
+test('find h1 by text', () => {
+  const { getByText } = render(<Counter />);
+  // Find text with exact match:
+  getByText(`Let's count!`);
+  // Not exact:
+  getByText(`Current count`, { exact: false });
+});
+
+test('find all titles with the word <count>', () => {
+  const { getAllByText } = render(<Counter />);
+  getAllByText('count', { exact: false });
+  console.log(getAllByText('count', { exact: false })); // will throw an array with all the results.
+});
+
+test('select by placeholder', () => {
+  const { getByPlaceholderText } = render(<Counter />);
+  console.log(getByPlaceholderText('username'));
+});
+```
+
+[full_methods](https://testing-library.com/docs/react-testing-library/api/#render-result)
+
+- .getByText()
+  Find first matching element by its text (throws error if nothing found)
+- .queryByText()
+  Find first matching element by its text (returns null if nothing found)
+- .getAllByText()
+  Like getByText but finds all matches
+- .queryAllByText()
+  Like queryByText but finds all matches
+- .getByPlaceholderText() / queryByPlaceholderText()
+  Find first matching element by placeholder text
+- .getAllByPlaceholderText() / queryAllByPlaceholderText()
+  Like above but finds all matches
+- .getByTestId() / queryByTestId()
+  Find matching element by a data-testid attribute (helpful if there’s no other convenient way to grab an element)
+- .getAllByTestId() / queryAllByTestId()
+  Like above but finds all matches
+
+### matchers
+
+```jsx
+it('should start showing h1', () => {
+  const { getByText } = render(<Toggler />);
+  const heading = getByText('Hello World');
+  expect(heading).toHaveClass('Toggler-text');
+  expect(heading).toBeInTheDocument();
+});
+```
+
+CRA comes with jest-dom, an extension of jest providing aditional matchers.
+[jest-dom_docs](https://testing-library.com/docs/ecosystem-jest-dom)
+Some of them:
+
+.toHaveClass()
+Check whether an element has a certain class
+.toBeInTheDocument()
+Check whether an element is in the document
+.toContainHTML()
+Check whether the element contains a certain HTML string
+.toBeEmpty()
+Check whether the element has any content
+
+### fireEvent
+
+```jsx
+test('button clicks', () => {
+  const { getByText } = render(<Counter />);
+  const h2 = getByText('Current count: 0');
+  const btn = getByText('Add');
+  // HERE WE TRIGGER THE EVENT:
+  fireEvent.click(btn);
+  // NOW WE EXPECT THE APP RESPONSE TO THAT EVENT:
+  expect(h2).not.toHaveTextContent('0');
+  // ALL MATCHERS HERE: https://github.com/testing-library/jest-dom#custom-matchers
+});
+
+it('should toggle', () => {
+  const { getByText } = render(<Toggler />);
+  const heading = getByText('Hello World');
+  fireEvent.click(getByText('Toggle'));
+  expect(heading).not.toBeInTheDocument();
+});
+```
+
+Testing Library provides a fireEvent method that you can use to mimic user interaction with the app.
+[fireEvents_docs](https://testing-library.com/docs/dom-testing-library/api-events/)
+.fireEvent.click(HTMLElement)
+Fire a click event
+.fireEvent.submit(HTMLElement)
+Fire a submit event
+.fireEvent.input(HTMLElement)
+Fire an input event
+
+### debug_tests
+
+Instead of console.log the whole object, console.log the specific element:
+
+```jsx
+test('button increments counter', () => {
+  // declare debug:
+  const { getByText, debug } = render(<Counter />);
+  // call debug:
+  debug(); // will console.log the component rendered above.
+  const h2 = getByText('Current count: 0');
+  const btn = getByText('Add');
+  // HERE WE TRIGGER THE EVENT:
+  fireEvent.click(btn);
+  // NOW WE EXPECT THE APP RESPONSE TO THAT EVENT:
+  debug();
+  expect(h2).not.toHaveTextContent('0');
+});
+```
+
+### add_breakpoints
+
+1. In package.json.scripts, add:
+
+```json
+"test:debug": "react-scripts --inspect-brk test --runInBand",
+```
+
+2. In myFile.test.js, add `debugger;` wherever you want the execution to stop for debugging.
+3. `npm run test:debug myFile.test.js`
+4. In Chrome, press the green Node.js button to go to the debugger breakpoint.
+
+```jsx
+it('should toggle', () => {
+  const { getByText } = render(<Toggler />);
+  const heading = getByText('Hello World');
+  // WILL STOP EXECUTION HERE:
+  debugger;
+  fireEvent.click(getByText('Toggle'));
+  expect(heading).not.toBeInTheDocument();
+});
+```
