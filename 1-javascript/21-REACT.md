@@ -10,31 +10,48 @@
    - [React.Fragment](##React.Fragment)
    - [react_developer_tools](##React_developer_tools)
    - [setup](##setup)
-2. [STATE](#state)
-3. [EVENTS](#events)
-4. [COMPONENTS](#components)
+2. [HOOKS](#HOOKS)
+   - [useState](##useState)
+     - [demo](/Users/xxx/projects/demos/react/states)
+     - [update_state_with_callback](##update_state_with_callback)
+   - [useEffect](##useEffect)
+     - [Request.js](###Request.js)
+     - [ProfileSearch](###ProfileSearch)
+     - [Timer](###Timer)
+   - [useRef](##useRef)
+     - [Video.js](###Video.js)
+     - [Focus.js](###Focus.js)
+     - [FileInput.js](###FileInput.js)
+3. [COMPONENTS](#components)
+   - [demo](/Users/xxx/projects/demos/react/component-design)
+   - [pass_function_to_child_component](##pass_function_to_child_component)
+   - [dumb_components](##dumb_components)
+   - [functional_components](###functional_components)
+   - [class_based_components](###class_based_components)
+4. [EVENTS](#events)
 5. [PROPS](#props)
+   - [key_prop](##key_prop)
    - [props.children](##props.children)
    - [props_with_default_values](##props_with_default_values)
    - [loops](##loops)
    - [conditionals](##conditionals)
    - [expressions](##expressions)
-   - [key_prop](##key_prop)
-6. [style](#style)
-7. [setup](###basic-dev-setup)
-8. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
-9. [testing](#testing_react)
-   - [run_tests](##run_tests)
-     General testing:
-   - [smoke_tests](###smoke_tests)
-   - [snapshot_tests](###snapshot_tests)
-     Specialized testing:
-   - [select_things_in_rendered_page](###select_things_in_rendered_page)
-   - [matchers](###matchers)
-   - [fireEvent](###fireEvent)
-     Debug:
-   - [debug_tests](###debug_tests)
-   - [add_breakpoints](###add_breakpoints)
+6. [FORMS](#FORMS)
+7. [style](#style)
+8. [setup](###basic-dev-setup)
+9. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
+10. [testing](#testing_react)
+    - [run_tests](##run_tests)
+      General testing:
+    - [smoke_tests](###smoke_tests)
+    - [snapshot_tests](###snapshot_tests)
+      Specialized testing:
+    - [select_things_in_rendered_page](###select_things_in_rendered_page)
+    - [matchers](###matchers)
+    - [fireEvent](###fireEvent)
+      Debug:
+    - [debug_tests](###debug_tests)
+    - [add_breakpoints](###add_breakpoints)
 
 # CRA
 
@@ -180,7 +197,55 @@ Libraries:
 - materialUI (premade components)
 - reactstrap
 
-# state
+---
+
+# HOOKS
+
+[full_hooks](https://reactjs.org/docs/hooks-reference.html)
+
+## useState
+
+REACT WILL RE-RENDER THE COMPONENT ONLY WHEN THE NEW STATE IS DIFFERENT FROM THE PREVIOUS.
+
+```jsx
+import React, { useState } from 'react';
+const [data, setData] = useState(initialState);
+/* Periphrasis: During the intial render, the returned state (data) is te same as the value passed as the first argument (initialState).
+The setData function is used to update the state. It accepts a new state value and equeues a re-render of the whole component. 
+The convention is to name the second value setX where X is the name of the first value. 
+*/
+```
+
+## update_state_with_callback
+
+```jsx
+import React, { useState } from 'react';
+
+function BestSimpleCounter() {
+  const [num, setNum] = useState(0);
+  const clickUp = () => {
+    // callback will run once the useState value is updated:
+    setNum((n) => n + 1);
+  };
+
+  const clickUpBy2 = () => {
+    // callback will run once the useState value is updated:
+    setNum((n) => n + 1);
+    // once 'n' is updated, will run the next callback:
+    setNum((n) => n + 1);
+  };
+
+  return (
+    <div>
+      <h3>Count: {num}</h3>
+      <button onClick={clickUp}>Up</button>
+      <button onClick={clickUpBy2}>Up By 2</button>
+    </div>
+  );
+}
+
+export default BestSimpleCounter;
+```
 
 EightBall demo:
 
@@ -325,6 +390,293 @@ Use cases:
 - Fetch data from API.
 - Themes, colors or styles that change based on an event.
 
+## useEffect
+
+```jsx
+useEffect(() => {
+  //function here
+}, [props.some, props.others, etc]); // effect runs every time a prop value changes.
+
+useEffect(() => {
+  //function here
+}, []); // effect runs only first time component is rendered
+
+useEffect(() => {
+  //function here
+}); // effect runs every time component is rendered
+```
+
+### Request.js
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+// "https://api.github.com/users/elie"
+
+const ProfileViewer = ({ name = 'Elie', color = 'purple' }) => {
+  // Set an empty piece of state, so the page can load without having to wait for the request:
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    async function loadProfile() {
+      const res = await axios.get(`https://api.github.com/users/${name}`);
+      // change the state to re-render component:
+      setData(res.data.name);
+    }
+    loadProfile();
+  }, [name]);
+  // If "name" changes the request will run, but if "color" changes,
+  //the component will re-render but the request will not run,
+  //because "color" is not in the array
+
+  return <h3 style={{ color }}>{data ? data : 'Loading...'}</h3>;
+  /* periphrasis: "if there's data in state, display it, else display 'loading...'"*/
+};
+
+export default ProfileViewer;
+
+// IN APP.JS:
+function App() {
+  return (
+    <div className="App">
+      <ProfileViewer name="Colt" color="teal" />
+      <ProfileViewer name="Matt" color="orange" />
+    </div>
+  );
+}
+```
+
+### ProfileSearch
+
+1. ProfileViewerWithSearch.js:
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import ProfileSearchForm from './ProfileSearchForm';
+
+const ProfileViewerWithSearch = () => {
+  const [profile, setProfile] = useState(null);
+  const [url, setUrl] = useState(`https://api.github.com/users/elie`);
+
+  // term comes from the form
+  const search = (term) => {
+    setUrl(`https://api.github.com/users/${term}`);
+  };
+
+  useEffect(() => {
+    console.log('LOADING DATA');
+    async function loadProfile() {
+      const res = await axios.get(url);
+      setProfile(res.data);
+    }
+    loadProfile();
+
+    // CLEANUP FUNCTION (will run before the effect and after the component unmounts, after the first
+    // time the effect runned):
+    return () => console.log('CLEANING UP!');
+  }, [url]);
+
+  return (
+    <div>
+      {profile ? <h1>Hi {profile.name}</h1> : <h1>Loading....</h1>}
+      <ProfileSearchForm search={search} />
+    </div>
+  );
+};
+
+export default ProfileViewerWithSearch;
+```
+
+2. ProfileSearchForm.js:
+
+```jsx
+import React, { useState } from 'react';
+
+const ProfileSearchForm = ({ search }) => {
+  const [term, setTerm] = useState('');
+
+  const handleChange = (evt) => {
+    setTerm(evt.target.value);
+  };
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    search(term);
+    setTerm('');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" value={term} onChange={handleChange} />
+      <button>Search!</button>
+    </form>
+  );
+};
+
+export default ProfileSearchForm;
+```
+
+### Timer
+
+1. Timer.js:
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+const Timer = () => {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setSeconds((seconds) => seconds + 1);
+    }, 1000);
+
+    // cleanup function will run only when component dismounts:
+    return () => {
+      console.log('hi from cleanup');
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  return <h1>{seconds}</h1>;
+};
+
+export default Timer;
+```
+
+2. TimerWrapper.js:
+
+```jsx
+// show/hide the timer:
+
+import React, { useState } from 'react';
+import Timer from './Timer';
+
+const TimerWrapper = () => {
+  const [timerVisible, setTimerVisible] = useState(true);
+
+  const toggleTimer = () => {
+    // Will unmount Timer component:
+    setTimerVisible(!timerVisible);
+  };
+
+  return (
+    <div>
+      <button onClick={toggleTimer}>Toggle Timer</button>
+      {timerVisible && <Timer />}
+    </div>
+  );
+};
+
+export default TimerWrapper;
+```
+
+## useRef
+
+`myVarName.current` stores the useRef object
+
+### Video.js
+
+```jsx
+import React, { useState, useRef, useEffect } from 'react';
+
+function Video({
+  src = 'https://media.giphy.com/media/KctGIT2JHvVRC7ESeR/giphy.mp4',
+}) {
+  const [speed, setSpeed] = useState(1);
+
+  // 1. Make an object that will persist accross renders:
+  const videoRef = useRef();
+
+  // 3. Grab the useRef object, set its initial value through state and its changes through side effect:
+  useEffect(() => {
+    videoRef.current.playbackRate = speed;
+  }, [speed]);
+
+  return (
+    <div>
+      {/* 2. Pass the useRef value to the DOM element where we want to use it: */}
+      <video muted autoPlay loop ref={videoRef}>
+        <source src={src} />
+      </video>
+      <div>
+        <button onClick={() => setSpeed((s) => s / 2)}>slow</button>
+        <button onClick={() => setSpeed((s) => s * 2)}>fast</button>
+        <p>Current speed: {speed}x</p>
+      </div>
+    </div>
+  );
+}
+
+export default Video;
+```
+
+### Focus.js
+
+```jsx
+import React, { useRef } from 'react';
+
+const Focus = () => {
+  // 1. Make this 'secondInput' property:
+  const secondInput = useRef();
+
+  // 3. grab the current value of 'secondInput' and run function over it.
+  const moveFocus = () => secondInput.current.focus();
+
+  return (
+    <>
+      <h3>Focus Starts Here</h3>
+      <input type="text" autoFocus />
+      <button onClick={moveFocus}>Focus the text input</button>
+      <h3>Then Moves Here</h3>
+      {/* 2. Point the useRef property to this DOM element (this input will be stored in secondInput variable): */}
+      <input type="text" ref={secondInput} />
+    </>
+  );
+};
+
+export default Focus;
+```
+
+### FileInput.js
+
+```jsx
+class FileInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.fileInput = React.createRef();
+  }
+  handleSubmit(event) {
+    event.preventDefault();
+    alert(`Selected file - ${this.fileInput.current.files[0].name}`);
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Upload file:
+          <input type="file" ref={this.fileInput} />
+        </label>
+        <br />
+        <button type="submit">Submit</button>
+      </form>
+    );
+  }
+}
+
+ReactDOM.render(<FileInput />, document.getElementById('root'));
+
+// docs:
+// https://reactjs.org/docs/uncontrolled-components.html#the-file-input-tag
+```
+
+Use cases: file input, video player speed, focus, integrate library. Except this try to avoid it, is better that React controlls the DOM.
+
+---
+
 # events
 
 [full_list_of_events](https://reactjs.org/docs/events.html#supported-events)
@@ -412,6 +764,19 @@ const App = () => (
 
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
+
+## key_prop
+
+```jsx
+let todoItems = todos.map((todo) => <li key={todo.id}>{todo.text}</li>);
+
+// if no id, if no other possible solution, use iteration index:
+let todoItems = todos.map((todo, idx) => <li key={idx}>{todo.text}</li>);
+```
+
+Tool to generate unique ids: [uuid](https://www.npmjs.com/package/uuid)
+
+When working with JSON or objects or arrays, React need the key prop to keep track of the data changes. Every key should be a unique value. Ideally, a stable id, else the idx position of the element.
 
 ## props.children
 
@@ -616,12 +981,144 @@ Keetp in mind:
 
 Syntax that allows to write HTML in a JS file. We have to transpile it to JS so the browser can understand it.
 
-## key_prop
+---
 
-Keys help React identify which items have changed, added or removed.
-They should always be unique and not change (also called stable)
+# FORMS
+
+## basic_demo
+
+With no validations:
+/Users/xxx/projects/demos/react/forms
+
+## validation
+
+Validation + form styles:
+[formik-material-ui](https://stackworx.github.io/formik-material-ui/docs/guide/getting-started)
+
+Pure validation library:
+[formik](https://formik.org/docs/tutorial)
+
+React validation IS NOT A SUBSTITUTE for server side validation. Have to validate also in the server separatedly.
+
+## controlled_components
+
+React controls all the form data through state.
+
+## uncontrolled_components
+
+React doesn't control the from state. It's not very common, but may be needed (file input, or external libraries that require uncontrolled components, or non-react code integrations). Check react docs for implementation.
+
+---
 
 # components
+
+Parent:
+
+```jsx
+import React, { useState } from 'react';
+import Die from './Die';
+import './Dice.css';
+
+const Dice = ({ numDice = 6, title = 'Main Game', maxVal = 20 }) => {
+  // MIND THE STATE IS IN THE PARENT COMPONENT:
+  const [numbers, setNumbers] = useState(Array.from({ length: numDice }));
+
+  // MAKE NEW ARRAY OF DICES AND SET IT TO STATE TO RE-RENDER:
+  const rollDice = () =>
+    setNumbers((numbers) =>
+      numbers.map((n) => Math.floor(Math.random() * maxVal) + 1)
+    );
+
+  return (
+    <div className="Dice">
+      <h2>{title}</h2>
+      <div>
+        {numbers.map((num) => (
+          <Die val={num} />
+        ))}
+      </div>
+
+      <button onClick={rollDice}>Roll</button>
+    </div>
+  );
+};
+
+export default Dice;
+```
+
+Child:
+
+```jsx
+import React from 'react';
+import './Die.css';
+
+const Die = ({ val }) => {
+  return <div className="Die">{val}</div>;
+};
+export default Die;
+```
+
+## pass_function_to_child_component
+
+Parent component defines the function ---> pass the function to the child as a prop. The child invokes the prop. When called, the parent executes the prop and updates the state. The parent is re-rendered along with the children.
+
+```jsx
+// PARENT COMPONENT
+import React, { useState } from 'react';
+import NumberItem from './NumberItem';
+
+function NumberList() {
+  const [nums, setNums] = useState([1, 2, 3, 4]);
+
+  const remove = (num) => {
+    setNums(nums.filter((n) => n !== num));
+  };
+
+  const numsList = nums.map((n) => <NumberItem value={n} remove={remove} />);
+  /* alternate way to pass the function to the child directly in the parent:
+  return (
+    <ul>
+      {numbers.map(n => (
+        <NumberItem number={n} remove={() => remove(n)} />
+      ))}
+    </ul>
+  )
+  */
+  return <ul>{numsList}</ul>;
+}
+
+export default NumberList;
+
+// ----------------
+// CHILD COMPONENT
+import React from 'react';
+
+function NumberItem(props) {
+  // Define function that calls the parent's function, convetional
+  // naming 'handleMyName' for parent invoking.
+  const handleRemove = () => {
+    props.remove(props.value);
+  };
+
+  return (
+    <li>
+      {props.value}
+      <button onClick={handleRemove}>X</button>
+    </li>
+  );
+}
+
+export default NumberItem;
+```
+
+## dumb_components
+
+"There should be a single “source of truth” for any data that changes in a React application. Usually, the state is first added to the component that needs it for rendering. Then, if other components also need it, you can lift it up to their closest common ancestor. Instead of trying to sync the state between different components, you should rely on the top-down data flow."
+(https://reactjs.org/docs/lifting-state-up.html#lessons-learned)
+
+Are stateless. Are purely presentational, destined only to render something. Smarter parent with dumber children is a good pattern. State goes with the parent, the children only render.
+
+Components should be small & do one thing, this makes them more reusable and debuggable. It's good to break one thing in multiple components.
 
 ### functional_components
 
@@ -649,25 +1146,21 @@ function Counter() {
 }
 
 export default Counter;
-```
 
+//--------------------------------
 // Super basic:
 const Comp = () => <p>Implicit return</p>;
 
 const Other = () => (
-
   <div>
     <h3>Multiple lines implicit return</h3>
   </div>
 );
 
 const App = () => {
-return <p> Hi from function </p>;
+  return <p> Hi from function </p>;
 };
-
-````
-
-Newest version (2019)
+```
 
 ### class_based_components
 
@@ -679,7 +1172,9 @@ class App extends React.Component {
     return <p> Hi from a class </p>;
   }
 }
-````
+```
+
+---
 
 ## basic-dev-setup
 
