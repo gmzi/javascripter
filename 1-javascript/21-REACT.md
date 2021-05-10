@@ -21,6 +21,7 @@
    - [useRef](##useRef)
      - [Video.js](###Video.js)
      - [Focus.js](###Focus.js)
+     - [Timer2.js](###Timer2.js)
      - [FileInput.js](###FileInput.js)
 3. [COMPONENTS](#components)
    - [demo](/Users/xxx/projects/demos/react/component-design)
@@ -637,6 +638,45 @@ const Focus = () => {
 };
 
 export default Focus;
+```
+
+### Timer2.js
+
+```jsx
+import React, { useState, useEffect, useRef } from 'react';
+
+const Timer2 = () => {
+  const [seconds, setSeconds] = useState(0);
+
+  // Store the id of timer component-scoped so you can stop it in clearInterval
+  const timerId = useRef();
+
+  // Run timer when component renders:
+  useEffect(() => {
+    timerId.current = setInterval(() => {
+      setSeconds((seconds) => seconds + 1);
+    }, 1000);
+
+    // cleanup when component unmounts:
+    return () => {
+      clearInterval(timerId.current);
+    };
+  }, []);
+
+  // useRef to grab the id of the current timer and stop it:
+  const stopTimer = () => {
+    clearInterval(timerId.current);
+  };
+
+  return (
+    <div>
+      <h1>{seconds}</h1>
+      <button onClick={stopTimer}>Stop Timer</button>
+    </div>
+  );
+};
+
+export default Timer2;
 ```
 
 ### FileInput.js
