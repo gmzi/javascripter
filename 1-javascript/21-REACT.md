@@ -23,6 +23,11 @@
      - [Focus.js](###Focus.js)
      - [Timer2.js](###Timer2.js)
      - [FileInput.js](###FileInput.js)
+   - [custom_hooks]
+     - [useRequest](###useRequest)
+     - [useFormFields](###useFormFields)
+     - [useToggle](###useToggle)
+     - [useLocalStorage](###useLocalStorage)
 3. [COMPONENTS](#components)
    - [demo](/Users/xxx/projects/demos/react/component-design)
    - [pass_function_to_child_component](##pass_function_to_child_component)
@@ -714,6 +719,288 @@ ReactDOM.render(<FileInput />, document.getElementById('root'));
 ```
 
 Use cases: file input, video player speed, focus, integrate library. Except this try to avoid it, is better that React controlls the DOM.
+
+## custom_hooks
+
+Just functions that abstract logic or perfor repeatable tasks. Can be in separate file, and call it from different components. Move logic out to a separate file if a componen gets too cluttered. No need to make hooks ahead, its just a refactoring tool.
+
+### useRequest
+
+1. hooks/useRequest.js:
+
+```jsx
+import { useEffect, useState } from 'react';
+
+const useRequest = (url, options = {}) => {
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // after the first render, fetch our data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        setResponse(json);
+      } catch (error) {
+        setError(error);
+      }
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [url]);
+
+  //returns an object:
+  return { response, error, isLoading };
+};
+
+export default useRequest;
+```
+
+2. DogDetails.js:
+
+```jsx
+import React from 'react';
+import useRequest from './hooks/useRequest';
+
+const DogDetail = () => {
+  const data = useRequest('https://dog.ceo/api/breeds/image/random');
+
+  if (data.isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (data.error) {
+    return <div>Sorry, something went wrong</div>;
+  }
+
+  const { status, message } = data.response;
+
+  return (
+    <div className="App">
+      <div>
+        <h3>{status}</h3>
+        <div>
+          <img src={message} alt="avatar" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DogDetail;
+```
+
+### useFormFields
+
+1. /hooks/useFormFields.js:
+
+```jsx
+import React, { useState } from 'react';
+
+const useFormFields = (initialState) => {
+  const [formData, setFormData] = useState(initialState);
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setFormData((formData) => ({
+      ...formData,
+      [name]: value,
+    }));
+  };
+
+  const resetFormData = () => {
+    setFormData(initialState);
+  };
+
+  return [formData, handleChange, resetFormData];
+};
+
+export default useFormFields;
+```
+
+2. SignupForm.js:
+
+```jsx
+import React from 'react';
+import useFormFields from './hooks/useFormFields';
+
+const SignupForm = () => {
+  const [formData, handleChange, resetForm] = useFormFields({
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    resetForm();
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        name="username"
+        value={formData.username}
+        onChange={handleChange}
+        placeholder="username"
+      />
+      <input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        placeholder="email"
+      />
+      <input
+        type="text"
+        name="password"
+        value={formData.password}
+        onChange={handleChange}
+        placeholder="password"
+      />
+      <button>Submit</button>
+    </form>
+  );
+};
+
+export default SignupForm;
+```
+
+### useToggle
+
+1. /hooks/useToggleState.js:
+
+```jsx
+import React, { useState } from 'react';
+
+const useToggleState = (initialState = true) => {
+  // Make a piece of state:
+  const [state, setState] = useState(initialState);
+
+  // Toggler function (change t to f or viceversa):
+  const toggleState = () => {
+    setState((state) => !state);
+  };
+
+  // Return the piece of state and the function:
+  return [state, toggleState];
+};
+
+export default useToggleState;
+```
+
+2. /MoodClicker.js:
+
+```jsx
+import React from 'react';
+// 1. IMPORT CUSTOM HOOK:
+import useToggleState from './hooks/useToggleState';
+import './MoodClicker.css';
+
+const MoodClicker = () => {
+  // ASSIGN STATE AND FUNCTION TO CUSTOM HOOK, WITH INITIAL VALUE:
+  const [isHappy, toggleIsHappy] = useToggleState(true);
+  const [isDarkMode, toggleIsDarkMode] = useToggleState(false);
+
+  return (
+    // TOGGLE CLASSNAMES:
+    <div className={isDarkMode ? 'Clicker-dark' : 'Clicker-light'}>
+      {/* TOGGLE CONTENT: */}
+      <h1>{isHappy ? '😀' : '😭'}</h1>
+      {/* FIRE TOGGLE WITH BUTTON: */}
+      <button onClick={toggleIsHappy}>Change Mood</button>
+      <button onClick={toggleIsDarkMode}>Toggle Dark/Light Mode</button>
+    </div>
+  );
+};
+
+export default MoodClicker;
+```
+
+3. /MoodClicker.css
+
+```css
+.Clicker-light {
+  background-color: lightblue;
+}
+.Clicker-dark {
+  background-color: darkslateblue;
+}
+.Clicker-dark button {
+  background-color: lightblue;
+}
+
+.Clicker-light button {
+  background-color: darkslateblue;
+  color: white;
+}
+```
+
+### useLocalStorage
+
+1. /hooks/useLocalStorageState.js
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+const useLocalStorageState = (key, defaultValue) => {
+  // Instead of setting the initial value directly, use a callback function to check if is
+  // there any previous value in localStorage:
+  const [state, setState] = useState(() => {
+    let value;
+    try {
+      value = JSON.parse(
+        window.localStorage.getItem(key) || JSON.stringify(defaultValue)
+      );
+    } catch (e) {
+      console.log(e);
+      value = defaultValue;
+    }
+    // useState will have this value:
+    return value;
+  });
+
+  // call useState if there's any change in the value or if the function is called:
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(state));
+  }, [key, state]);
+
+  // return the state value and the function:
+  return [state, setState];
+};
+
+export default useLocalStorageState;
+```
+
+2. Counter.js:
+
+```jsx
+import React from 'react';
+import useLocalStorageState from './hooks/useLocalStorageState';
+
+const Counter = () => {
+  // call the custom hook:
+  const [count, setCount] = useLocalStorageState('count', 0);
+
+  // function inherent to this particular component:
+  const addToCount = () => {
+    setCount((count) => count + 1);
+  };
+
+  return (
+    <>
+      <h4>{count}</h4>
+      <button onClick={addToCount}>Add</button>
+    </>
+  );
+};
+
+export default Counter;
+```
 
 ---
 
