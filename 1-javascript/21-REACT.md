@@ -10,7 +10,12 @@
    - [React.Fragment](##React.Fragment)
    - [react_developer_tools](##React_developer_tools)
    - [setup](##setup)
-2. [HOOKS](#HOOKS)
+2. [ROUTING](#ROUTING)
+   - [<NavLink>](##<NavLink>)
+   - [<Link>](##<Link>)
+   - [App.js](##App.js)
+   - [install_react_router](##install_react_router)
+3. [HOOKS](#HOOKS)
    - [useState](##useState)
      - [demo](/Users/xxx/projects/demos/react/states)
      - [update_state_with_callback](##update_state_with_callback)
@@ -28,25 +33,25 @@
      - [useFormFields](###useFormFields)
      - [useToggle](###useToggle)
      - [useLocalStorage](###useLocalStorage)
-3. [COMPONENTS](#components)
+4. [COMPONENTS](#components)
    - [demo](/Users/xxx/projects/demos/react/component-design)
    - [pass_function_to_child_component](##pass_function_to_child_component)
    - [dumb_components](##dumb_components)
    - [functional_components](###functional_components)
    - [class_based_components](###class_based_components)
-4. [EVENTS](#events)
-5. [PROPS](#props)
+5. [EVENTS](#events)
+6. [PROPS](#props)
    - [key_prop](##key_prop)
    - [props.children](##props.children)
    - [props_with_default_values](##props_with_default_values)
    - [loops](##loops)
    - [conditionals](##conditionals)
    - [expressions](##expressions)
-6. [FORMS](#FORMS)
-7. [style](#style)
-8. [setup](###basic-dev-setup)
-9. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
-10. [testing](#testing_react)
+7. [FORMS](#FORMS)
+8. [style](#style)
+9. [setup](###basic-dev-setup)
+10. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
+11. [testing](#testing_react)
     - [run_tests](##run_tests)
       General testing:
     - [smoke_tests](###smoke_tests)
@@ -188,13 +193,156 @@ In google chrome store find and install the extension.
 ## setup
 
 0. cd to dir
-1. - `npx create-react-app myAppName`
+1. - `npx create-react-app my-app-name`
 2. Work on the 'src' folder.
 
 [docs](https://create-react-app.dev)
 
 Creates a skeleton of the full app with all the setup.
 It's not required for very lightweight projects. Create React App. Is a library to help creating react apps, that is efficient and scalable, and optimized for production.
+
+# ROUTING
+
+## <NavLink>
+
+1. NavBar.js:
+
+```jsx
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import './NavBar.css';
+
+function NavBar() {
+  return (
+    <nav className="NavBar">
+      <NavLink exact to="/">
+        Home
+      </NavLink>
+      <NavLink exact to="/eat">
+        Eat
+      </NavLink>
+      <NavLink exact to="/drink">
+        Drink
+      </NavLink>
+    </nav>
+  );
+}
+
+export default NavBar;
+```
+
+2. NavBar.css:
+
+```CSS
+.NavBar {
+  background-color: tomato;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* anchor tags: */
+.NavBar a {
+  padding: 0.5em 0;
+  width: 10em;
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+}
+
+.NavBar a:hover {
+  background-color: black;
+  color: white !important;
+}
+
+/* the 'active' pseudo class is comming from the NavLink
+functionality, and gets applied automatically by React Router */
+.NavBar a.active {
+  font-weight: bold;
+  color: black;
+}
+
+```
+
+Same as Link but when you are in the linked page the links is added with a CSS class of active, so it looks different than the rest when you're on that page.
+
+## <Link>
+
+```jsx
+<p>
+  Go to <Link to="/drink">drinks</Link> page
+</p>
+```
+
+The <Link> component acts as a replacement for <a> tags. Instead of an href attribute, <Link> uses a "to" prop. Clicking on <Link> does not issue a GET request, JS intercepts the click and does client-side routing.
+
+## App.js
+
+1. App.js:
+
+```jsx
+import React from 'react';
+
+import Home from './Home';
+import Eat from './Eat';
+import Drink from './Drink';
+import NavBar from './NavBar';
+
+import { BrowserRouter, Route } from 'react-router-dom';
+
+function App() {
+  return (
+    <div className="App">
+      {/* Main wrap, there are other kind of Routers (check docs) */}
+      <BrowserRouter>
+        <NavBar />
+        {/* Routes: */}
+        <Route exact path="/drink">
+          <Drink />
+        </Route>
+        <Route exact path="/eat">
+          <Eat />
+        </Route>
+        <Route exact path="/">
+          <Home />
+        </Route>
+      </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
+```
+
+2. Drink.js:
+
+```jsx
+import React from 'react';
+
+function Drink() {
+  return (
+    <div>
+      <h1>SO REFRESHING</h1>
+      <img
+        src="https://i.giphy.com/DbD6EnlEQmjTi.gif"
+        alt="Diet coke exploding everywhere."
+      />
+    </div>
+  );
+}
+
+export default Drink;
+```
+
+## install_react_router
+
+1. Check create-react-app already done and cd to myAppName dir
+2. `npm install react-router-dom`
+
+Will use a library called [React_Router](https://reactrouter.com)
+
+There are many libraries to handle routing in react.
+
+Client-side routing handles mapping between URL bar. The user sees the content via browser rather than via server. Sites that exclusively use client-side routing are single-page applications. We use JavaScript to manipulate the URL bar with a Web API called History
 
 # style
 

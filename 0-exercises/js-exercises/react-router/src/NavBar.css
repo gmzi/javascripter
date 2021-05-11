@@ -1,0 +1,26 @@
+.NavBar {
+  background-color: tomato;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* anchor tags: */
+.NavBar a {
+  padding: 0.5em 0;
+  width: 10em;
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+}
+
+.NavBar a:hover {
+  background-color: black;
+  color: white !important;
+}
+
+/* the 'active' pseudo class is comming from the NavLink 
+  functionality, and gets applied automatically by React Router */
+.NavBar a.active {
+  font-weight: bold;
+  color: black;
+}
