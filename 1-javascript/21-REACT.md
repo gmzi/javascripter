@@ -11,6 +11,10 @@
    - [react_developer_tools](##React_developer_tools)
    - [setup](##setup)
 2. [ROUTING](#ROUTING)
+   - [Switch](##Switch)
+   - [Redirect](##Redirect)
+   - [url_params/useParams()](##url_params/useParams)
+   - [demo](/Users/xxx/projects/demos/react/react-router/src)
    - [<NavLink>](##<NavLink>)
    - [<Link>](##<Link>)
    - [App.js](##App.js)
@@ -202,6 +206,137 @@ Creates a skeleton of the full app with all the setup.
 It's not required for very lightweight projects. Create React App. Is a library to help creating react apps, that is efficient and scalable, and optimized for production.
 
 # ROUTING
+
+## Switch
+
+Routes.js:
+
+```jsx
+import React from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import Home from './Home';
+import About from './About';
+import Contact from './Contact';
+import BlogHome from './BlogHome';
+import NewBlogForm from './NewBlogForm';
+import AdminDashboard from './AdminDashboard';
+import Post from './Post';
+
+function Routes() {
+  return (
+    <Switch>
+      <Route exact path="/about">
+        <About />
+      </Route>
+      <Route exact path="/contact">
+        <Contact />
+      </Route>
+      <Route exact path="/blog/new">
+        <NewBlogForm />
+      </Route>
+      <Route exact path="/blog/:slug">
+        <Post />
+      </Route>
+      <Route exact path="/blog">
+        <BlogHome />
+      </Route>
+      <Route exact path="/admin">
+        <AdminDashboard />
+      </Route>
+      <Route exact path="/">
+        <Home />
+      </Route>
+      <Redirect to="/about" />
+      {/* Mind NotFound route always last. Mind NotFound only in SWITCH routes.
+      If none of the previus routes match, NotFound will be rendered: */}
+      <Route>
+        <NotFoud />
+      </Route>
+    </Switch>
+  );
+}
+
+export default Routes;
+```
+
+By default, routes are matched inclusively, any Routes whose path matches with what we have in the url will be rendered. React will render all routes that match with the url. SWITCH will render only the first route whose path matches with the url. Exclusive render only renders the first matching route. Similar to express or Flask.
+
+## Redirect
+
+Two ways to redirect:
+
+- way 1: <Redirect to="/somewhere"> component
+
+  - Useful for “you shouldn’t have gotten here, go here instead.
+
+```jsx
+import { Route, Swith, Redirect } from 'react-router-dom';
+function Routes() {
+  return (
+    <Switch>
+      <Route exact path="/somewhere">
+        <Home />
+      </Route>
+      <Route exact path="/about">
+        <Home />
+      </Route>
+      <Route exact path="/">
+        <Home />
+      </Route>
+      {/*If none of the above routes match, will redirect to "about"*/}
+      <Redirect to="/about" />
+    </Switch>
+  );
+}
+```
+
+- way 2: `.push` method on history object
+  - Useful for “you finished this, now go here”
+
+With React Router we can mimic the behavior of server-side redirects. Useful after certain user actions (e.g. submitting a form). Can be used in lieu of having a catch-all 404 component.
+
+## url_params/useParams
+
+Given this path:
+
+```jsx
+// SINGLE PARAMETER:
+<Route path="/food/:name">
+  <Food />
+</Route>
+
+// MULTIPLE PARAMETERS:
+<Route path="/burger/:name/topping/:topp-name">
+  <Burger />
+</Route>
+```
+
+Doesn't have the 'exact' keyword, so it will match whatever comes after '/':
+Grab the parameter with useParams()
+
+```jsx
+import { useParams } from 'react-router-dom';
+
+// SINGLE PARAMETER:
+function Food() {
+  // Mind matching with whatever is after ':'
+  const { name } = useParams();
+
+  function grabSearchTerm() {
+    console.log(name); // FOR hhtp://my-adress/food/algo will return {name: "algo"}
+  }
+}
+
+function Burger() {
+  // Mind matching with whatever is after ':'
+  const { burger, name, topping, topp-name } = useParams();
+
+  function grabSearchTerm() {
+    console.log(burger, name, topping);
+    /* FOR hhtp://my-adress/burger/mcmierda/topping/caca will return {burger: "mcmierda", topping: "caca"} */
+  }
+}
+```
 
 ## <NavLink>
 
