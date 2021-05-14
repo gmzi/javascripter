@@ -11,15 +11,19 @@
    - [react_developer_tools](##React_developer_tools)
    - [setup](##setup)
 2. [ROUTING](#ROUTING)
+   - [demo](/Users/xxx/projects/demos/react/routing)
    - [Switch](##Switch)
    - [Redirect](##Redirect)
+     - [Redirect_component](###Redirect_component)
+     - [useHistory](###useHistory)
    - [url_params/useParams()](##url_params/useParams)
-   - [demo](/Users/xxx/projects/demos/react/react-router/src)
    - [<NavLink>](##<NavLink>)
    - [<Link>](##<Link>)
-   - [App.js](##App.js)
+   - [App.js/Routes.js](##App.js/Routes.js)
    - [install_react_router](##install_react_router)
+   - [TEST_REACT_ROUTER](##TEST_REACT_ROUTER)
 3. [HOOKS](#HOOKS)
+   - [Counter_example](##Counter_example)
    - [useState](##useState)
      - [demo](/Users/xxx/projects/demos/react/states)
      - [update_state_with_callback](##update_state_with_callback)
@@ -37,12 +41,12 @@
      - [useFormFields](###useFormFields)
      - [useToggle](###useToggle)
      - [useLocalStorage](###useLocalStorage)
+   - [closure](##closure)
 4. [COMPONENTS](#components)
    - [demo](/Users/xxx/projects/demos/react/component-design)
    - [pass_function_to_child_component](##pass_function_to_child_component)
    - [dumb_components](##dumb_components)
    - [functional_components](###functional_components)
-   - [class_based_components](###class_based_components)
 5. [EVENTS](#events)
 6. [PROPS](#props)
    - [key_prop](##key_prop)
@@ -55,7 +59,14 @@
 8. [style](#style)
 9. [setup](###basic-dev-setup)
 10. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
-11. [testing](#testing_react)
+11. [CLASS_BASED_COMPONENTS](#CLASS_BASED_COMPONENTS)
+    - [render_props](##render_props)
+    - [Higher_order_components](##Higher_order_components)
+    - [higher_order_functions_recap](###higher_order_functions_recap)
+    - [lifecycle](##lifecycle)
+    - [props](##props)
+    - [state](##state)
+12. [testing](#testing_react)
     - [run_tests](##run_tests)
       General testing:
     - [smoke_tests](###smoke_tests)
@@ -265,12 +276,17 @@ By default, routes are matched inclusively, any Routes whose path matches with w
 
 Two ways to redirect:
 
+### Redirect_component
+
 - way 1: <Redirect to="/somewhere"> component
 
   - Useful for “you shouldn’t have gotten here, go here instead.
 
 ```jsx
+
+//REDIRECT FROM SWITCH:
 import { Route, Swith, Redirect } from 'react-router-dom';
+
 function Routes() {
   return (
     <Switch>
@@ -288,10 +304,76 @@ function Routes() {
     </Switch>
   );
 }
+
+export default Routes;
+// ----------------------------------------------------------------
+
+// REDIRECT FROM COMPONENT:
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+
+const AdminDashboard = () => {
+  const isAdmin = Math.random() < 0.5;
+  return isAdmin ? <h1>WELCOME ADMIN!!!</h1> : <Redirect to="/" />
+}
+
+export default AdminDashboard;
 ```
 
+### useHistory
+
 - way 2: `.push` method on history object
+
   - Useful for “you finished this, now go here”
+
+```jsx
+import React, { useState } from 'react';
+// 1. IMPORT
+import { useHistory } from 'react-router-dom';
+
+function Contact() {
+  const [email, setEmail] = useState('');
+  // 2. SET
+  const history = useHistory();
+
+  function handleChange(e) {
+    setEmail(e.target.value);
+  }
+
+  function storeEmail() {
+    alert('jk, no email storage');
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    storeEmail(email);
+    // 3. CALL
+    // Redirect to home page using useHistory:
+    history.push('/');
+  }
+
+  return (
+    <div>
+      <h1>This is the contact page.</h1>
+      <p>To get in touch, enter email.</p>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          name="email"
+          value={email}
+          onChange={handleChange}
+        />
+        <button>Submit</button>
+      </form>
+    </div>
+  );
+}
+// end
+
+export default Contact;
+```
+
+    Browser has a `window.history` object. In this object the browser keeps track of visited pages and browsing history. React has a hook to interact with window.history: `useHistory`. This hook has a method called `.push(url)`, which adds the url to the session history. This allows the user to use the '<--' and '-->' arrows in the browser, he can go forward or backwards in his history (with the Readirect component we don't have this posibility, since Redirect doesn't add anything to the session history.)
 
 With React Router we can mimic the behavior of server-side redirects. Useful after certain user actions (e.g. submitting a form). Can be used in lieu of having a catch-all 404 component.
 
@@ -410,42 +492,117 @@ Same as Link but when you are in the linked page the links is added with a CSS c
 
 The <Link> component acts as a replacement for <a> tags. Instead of an href attribute, <Link> uses a "to" prop. Clicking on <Link> does not issue a GET request, JS intercepts the click and does client-side routing.
 
-## App.js
+## App.js/Routes.js
 
 1. App.js:
 
 ```jsx
 import React from 'react';
+import Routes from './Routes';
+import Nav from './Nav';
 
-import Home from './Home';
-import Eat from './Eat';
-import Drink from './Drink';
-import NavBar from './NavBar';
-
-import { BrowserRouter, Route } from 'react-router-dom';
+import './App.css';
 
 function App() {
   return (
     <div className="App">
-      {/* Main wrap, there are other kind of Routers (check docs) */}
-      <BrowserRouter>
-        <NavBar />
-        {/* Routes: */}
-        <Route exact path="/drink">
-          <Drink />
-        </Route>
-        <Route exact path="/eat">
-          <Eat />
-        </Route>
-        <Route exact path="/">
-          <Home />
-        </Route>
-      </BrowserRouter>
+      <Nav />
+      <Routes />
     </div>
   );
 }
 
 export default App;
+```
+
+2. Nav.js:
+
+```jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+function Nav() {
+  return (
+    <ul>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/about">About Us</Link>
+      </li>
+      <li>
+        <Link to="/contact">Contact</Link>
+      </li>
+      <li>
+        <Link to="/blog">Blog</Link>
+      </li>
+      <li>
+        <Link to="/blog/new">New Post</Link>
+      </li>
+      <li>
+        <Link to="/blargh">Broken Link</Link>
+      </li>
+      <li>
+        <Link to="/admin">Admin Dashboard</Link>
+      </li>
+    </ul>
+  );
+}
+
+export default Nav;
+```
+
+3. Routes.js:
+
+```jsx
+import React from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import Home from './Home';
+import About from './About';
+import Contact from './Contact';
+import BlogHome from './BlogHome';
+import NewBlogForm from './NewBlogForm';
+import AdminDashboard from './AdminDashboard';
+import Post from './Post';
+
+function Routes() {
+  return (
+    <Switch>
+      <Route exact path="/drink">
+        <Drink />
+      </Route>
+      <Route exact path="/about">
+        <About />
+      </Route>
+      <Route exact path="/contact">
+        <Contact />
+      </Route>
+      <Route exact path="/blog/new">
+        <NewBlogForm />
+      </Route>
+      <Route exact path="/blog/:slug">
+        <Post />
+      </Route>
+      <Route exact path="/blog">
+        <BlogHome />
+      </Route>
+      <Route exact path="/admin">
+        <AdminDashboard />
+      </Route>
+      <Route exact path="/">
+        <Home />
+      </Route>
+      <Redirect to="/about" />
+      {/* Mind NotFound route always last. Mind NotFound only in SWITCH routes.
+      If none of the previus routes match, NotFound will be rendered: */}
+      <Route>
+        <NotFoud />
+      </Route>
+    </Switch>
+  );
+}
+
+export default Routes;
 ```
 
 2. Drink.js:
@@ -470,7 +627,7 @@ export default Drink;
 
 ## install_react_router
 
-1. Check create-react-app already done and cd to myAppName dir
+1. Check create-react-app already done and cd to my-app-name dir
 2. `npm install react-router-dom`
 
 Will use a library called [React_Router](https://reactrouter.com)
@@ -478,6 +635,106 @@ Will use a library called [React_Router](https://reactrouter.com)
 There are many libraries to handle routing in react.
 
 Client-side routing handles mapping between URL bar. The user sees the content via browser rather than via server. Sites that exclusively use client-side routing are single-page applications. We use JavaScript to manipulate the URL bar with a Web API called History
+
+## TEST_REACT_ROUTER
+
+Testing components with React Router. Components may depend on router hooks that we'll have to mock, e.g. useParams hook. Components require the context of a parent router during the test.
+
+Test Single components:
+
+Nav.test.js:
+
+```jsx
+import React from 'react';
+import Nav from './Nav';
+import { render } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+
+it('renders without crashing', () => {
+  render(
+    <MemoryRouter>
+      <Nav />
+    </MemoryRouter>
+  );
+});
+```
+
+Test Routing Logic:
+
+1. Remove <BrowserRouter> from App.js and put it into index.js:
+   index.js:
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+// MIND IMPORTING!!!
+import { BrowserRouter } from 'react-router-dom';
+
+// WRAP APP WITH BROWSERROUTER:
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById('root')
+);
+
+serviceWorker.unregister();
+```
+
+2. App.js should look like this:
+
+```jsx
+import React from 'react';
+import Routes from './Routes';
+import Nav from './Nav';
+
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <Nav />
+      <Routes />
+    </div>
+  );
+}
+export default App;
+```
+
+3. App.test.js:
+
+```jsx
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import App from './App';
+import { MemoryRouter } from 'react-router-dom';
+
+test('/about route', () => {
+  const { getByText } = render(
+    <MemoryRouter initialEntries={['/about']}>
+      <App />
+    </MemoryRouter>
+  );
+  expect(getByText('This is the about page.')).toBeInTheDocument();
+});
+
+test('navbar links', () => {
+  const { getByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <App />
+    </MemoryRouter>
+  );
+  expect(getByText('This is the home page.')).toBeInTheDocument();
+  const link = getByText('Contact');
+  fireEvent.click(link);
+  expect(getByText('This is the contact page.')).toBeInTheDocument();
+});
+```
+
+---
 
 # style
 
@@ -491,6 +748,61 @@ Libraries:
 # HOOKS
 
 [full_hooks](https://reactjs.org/docs/hooks-reference.html)
+Their allow to share functionality between components. They let you use state without having to write a class. Hooks are just functions that let you "hook into" React state and lifecycle features of components. Hooks don't work inside classes, they let you use React without classes.
+
+## Counter_example
+
+Compare this to the Counter example in class based components:
+
+```jsx
+// useCounter.js:
+import React, { useState } from 'react';
+
+const useCounter = () => {
+  const [count, setCount] = useState(0);
+
+  const increment = () => setCount(count => count + 1);
+  const decrement = () => setCount(count => count - 1);
+
+  return [count, increment, decrement];
+};
+
+export default useCounter;
+
+// -------------------------------------------------
+// Counter.js:
+import React from 'react';
+import useCounter from './useCounter';
+
+const Counter = () => {
+  const [count, incr, decr] = useCounter();
+  return (
+      <div>
+          <h1>Count is: {count}</h1>
+          <button onClick={incr}>Increment</button>
+          <button onClick={decr}>Decrement</button>
+      </div>
+  )
+
+};
+
+export default Counter;
+
+// -------------------------------------------------
+// APP.js:
+import React from 'react';
+import Counter from './Counter'
+
+function App() {
+    return (
+        <div className="App">
+            <Counter />
+        </div>
+    )
+}
+
+export default App;
+```
 
 ## useState
 
@@ -1285,6 +1597,109 @@ const Counter = () => {
 export default Counter;
 ```
 
+## closure
+
+Closure is the ability of inner functions to remember variables defines in outer functions, long after the outer function has returned. Hooks use closure to store state, refs, and all kinds of data that we want to persist between function calls.
+
+```jsx
+// SCOPE
+function justScope() {
+  const secret = 42;
+
+  // we have haccess to 'secret'variable, because of scope
+  function shareSecret() {
+    return secret;
+  }
+
+  return shareSecret();
+}
+justScope(); // 42
+
+// --------------------------------------
+// CLOSURE
+// The inner function has access to 'secret', even after the outer function
+// has completed
+function closureExample() {
+  const secret = 42;
+
+  function shareSecret() {
+    return secret;
+  }
+
+  return shareSecret;
+}
+
+let shareFn = closureExample();
+shareFn(); // 42
+
+//--------
+// Updating private variables:
+
+function changeableSecret() {
+  let secret = 42;
+
+  function shareSecret() {
+    return secret;
+  }
+
+  function changeSecret(newSecret) {
+    secret = newSecret;
+  }
+
+  return { shareSecret, changeSecret };
+}
+// Use it in variable:
+let shh = changeableSecret();
+shh.shareSecret(); // 42
+shh.changeSecret(43);
+shh.shareSecret(); // 43;
+// Use it alone:
+let { shareSecret, changeSecret } = changeableSecret();
+shareSecret(); // 43
+changeSecret(21);
+shareSecret(); // 21
+
+// --------------------------
+// Other example
+function counter(initialVal) {
+  let count = initialVal;
+
+  function getCount() {
+    return count;
+  }
+
+  function increment(n) {
+    count += n;
+  }
+  return { getCount, increment };
+}
+
+let vamo = counter(3);
+vamo.increment(12);
+vamo.getCount();
+// Destructure:
+const { getCount, increment } = counter(92);
+getCount(); // 92
+increment(1);
+getCount(); // 93
+
+// -----------------------------
+// A REACT HOOK:
+
+function Counter() {
+  // 'count' is like 'getCount', and setCount in like 'increment'
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+j;
+```
+
 ---
 
 # events
@@ -1622,6 +2037,8 @@ React doesn't control the from state. It's not very common, but may be needed (f
 
 # components
 
+Functional Components:
+
 Parent:
 
 ```jsx
@@ -1772,18 +2189,6 @@ const App = () => {
 };
 ```
 
-### class_based_components
-
-Older version of components
-
-```jsx
-class App extends React.Component {
-  render() {
-    return <p> Hi from a class </p>;
-  }
-}
-```
-
 ---
 
 ## basic-dev-setup
@@ -1847,6 +2252,507 @@ const App = () => {
 
 React helps to create reusable components. We build components that have HTM, JS and CSS working together.
 React is a front end framework. Integrates JS in the front end rendering of the app. Offers a blueprint to build an app in it.
+
+---
+
+# CLASS_BASED_COMPONENTS
+
+```jsx
+class App extends React.Component {
+  render() {
+    return <p> Hi from a class </p>;
+  }
+}
+```
+
+To share code between components, we have a couple of approaches, all of them following the concept of higher order functions:
+
+## render_props
+
+```jsx
+import React from 'react';
+
+class CounterWrapper extends React.Component {
+  state = { count: 0 };
+
+  increment = () => {
+    this.setState({ count: this.state.count + 1 });
+  };
+
+  decrement = () => {
+    this.setState({ count: this.state.count - 1 });
+  };
+
+  render() {
+    return (
+      <div>
+          {/* BEHOLD THE WEIRDNESS: */}
+        {this.props.render({
+          increment: this.increment,
+          decrement: this.decrement,
+          count: this.state.count,
+        })}
+      </div>
+    );
+  }
+}
+
+export default CounterWrapper;
+
+// --------------------------------------------------
+// Counter.js:
+import React from 'react';
+import CounterWrapper from './CounterWrapper'
+
+class Counter extends React.Component {
+    render() {
+      return (
+        <CounterWrapper
+          render={obj => (
+            <div>
+              <div>Current count: {obj.count}</div>
+              <div>
+                <button onClick={obj.decrement}>
+                  -
+                </button>
+                <button onClick={obj.increment}>
+                  +
+                </button>
+              </div>
+            </div>
+          )}
+        />
+      );
+    }
+  }
+
+  export default Counter;
+
+// --------------------------------------------------
+// APP.js:
+import React from 'react';
+import Counter from './Counter';
+
+function App() {
+    return (
+        <div>
+            <Counter />
+        </div>
+    )
+}
+
+export default App;
+```
+
+## Higher_order_components
+
+```jsx
+// Make the function:
+// withCounter.js:
+const withCounter = (Component) => {
+  return class extends React.Component {
+    state = {
+      count: 0,
+    };
+
+    handleDecrement = () => {
+      this.setState({ count: this.state.count - 1 });
+    };
+
+    handleIncrement = () => {
+      this.setState({ count: this.state.count + 1 });
+    };
+
+    render() {
+      return (
+        // This is the cool part, render the component with the class attributes:
+        <Component
+          {...this.props}
+          count={this.state.count}
+          onIncrease={this.handleIncrement}
+          onDecrease={this.handleDecrement}
+        />
+      );
+    }
+  };
+};
+
+export default withCounter;
+
+// -----------------------------------------------------------
+// Counter.js:
+import React from 'react';
+import withCounter from './withCounter';
+
+const Counter = (props) => (
+  <div style={{color: props.color}}>
+    <div>Current count: {props.count}</div>
+    <div>
+      <button onClick={props.onDecrease}>-</button>
+      <button onClick={props.onIncrease}>+</button>
+    </div>
+  </div>
+);
+// HERES WHERE THE HIGHER ORDER COMPONENT GETS REALLY HIGH:
+export default withCounter(Counter);
+
+// -----------------------------------------------------------
+// ThingCounter.js:
+import React from 'react';
+import withCounter from './withCounter';
+
+class ThingCounter extends React.Component {
+  constructor(props){
+    super(props)
+    // a state local and specific to this component:
+    this.state = {thingToCount: 'soretes'}
+  }
+  render(){
+    const {thingToCount} = this.state;
+    const {count, onDecrease, onIncrease} = this.props;
+    return (
+      <div>
+        <h3>Your things: {thing.repeat(count)}</h3>
+        <div>
+          <button onClick={onDecrease}>Subtract things</button>
+          <button onClick={onIncrease}>Add things</button>
+        </div>
+      </div>
+    )
+  }
+}
+
+export default withCounter(ThingCounter)
+
+
+
+// -----------------------------------------------------------
+// APP.JS:
+import React from 'react';
+import Counter from './Counter';
+
+function App() {
+  return (
+    <div className="App">
+      <Counter color={'black'} />
+    </div>
+  );
+}
+
+```
+
+### higher_order_functions_recap
+
+```javascript
+// Given task of calculating, logging the result and returning the result
+// 1. Basic funcs:
+function addAndLog(x, y) {
+  let result = x + y;
+  console.log('result:', result);
+  return result;
+}
+
+function multiplyAndLog(x, y) {
+  let result = x * y;
+  console.log('result:', result);
+  return result;
+}
+
+// Clean the duplication of console.logs, make a function that accepts another function
+// and returns a new function with the logging included:
+function add(x, y) {
+  return x + y;
+}
+
+function multiply(x, y) {
+  return x * y;
+}
+
+function withLogging(wrappedFunction) {
+  return function (x, y) {
+    let result = wrappedFunction(x, y);
+    console.log('result:', result);
+    return result;
+  };
+}
+// now use it:
+const addAndLog = withLogging(add);
+console.log(addAndLog(2, 2)); // result: 4 / 4
+
+// Equivalent to writing multiplyAndLog by hand:
+const multiplyAndLog = withLogging(multiply);
+console.log(multiplyAndLog(3, 2)); // result: 6 / 6
+```
+
+## lifecycle
+
+```jsx
+//Counter.js:
+import React from 'react';
+
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0, isHiding: false };
+    this.increment = this.increment.bind(this);
+    this.decrement = this.decrement.bind(this);
+  }
+
+  increment() {
+    this.setState({ count: this.state.count + 1 });
+  }
+
+  decrement() {
+    this.setState({ count: this.state.count - 1 });
+  }
+
+  // ONLY RUNS ONE TIME (WHEN COMP MOUNTS)
+  componentDidMount() {
+    console.log('compoonent mounted...');
+  }
+
+  // every time comp updates:
+  componentDidUpdate() {
+    console.log('component updated....');
+  }
+
+  // cleanup timers, close sockets,
+  componentWillUnmount() {
+    console.log('about to close component...');
+  }
+
+  render() {
+    console.log('component rendered....');
+    const { color } = this.props;
+    const { count } = this.state;
+    return (
+      <div>
+        <h1 style={{ color }}>I am Counter</h1>
+        <h3>Count is: {count}</h3>
+        <button onClick={this.increment}>Add 1</button>
+        <button onClick={this.decrement}>Subtract 1</button>
+      </div>
+    );
+  }
+}
+
+export default Counter;
+```
+
+Lifecycle is specific to class based components. In functional components we use useEffect, but here we use the lifecycle methods:
+
+- constructor
+  Runs when the component first tries to mount
+- render
+  Renders the component
+- componentDidMount
+  Runs after the first render only. Great for fetching data.
+- componentDidUpdate
+  Runs after the component is updated. Does not run after the first render. Good place to optionally fetch data, sync to localStorage, etc.
+- componentWillUnmount
+  Runs before the component is set to be removed from the DOM. Good place to clean up timers or cancel network requests.
+
+## state
+
+1. Changing state with functions as instance methods:
+
+```jsx
+//Counter.js:
+import React from 'react';
+
+class Counter extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {count: 0, isHiding: false}
+        //1. BIND 'THIS' TO METHODS:
+        this.increment = this.increment.bind(this)
+        this.decrement = this.decrement.bind(this)
+    }
+
+    //2. DECLARE INSTANCE METHODS:
+    increment() {
+        this.setState({count: this.state.count + 1})
+    }
+
+    decrement() {
+        this.setState({count: this.state.count - 1})
+    }ra
+
+  render() {
+      const {color} = this.props;
+      const {count} = this.state;
+    return (
+        <div>
+            <h1 style={{color}}>I am Counter</h1>
+            <h3>Count is: {count}</h3>
+            {/* 3. CALL INSTANCE METHODS: */}
+            <button onClick={this.increment}>Add 1</button>
+            <button onClick={this.decrement}>Subtract 1</button>
+        </div>
+    )
+  }
+}
+
+export default Counter;
+
+// -------------------------------------------------
+
+// IN APP.JS:
+import Counter from './Cunter';
+
+function App() {
+  return <Counter color="purple" initialVal={10} />;
+}
+export default App;
+
+```
+
+2. Changing state with class fields (experimental Javascript syntax, create-react-app supports it compiling it with Babel)
+
+```jsx
+//Counter.js:
+import React from 'react';
+
+class Counter extends React.Component {
+  state = {
+    count: 0,
+  };
+
+  // Binds:
+  decrement = () => {
+    this.setState({ count: this.state.count - 1 });
+  };
+
+  increment = () => {
+    this.setState({ count: this.state.count + 1 });
+  };
+
+  render() {
+    const { color } = this.props;
+    const { count } = this.state;
+    return (
+      <div>
+        <h1 style={{ color }}>I am Counter</h1>
+        <h3>Count is: {count}</h3>
+        {/* CALL INSTANCE METHODS: */}
+        <button onClick={this.increment}>Add 1</button>
+        <button onClick={this.decrement}>Subtract 1</button>
+      </div>
+    );
+  }
+}
+
+export default Counter;
+```
+
+3. Changing state with inline arrow functions (not great):
+
+```jsx
+//Counter.js:
+import React from 'react';
+
+// all the cool methods are under React.Component
+class Counter extends React.Component {
+
+    constructor(props){
+        super(props);
+        // MIND IS ONE STATE BY COMPONENT
+        this.state = {count: 0, isHiding: false}
+    }
+
+  render() {
+      const {color} = this.props;
+      const {count} = this.state;
+    return (
+        <div>
+            <h1 style={{color}}>I am Counter</h1>
+            <h3>Count is: {count}</h3>
+            {/* CHANGE STATE: */}
+            <button onClick={()=> this.setState({count: count + 1})}>Add 1</button>
+            <button onClick={()=> this.setState({count: count - 1})}>Subtract 1</button>
+        </div>
+    )
+  }
+}
+
+export default Counter;
+
+// -------------------------------------------------
+
+// IN APP.JS:
+import Counter from './Cunter';
+
+function App() {
+  return <Counter color="purple" initialVal={10} />;
+}
+export default App;
+
+```
+
+## props
+
+```jsx
+//Counter.js:
+import React from 'react';
+
+// all the cool methods are under React.Component
+class Counter extends React.Component {
+
+    constructor(props){
+        super(props);
+        console.log(this.props) // Object: color: "purple", initialVal: 10
+    }
+
+  render() {
+      const {color} = this.props;
+    return (
+        <div>
+            <h1 style={{color}}>I am Counter</h1>
+        </div>
+    )
+  }
+}
+
+export default Counter;
+
+// -------------------------------------------------
+
+// IN APP.JS:
+import Counter from './Cunter';
+
+function App() {
+  return <Counter color="purple" initialVal={10} />;
+}
+export default App;
+
+```
+
+basic syntax:
+
+```jsx
+//Mesasge.js:
+import React from 'react';
+
+// all the cool methods are under React.Component
+class Message extends React.Component {
+  render() {
+    return <h1>Hello World</h1>;
+  }
+}
+
+export default Message;
+
+// -------------------------------------------------
+
+// IN APP.JS:
+import Message from './Message';
+
+function App() {
+  return <Message />;
+}
+export default App;
+```
 
 ---
 
