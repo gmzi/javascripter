@@ -16,14 +16,21 @@
    - [Redirect](##Redirect)
      - [Redirect_component](###Redirect_component)
      - [useHistory](###useHistory)
-   - [url_params/useParams()](##url_params/useParams)
+   - [useParams/url_params](##url_params/useParams)
    - [<NavLink>](##<NavLink>)
    - [<Link>](##<Link>)
    - [App.js/Routes.js](##App.js/Routes.js)
    - [install_react_router](##install_react_router)
    - [TEST_REACT_ROUTER](##TEST_REACT_ROUTER)
-3. [HOOKS](#HOOKS)
+3. [CONTEXT](#CONTEXT)
+   - [create](##create)
+   - [provide](##provide)
+   - [consume](##consume)
+   - [pattern_example](##pattern_example)
+   - [demo](/Users/xxx/projects/demos/react/context/counter)
+4. [HOOKS](#HOOKS)
    - [Counter_example](##Counter_example)
+   - [useContext](checkout context)
    - [useState](##useState)
      - [demo](/Users/xxx/projects/demos/react/states)
      - [update_state_with_callback](##update_state_with_callback)
@@ -42,31 +49,31 @@
      - [useToggle](###useToggle)
      - [useLocalStorage](###useLocalStorage)
    - [closure](##closure)
-4. [COMPONENTS](#components)
+5. [COMPONENTS](#components)
    - [demo](/Users/xxx/projects/demos/react/component-design)
    - [pass_function_to_child_component](##pass_function_to_child_component)
    - [dumb_components](##dumb_components)
    - [functional_components](###functional_components)
-5. [EVENTS](#events)
-6. [PROPS](#props)
+6. [EVENTS](#events)
+7. [PROPS](#props)
    - [key_prop](##key_prop)
    - [props.children](##props.children)
    - [props_with_default_values](##props_with_default_values)
    - [loops](##loops)
    - [conditionals](##conditionals)
    - [expressions](##expressions)
-7. [FORMS](#FORMS)
-8. [style](#style)
-9. [setup](###basic-dev-setup)
-10. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
-11. [CLASS_BASED_COMPONENTS](#CLASS_BASED_COMPONENTS)
+8. [FORMS](#FORMS)
+9. [style](#style)
+10. [setup](###basic-dev-setup)
+11. [basic-demo](/Users/xxx/projects/demos/react/basic-layout)
+12. [CLASS_BASED_COMPONENTS](#CLASS_BASED_COMPONENTS)
     - [render_props](##render_props)
     - [Higher_order_components](##Higher_order_components)
     - [higher_order_functions_recap](###higher_order_functions_recap)
     - [lifecycle](##lifecycle)
     - [props](##props)
     - [state](##state)
-12. [testing](#testing_react)
+13. [testing](#testing_react)
     - [run_tests](##run_tests)
       General testing:
     - [smoke_tests](###smoke_tests)
@@ -733,6 +740,167 @@ test('navbar links', () => {
   expect(getByText('This is the contact page.')).toBeInTheDocument();
 });
 ```
+
+---
+
+# CONTEXT
+
+Create and use context:
+
+## create
+
+CountContext.js:
+
+```jsx
+import React from 'react';
+
+const CountContext = React.createContext();
+
+export default CountContext;
+
+/* this will create the Context object with its metod <MyContext.Provider value={some}/> that
+we can use to wrap the components where we will use the context. Everything nested inside
+of the provider will have access to whatever data is stored in the Context. */
+```
+
+## provide:
+
+CounterReadWrite.js:
+
+```jsx
+import React, { useState } from 'react';
+import Child from './Child';
+import CountContext from './countContext';
+
+function CounterReadWrite() {
+  //changhe the value of count:
+  const [num, setNum] = useState(0);
+  const up = () => {
+    setNum((oldNum) => oldNum + 1);
+  };
+
+  return (
+    // pass the value of count and the function to change it:
+    <CountContext.Provider value={{ num, up }}>
+      <Child />
+      <GreatGrandChild />
+    </CountContext.Provider>
+    //   <Something> rendered here won't have access to context data.
+  );
+}
+
+export default CounterReadWrite;
+
+/* Childs can access only to whatever is stored in 'value', and must be only one item (object, array, etc) with items inside
+ */
+```
+
+## consume:
+
+Any component nested inside a Provider can suscribe to context value. Every time Provided value changes, the consumer components will be re-rendered.
+
+GreatGrandChild.js:
+
+```jsx
+import React, { useContext } from 'react';
+import CountContext from './CountContext';
+import ThemeContext from './ThemeContext';
+
+function GreatGrandReadWrite() {
+  //consume the value and the function to change it:
+  const { countNum, up } = useContext(CountContext);
+  // can consume multiple contexts:
+  const color = useContext(ThemeContext);
+
+  return (
+    <div>
+      <p>I'm a great-grandchild!</p>
+      <p>Here's the count: {countNum}.</p>
+      <button onClick={up}>Add 1 to counter</button>
+    </div>
+  );
+}
+
+export default GreatGrandReadWrite;
+```
+
+## pattern_example
+
+1. App.js:
+   Only renders the navbar and the app main component.
+
+```jsx
+import React from 'react';
+import Navbar from './Navbar';
+import Some from './Some';
+
+function App(){
+  return (
+    <div className="App">ma
+      <ThemeProvider>
+        <Navbar>
+        <Some>
+      </ThemeProvider>
+    </div>
+  )
+}
+export default App;
+```
+
+2. ThemeContext.js:
+   Makes context
+
+```jsx
+import React from 'react';
+
+const CountContext = React.createContext();
+
+export default CountContext;
+```
+
+3. ThemeProvider.js
+   Hosts the theme logic so we don't have to put it in app.js, and renders Nav and whatever global components needed.
+
+```jsx
+import React, { useState } from 'react';
+import ThemeContext from './ThemeContext';
+
+// Mind 'children' is a React keyword to say "everything passed in children will be rendered inside "ThemeContext" labels
+const ThemeProvider = ({ children }) => {
+  // store current color:
+  const [color, setColor] = useState('olive');
+  // change color:
+  const toggleColor = () => {
+    setColor((color) => (color === 'olive' ? 'purple' : 'olive'));
+  };
+
+  return (
+    // Mind 'children' is React keyword!!!!!!
+    <ThemeContext.Provider value="orange">{children}</ThemeContext.Provider>
+  );
+};
+
+export default ThemeProvider;
+```
+
+3. GreatGrandChild.js:
+
+```jsx
+import React, { useContext } from 'react';
+import ThemeContext from './ThemeContext';
+
+function GreatGrandChild() {
+  const { color } = useContext(ThemeContext);
+
+  return (
+    <div style={{ color }}>
+      <h1>This is consumer</h1>
+    </div>
+  );
+}
+```
+
+Prop drilling is passing data down (as props) from parent to childs, grandchilds, grandgrandchilds, etc. We must pass the props one step at a time. CONTEXT allows to have UNIVERSAL DATA accross the application, and it's possible to control what has access where, and no need to make prop drilling. We still want to make components as self-contained as possible, but in certain cases Context will help to aliviate some of the tunneling.
 
 ---
 

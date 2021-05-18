@@ -43,6 +43,7 @@
 [sumRows](###sumRows)
 [Guessing_game](###Guessing_game)
 [filterByType](###filterByType)
+[SPIRAL_MATRIX](###SPIRAL_MATRIX)
 
 ---
 
@@ -1366,6 +1367,7 @@ function vowelCount(str) {
 ```
 
 ### grid_star
+
 Star rows and columns where is a star
 
 ```javascript
@@ -1409,7 +1411,6 @@ console.log(
 ["*", "*", "*"]
 ["G", "H", "*"]
 */
-
 ```
 
 ### subset_of_str
@@ -1547,6 +1548,36 @@ const filterByType = (type, ...values) => {
 filterByType('number', 1, 2, 3, 'caca', 6, true, 'denise', 9);
 // [1, 2, 3, 6, 9]
 filterByType('string', 1, 2, 3, 'caca', 6, true, 'denise', 9); // "caca" "denise"
+```
+
+### SPIRAL_MATRIX
+
+Return nested arrays in spiral shape:
+
+```javascript
+const square = [
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  [9, 10, 11, 12],
+  [13, 14, 15, 16],
+];
+
+// source: https://stackoverflow.com/questions/30906366/spiral-traversal-of-a-matrix-recursive-solution-in-javascript
+function spiral(matrix) {
+  const arr = [];
+
+  while (matrix.length) {
+    arr.push(
+      ...matrix.shift(),
+      ...matrix.map((a) => a.pop()),
+      ...(matrix.pop() || []).reverse(),
+      ...matrix.map((a) => a.shift()).reverse()
+    );
+  }
+  return arr;
+}
+
+console.log(spiral(square)); // [1, 2, 3, 4, 8, 12, 16, 15, 14, 13, 9, 5, 6, 7, 11, 10]
 ```
 
 ### Function_picker
