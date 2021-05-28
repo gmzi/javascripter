@@ -626,18 +626,19 @@ Clone python project
    - `heroku git:remote -a <NAME_OF_APP>`
    - `git add .`
    - `git commit -m "ready to deploy backend"`
-2. Deploy the backend:
    - `git push heroku master`
+2. Create and deploy the db:
    - `heroku addons:create heroku-postgresql:hobby-dev -a <NAME_OF_APP>`
    - `heroku pg:push <name_of_local_database> DATABASE_URL -a <NAME_OF_APP>` Mind having a local seeded database to push, and Postgres app running.
    - `heroku config:set PGSSLMODE=no-verify`
-   - `heroku open` Should see the json response from the db, and routes should be available.
+   - `heroku open` Should see the json response from the db, and tables should be available.
 3. Connect the frontend:
-   - `REACT_APP_BASE_URL=<YOUR_HEROKU_DB_APP_URL> npm run build`
-     (to deploy in surge only:
-   - `cp build/index.html build/200.html`
-   - `surge build`
-     )
+   - `REACT_APP_BASE_URL=<YOUR_HEROKU_APP_URL> npm run build`
+     (to deply in vercel only:
+     - `CI false` add this environment variable in vercel webpage.)
+       (to deploy in surge only:
+     - `cp build/index.html build/200.html`
+     - `surge build`)
 
 # DEPLOY
 
