@@ -36,6 +36,8 @@
    - [clone_project](##clone_project)
    - [global_install](##global_install)
 8. [DATABASE](#DATABASE)
+   - [create_local_db](##create_local_database)
+   - [heroku_database](##heroku_database)
 9. [DEPLOY](#DEPLOY)
    - [flask_app](##deploy_flask_app)
 10. [run_local_server](#run_server)
@@ -593,7 +595,7 @@ Clone python project
 
 # DATABASE
 
-## create_database
+## create_local_database
 
 1. Option 1, in terminal:
    1. cd to directory
@@ -614,6 +616,28 @@ Clone python project
    - cd to dir
    - active psql
    - `psql < my_file.sql`
+
+## heroku_database
+
+1. Create heroku app that will manage the db:
+   - `heroku login`
+   - `heroku create <NAME_OF_APP>`
+   - `echo "web: node server.js" > Procfile`
+   - `heroku git:remote -a <NAME_OF_APP>`
+   - `git add .`
+   - `git commit -m "ready to deploy backend"`
+2. Deploy the backend:
+   - `git push heroku master`
+   - `heroku addons:create heroku-postgresql:hobby-dev -a <NAME_OF_APP>`
+   - `heroku pg:push <name_of_local_database> DATABASE_URL -a <NAME_OF_APP>` Mind having a local seeded database to push, and Postgres app running.
+   - `heroku config:set PGSSLMODE=no-verify`
+   - `heroku open` Should see the json response from the db, and routes should be available.
+3. Connect the frontend:
+   - `REACT_APP_BASE_URL=<YOUR_HEROKU_DB_APP_URL> npm run build`
+     (to deploy in surge only:
+   - `cp build/index.html build/200.html`
+   - `surge build`
+     )
 
 # DEPLOY
 
