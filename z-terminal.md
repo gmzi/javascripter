@@ -624,6 +624,7 @@ Clone python project
    - `heroku create <NAME_OF_APP>`
    - `echo "web: node server.js" > Procfile`
    - `heroku git:remote -a <NAME_OF_APP>`
+   - REMOVE NODE_MODULES FOLDER FROM THE BACKEND APPLICATION, OTHERWISE WILL THROW ERROR.
    - `git add .`
    - `git commit -m "ready to deploy backend"`
    - `git push heroku master`
