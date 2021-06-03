@@ -1,229 +1,82 @@
-function countZeroes(arr) {
-  let startIdx = 0;
-  let endIdx = arr.length - 1;
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
 
-  while (startIdx <= endIdx) {
-    let middleIdx = Math.floor(startIdx + endIdx / 2);
-    let middleVal = arr[middleIdx];
-    if (middleVal !== 0) {
-      startIdx = middleIdx;
-    } else {
-      const firstVal = arr.indexOf(0);
-      const result = arr.splice(firstVal, arr.length);
-      return result.length;
+// let antNode = new Node('ant');
+// let beeNode = new Node('bee');
+// let caterpillarNode = new Node('caterpillar');
+
+// antNode.next = beeNode;
+// beeNode.next = caterpillarNode;
+
+// let antNode = new Node('ant', new Node('bee', new Node('caterpillar')));
+
+// ----------------------------------
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+  }
+
+  push(val) {
+    // adds node at the end of list
+    let newNode = new Node(val);
+    if (this.head === null) this.head = newNode;
+    if (this.tail !== null) this.tail.next = newNode;
+    this.tail = newNode;
+    return this;
+  }
+
+  remove(val) {
+    /** if removing the only item in linked list
+            Don’t forget to update head and tail to null
+      if removing first item:
+          Don’t forget to update the head!
+      if removing the last item:
+          Don’t forget to update the tail!
+       */
+  }
+
+  find(val) {
+    // finds given value in list, => true/false
+    let current = this.head;
+    while (current !== null) {
+      if (current.val === val) return true;
+      current = current.next;
     }
+    return false;
   }
-  return 0;
-}
 
-// -------------------------------------------------------------
-function sortedFrequency(arr, num) {
-  let firstIdx = findFirst(arr, num);
-  if (firstIdx == -1) return firstIdx;
-  let lastIdx = findLast(arr, num);
-  return lastIdx - firstIdx + 1;
-}
-
-function findFirst(arr, num, low = 0, high = arr.length - 1) {
-  if (high >= low) {
-    let mid = Math.floor((low + high) / 2);
-    if ((mid === 0 || num > arr[mid - 1]) && arr[mid] === num) {
-      return mid;
-    } else if (num > arr[mid]) {
-      return findFirst(arr, num, mid + 1, high);
-    } else {
-      return findFirst(arr, num, low, mid - 1);
-    }
-  }
-  return -1;
-}
-
-function findLast(arr, num, low = 0, high = arr.length - 1) {
-  if (high >= low) {
-    let mid = Math.floor((low + high) / 2);
-    if ((mid === arr.length - 1 || num < arr[mid + 1]) && arr[mid] === num) {
-      return mid;
-    } else if (num < arr[mid]) {
-      return findLast(arr, num, low, mid - 1);
-    } else {
-      return findLast(arr, num, mid + 1, high);
-    }
-  }
-  return -1;
-}
-
-// -------------------------------------------------------------
-
-function findRotatedIndex(arr, val) {
-  let middleIdx = findMiddleIdx(arr);
-  let highestValIdx = findHighestValIdx(arr);
-  const middleVal = arr[middleIdx];
-  if (middleVal === val) {
-    return middleIdx;
-  } else if (middleVal > val && arr[0] > val) {
-    return binarySearch(arr, highestValIdx + 1, arr.length - 1, val);
-  } else {
-    return binarySearch(arr, 0, highestValIdx, val);
-  }
-}
-
-function findMiddleIdx(arr, startIdx = 0, endIdx = arr.length - 1) {
-  return Math.floor((startIdx + endIdx) / 2);
-}
-
-function findHighestValIdx(arr) {
-  let start = 0;
-  let end = arr.length - 1;
-  while (start <= end) {
-    const middle = findMiddleIdx(arr, start, end);
-    if (arr[middle] > arr[middle + 1]) return middle;
-    else if (arr[start] <= arr[middle]) {
-      start = middle + 1;
-    } else {
-      end = middle - 1;
+  traverse() {
+    // prints val and next of each node
+    let current = this.head;
+    while (current !== null) {
+      console.log(current.val);
+      current = current.next;
     }
   }
 }
 
-function binarySearch(arr, start, end, val) {
-  if (start >= 0 && end <= arr.length - 1) {
-    while (start <= end) {
-      let middleIdx = Math.floor((start + end) / 2);
-      if (arr[middleIdx] === val) {
-        return middleIdx;
-      } else if (val < arr[middleIdx]) {
-        end = middleIdx - 1;
-      } else {
-        start = middleIdx + 1;
-      }
-    }
-  }
-  return -1;
-}
+const insects = new LinkedList();
+// insects.head = antNode;
 
-// findRotatedIndex([3,4,1,2],4)
-findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 8);
-// findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 8)
-// findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 3);
-// findRotatedIndex([37,44,66,102,10,22],14)
-// findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 12)
+// use methods:
+insects.push('ant');
+insects.push('bee');
+insects.push('caterpillar');
+insects.push('dragonfly');
+insects.push('wasp');
 
-// -----------------------------------------------------------------
+insects.traverse(); // ant, bee, caterpillar, dragonfly
 
-function findRotationCount(arr) {
-  if (arr[0] < arr[arr.length - 1]) return 0;
+insects.find('fly'); // false
+insects.find('bee'); // true
 
-  const highestValueIdx = findHighestValueIdx(arr);
-  return binaryCount(arr, 0, highestValueIdx);
-}
-
-function binaryCount(arr, start, end) {
-  let count = 0;
-  while (start < end) {
-    const middle = Math.floor((start + end) / 2);
-    console.log(middle);
-    count++;
-    end -= 1;
-  }
-  return count + 1;
-}
-
-function findHighestValueIdx(arr) {
-  let start = 0;
-  let end = arr.length - 1;
-  while (start <= end) {
-    let middle = Math.floor((start + end) / 2);
-    if (arr[middle] > arr[middle + 1]) return middle;
-    else if (arr[start] <= arr[middle]) {
-      start = middle + 1;
-    } else {
-      end = middle - 1;
-    }
-  }
-}
-
-/**
- * SOLUTION:
- function findRotationCount(arr, low = 0, high = arr.length - 1) {
-  if (high < low) return 0;
-  if (high === low) return low;
-  let mid = Math.floor((low + high) / 2)
-
-  // Check if element (mid+1) is minimum element.
-  // Consider the cases like [3, 4, 5, 1, 2]
-  if (mid < high && arr[mid + 1] < arr[mid])
-    return mid + 1;
-
-  // Check if mid itself is minimum element
-  if (mid > low && arr[mid] < arr[mid - 1]) {
-    return mid;
-  }
-
-  // Decide whether we need to go to left half or
-  // right half
-  if (arr[high] > arr[mid]) {
-    return findRotationCount(arr, low, mid - 1);
-  }
-
-  return findRotationCount(arr, mid + 1, high);
-}
-
-// findRotationCount([15, 18, 2, 3, 6, 12]) 
-findRotationCount([7, 9, 11, 12, 5]) 
- */
-
-findRotationCount([15, 18, 2, 3, 6, 12]);
-// findRotationCount([7, 9, 11, 12, 5])
-// findRotationCount([7, 9, 11, 12, 15])
-
-// ----------------------------------------------------------------
-function findFloor(arr, value) {
-  const middleIdx = Math.floor((arr.length - 1) / 2);
-  const middleValue = arr[middleIdx];
-  if (middleValue > value) {
-    return binarySearch(arr, 0, middleIdx, value);
-  } else if (middleValue < value) {
-    return binarySearch(arr, middleIdx, arr.length - 1, value);
-  } else {
-    // check if arr[middleIdx] !== value, and return arr[middleValue] when it is
-    return 'hola';
-  }
-}
-
-function binarySearch(arr, start, end, value) {
-  while (start <= end) {
-    let middleIdx = Math.floor((start + end) / 2);
-    if (arr[middleIdx] === value - 1) {
-      return arr[middleIdx];
-    } else {
-      start++;
-    }
-  }
-  return -1;
-}
-
-/**
- SOLUTION:
- function findFloor(arr, num, low = 0, high = arr.length - 1) {
-  if (low > high) return -1;
-  if (num >= arr[high]) return arr[high];
-
-  let mid = Math.floor((low + high) / 2)
-
-  if (arr[mid] === num) return arr[mid];
-
-  if (mid > 0 && arr[mid - 1] <= num && num < arr[mid]) {
-    return arr[mid - 1];
-  }
-
-  if (num < arr[mid]) {
-    return findFloor(arr, num, low, mid - 1);
-  }
-
-  return findFloor(arr, num, mid + 1, high)
-}
- *  */
-
-findFloor([1, 2, 8, 10, 10, 12, 19], 9);
-// findFloor([1,2,8,10,10,12,19], 20)
-// findFloor([1,2,8,10,10,12,19], 0)
+// now the Nodes follow their own chaining through their "next" value:
+// insects.head.next; // bee
+// insects.head.next.next; // catarpillar
+// insects.head.next.next.next; // null

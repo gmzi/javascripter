@@ -1,8 +1,9 @@
 - Abstract data types
   [lists](#lists)
   - [linked_lists](##linked_lists)
-    - [Nodes](###Nodes)
-  - [double_linked_lists](##douuble_linked_lists)
+    - [runtime_of_LLists](#runtime_ll)
+  - [doubly_linked_lists](##douubly_linked_lists)
+  - [Nodes](##Nodes)
   - [arrays](##arrays)
     - [indirect_arrays](###indirect_arrays)
     - [direct_arrays/vectors](###direct_arrays/vectors)
@@ -37,9 +38,68 @@ They have two implementations: arrays and linked lists.
 Not built in in Javascript, we have to implement it:
 
 ```javascript
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+  }
 
+  push(val) {
+    // adds node at the end of list
+    let newNode = new Node(val);
+    if (this.head === null) this.head = newNode;
+    if (this.tail !== null) this.tail.next = newNode;
+    this.tail = newNode;
+    return this;
+  }
+
+  remove(val) {
+    /** if removing the only item in linked list
+            Don’t forget to update head and tail to null
+      if removing first item:
+          Don’t forget to update the head!
+      if removing the last item:
+          Don’t forget to update the tail!
+       */
+  }
+
+  find(val) {
+    // finds given value in list, => true/false
+    let current = this.head;
+    while (current !== null) {
+      if (current.val === val) return true;
+      current = current.next;
+    }
+    return false;
+  }
+
+  traverse() {
+    // prints val and next of each node
+    let current = this.head;
+    while (current !== null) {
+      console.log(current.val);
+      current = current.next;
+    }
+  }
+}
+
+const insects = new LinkedList();
+// insects.head = antNode;
+
+// use methods:
+insects.push('ant');
+insects.push('bee');
+insects.push('caterpillar');
+insects.push('dragonfly');
+insects.push('wasp');
+
+insects.traverse(); // ant, bee, caterpillar, dragonfly
+
+insects.find('fly'); // false
+insects.find('bee'); // true
 ```
 
+Check steps in visualgo: https://visualgo.net/en/list
 ![linked_lists](../images/head-and-tail.png)
 
 Nodes aren’t stored in contiguous memory; instead, each item references the next item in the sequence.Can rearrange without having to move other nodes in memory. It's more efficient than an array if we have to rearrange or move thins around. In an array we would have to shift over every element to insert a new item. In a linked list, we just change the references, and it's constant time. Although is not that efficient for a search by position.
@@ -49,7 +109,28 @@ Nodes aren’t stored in contiguous memory; instead, each item references the ne
 They are linear data structures: there is a sequence and an order to how they are constructed and traversed:
 ![linear](../images/linear.png)
 
-### Nodes
+<a name="runtime_ll"></a>
+
+### runtime of linked lists
+
+- Going to “next” item: O(1)
+- Insert node at the beginning: O(1)
+- Insert node at end: O(1) if known tail; O(n) if unknown;
+- Deleting at start: O(1)
+- Deleting at end: O(n) (because nodes desn't know "previous" value)
+- Going to item by arbitrary index: O(n)
+- Searching for value: O(n)
+- General insertion or deletion in the middle of list: O(n)
+
+## douubly_linked_lists
+
+Each node has a "next" and a "previous".
+
+Same principles as the linked lists, except that has the "previous" value. Allows us to traverse backwards, and makes easier to insert in the middle and to delete at the end of list. Can remove from the end in O(1), because can go to the tail, find the previous node and make it tail. The downsize is that you have to update next and previous every time, and you use more space in memory.
+
+![graphic](../images/doubly-linked-lists.png)
+
+## Nodes
 
 The basic unit in a linked list is a node. A basic node has two attributes:
 
@@ -82,16 +163,16 @@ class Node {
 let antNode = new Node('ant', new Node('bee', new Node('caterpillar')));
 ```
 
-## double_linked_lists
-
 ## arrays
 
 Array runtimes:
 
 - Retrieving by index: O(1)
-- Finding: O(n)
-- General insertion: O(n)
-- General deletion: O(n)
+- Searching: O(n)
+- General insertion: O(n) (because all things in array have to be shifted over)
+- General deletion: O(n) (all things have to be reaccomodated)
+- append to start: O(1)
+- append to end: O(1)
 
 Arrangement of items at equally-spaced addresses in memory:
 
