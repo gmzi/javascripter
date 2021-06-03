@@ -83,7 +83,11 @@ External source:
 ![imagename](https://images.outlookindia.com/public/uploads/articles/2020/5/9/EXbLKeGX0AIU2LH_570_850.jpg)
 
 Local source:
-![graphic_DOM](images/DOM.JPG)
+
+- Same folder:
+  ![graphic_DOM](images/DOM.JPG)
+- one folder up:
+  ![graphic_DOM](../images/DOM.JPG)
 
 #### _Tables_:
 

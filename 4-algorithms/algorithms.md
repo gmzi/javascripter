@@ -1,3 +1,12 @@
+- Abstract data types
+  [lists](#lists)
+  - [linked_lists](##linked_lists)
+    - [Nodes](###Nodes)
+  - [double_linked_lists](##douuble_linked_lists)
+  - [arrays](##arrays)
+    - [indirect_arrays](###indirect_arrays)
+    - [direct_arrays/vectors](###direct_arrays/vectors)
+    - [typed_arrays](###typed_arrays)
 - Divide and Conquer
   [binary_search](##binary_search)
   [linear_search](##linear_search)
@@ -7,6 +16,105 @@
   [time_complexity](##space_complexity)
   [log](##log)
   [generalities](##generalities)
+
+# Abstract data types
+
+# lists
+
+Are an abstract data type accross languages that can:
+
+- Keep multiple items
+- Can insert or delete items at any position
+- Can contain duplicates
+- Preserves order of items
+
+They have two implementations: arrays and linked lists.
+
+<a name="linked_lists"></a>
+
+## linked_lists
+
+Not built in in Javascript, we have to implement it:
+
+```javascript
+
+```
+
+![linked_lists](../images/head-and-tail.png)
+
+Nodes aren’t stored in contiguous memory; instead, each item references the next item in the sequence.Can rearrange without having to move other nodes in memory. It's more efficient than an array if we have to rearrange or move thins around. In an array we would have to shift over every element to insert a new item. In a linked list, we just change the references, and it's constant time. Although is not that efficient for a search by position.
+
+![ll](../images/linked-list.png)
+
+They are linear data structures: there is a sequence and an order to how they are constructed and traversed:
+![linear](../images/linear.png)
+
+### Nodes
+
+The basic unit in a linked list is a node. A basic node has two attributes:
+
+- val (can be string, int, instance, anything)
+- next (reference to the next node, if last item, reference to null)
+
+```javascript
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
+
+let antNode = new Node('ant');
+let beeNode = new Node('bee');
+let caterpillarNode = new Node('caterpillar');
+
+antNode.next = beeNode;
+beeNode.next = caterpillarNode;
+
+// ALTERNATIVE IMPLEMENTATION, ADDING THE NEXT NODE AS ARGUMENT:
+class Node {
+  constructor(val, next = null) {
+    this.val = val;
+    this.next = next;
+  }
+}
+
+let antNode = new Node('ant', new Node('bee', new Node('caterpillar')));
+```
+
+## double_linked_lists
+
+## arrays
+
+Array runtimes:
+
+- Retrieving by index: O(1)
+- Finding: O(n)
+- General insertion: O(n)
+- General deletion: O(n)
+
+Arrangement of items at equally-spaced addresses in memory:
+
+![memory](../images/memory.jpg)
+
+### indirect_arrays
+
+Javascript uses indirect arrays.
+In any indirect array, the array doesn’t directly hold the value. It holds the memory address of the real value. This lets an array store different types of data, or different length data.
+
+![graphic](../images/indirect_arr.jpg)
+
+### direct_arrays/vectors
+
+It's a special kind of array. IT ONLY WORKS IF ITEMS ARE ALL THE SAME SIZE:
+
+- all numbers
+- all same-length strings
+
+### typed_arrays
+
+Javascript typed arrays are more powerful when working with big loads of data. (numbers, music/video data, etc.)
+It's a javascript version of vectors. Used very rarely. They have restrictions on what can be stored in them. (checkout mdn for more)
 
 # Divide-and-conquer-strategy
 
