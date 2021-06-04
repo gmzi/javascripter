@@ -45,7 +45,13 @@
      - [direct_arrays/vectors](###direct_arrays/vectors)
      - [typed_arrays](###typed_arrays)
 - Recursion
-  [requirements](##requirements)
+  [recursion](#recursion)
+  [examples](##examples)
+  [runtime](##runtime)
+  [explicit_base_case](###explicit_base_case)
+  [hidden_base_case](###hidden_base_case)
+  [degenerate_case](###degenerate_case)
+  [recursion_vs_loops](##recursion_vs_loops)
 - Divide and Conquer
   [examples](##examples)
   [binary_search](##binary_search)
@@ -810,14 +816,155 @@ It's a javascript version of vectors. Used very rarely. They have restrictions o
 
 # recursion
 
-Functions that calls themselves.
-“In order to understand recursion, one must first understand recursion."
+MUST HAVE:
+
+- BASE CASE
+- PROGRESS
+
+  Functions that calls themselves.
+  “In order to understand recursion, one must first understand recursion."
 
 When you call a function, you “freeze” where you are until that function returns, and then continue where you left off.
 
 ## examples
 
 ```javascript
+// NESTED ARRAY
+// PRINT EVERY VALUE IN ARRAY, DOUBLED
+data = [ 1, [2, [3], 4], 5 ]
+
+function doubler(nums) {
+  for (let n of nums) {
+    if Array.isArray(n) {
+      doubler(n);
+    } else {
+      console.log(n * 2);
+    }
+  }
+}
+
+// --------------------------------------------------------
+// NESTED OBJECT
+function gatherStrings(obj, result = []) {
+  const values = Object.values(obj);
+  for (let val of values) {
+    if (typeof val === 'string') result.push(val);
+    if (typeof val === 'object') {
+      gatherStrings(val, result);
+    }
+  }
+  return result;
+}
+
+let nestedObj = {
+  firstName: 'Lester',
+  favoriteNumber: 22,
+  moreData: {
+    lastName: 'Testowitz',
+  },
+  funFacts: {
+    moreStuff: {
+      anotherNumber: 100,
+      deeplyNestedString: {
+        almostThere: {
+          success: 'you made it!',
+        },
+      },
+    },
+    favoriteString: 'nice!',
+  },
+};
+
+console.log(gatherStrings(nestedObj)); // ["Lester", "Testowitz", "you made it!", "nice!"];
+
+// ---------------------------------------------------------------------
+// BINARY SEARCH
+/** given a sorted array of numbers, and a value,
+ * return the index of that value (or -1 if val is not present). */
+
+function binarySearch(arr, val, startIdx = 0, endIdx = arr.length - 1) {
+  if (
+    startIdx < 0 ||
+    startIdx > arr.length - 1 ||
+    endIdx < 0 ||
+    endIdx > arr.length - 1
+  )
+    return -1;
+  const midIdx = Math.floor((startIdx + endIdx) / 2);
+  let midVal = arr[midIdx];
+  if (midVal === val) return midIdx;
+  if (midVal < val) return binarySearch(arr, val, midIdx + 1, arr.length - 1);
+  if (midVal > val) return binarySearch(arr, val, midIdx - 1, 0);
+}
+binarySearch([1,2,3,4],1) // 0
+binarySearch([1,2,3,4],3) // 2
+binarySearch([1,2,3,4],5) // -1
+
+// ------------------------------------------------------------------------
+
+/** product: calculate the product of an array of numbers. */
+
+function product(nums, idx = 0) {
+  if (idx === nums.length) return 1;
+  return nums[idx] * product(nums, idx + 1);
+}
+product([2, 2, 2]); // 8
+
+/** longest: return the length of the longest word in an array of words. */
+
+function longest(words, idx = 0, winner = 0) {
+  if (idx === words.length) return winner;
+  if (words[idx].length > winner) winner = words[idx].length;
+  return longest(words, idx + 1, winner);
+}
+
+/** everyOther: return a string with every other letter. */
+
+function everyOther(str, idx = 0, result = '') {
+  if (idx > str.length - 1) return result;
+  result += str[idx];
+  return everyOther(str, idx + 2, result);
+}
+
+/** isPalindrome: checks whether a string is a palindrome or not. */
+
+function isPalindrome(str, idxForwards = 0, idxBackWards = str.length - 1) {
+  if (idxForwards > str.length) return true;
+  if (str[idxForwards] === str[idxBackWards]) {
+    return isPalindrome(str, idxForwards + 1, idxBackWards - 1);
+  }
+  return false;
+}
+
+/** findIndex: return the index of val in arr (or -1 if val is not present). */
+
+function findIndex(arr, val, idx = 0) {
+  if (idx > arr.length) return -1;
+  if (arr[idx] === val) return idx;
+  return findIndex(arr, val, idx + 1);
+}
+
+/** revString: return a copy of a string, but in reverse. */
+
+function revString(str, idx = str.length - 1, result = '') {
+  if (idx === -1) return result;
+  result += str[idx];
+  return revString(str, idx - 1, result);
+}
+
+/** gatherStrings: given an object, return an array of all of the string values. */
+
+function gatherStrings(obj, result = []) {
+  const values = Object.values(obj);
+  for (let val of values) {
+    if (typeof val === 'string') result.push(val);
+    if (typeof val === 'object') {
+      gatherStrings(val, result);
+    }
+  }
+  return result;
+}
+
 /** Write a function called findFloor which accepts a sorted array and a value x,
 and returns the floor of x in the array. The floor of x in an array is the largest element
 in the array which is smaller than or equal to x. If the floor does not exist, return -1. */
@@ -843,36 +990,35 @@ function findFloor(arr, num, low = 0, high = arr.length - 1) {
 
 module.exports = findFloor
 // ---------------------------------------------------------
-// PRINT EVERY VALUE IN ARRAY, DOUBLED
-data = [ 1, [2, [3], 4], 5 ]
 
-function doubler(nums) {
-  for (let n of nums) {
-    if Array.isArray(n) {
-      doubler(n);
-    } else {
-      console.log(n * 2);
-    }
-  }
-}
-
-// -------------------------------------------------------------
-// SUM VALUES
-function sum(arr) {
-  //Base case
-  if (arr.length === 0) return 0;
-
-  //Normal case
-  return arr[0] + sum(arr.slice(1));
-}
-
-sum([1, 2, 3]); // 6
 ```
 
-## requirements
+## runtime
 
-- Base Case (the point at which we return / stop the recursion, otherwise will produce a Stack Overflow)
-- Progress
+In general O(n), and can be worst:
+
+```javascript
+function sum(nums, i = 0) {
+  if (i === nums.length) return 0;
+
+  return nums[i] + sum(nums, i + 1);
+}
+// O(n)
+
+function evens(nums) {
+  let out = [];
+
+  function _evens(nums, i) {
+    if (nums.length === i) return;
+    if (nums[i] % 2 === 0) out.push(nums[i]);
+    _evens(nums, i + 1);
+  }
+
+  _evens(nums, 0);
+  return out;
+}
+//O(n)
+```
 
 ### explicit_base_case
 
