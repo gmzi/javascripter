@@ -19,25 +19,35 @@
      - [methods](##Standard_methods_deques)
      - [implementations](##Efficient_Implementations_deques)
      - [example](#Example_implementation_deques)
-  4. PRIORITY QUEUES
+  4. HEAPS
+     [heaps](#heaps)
+     - [constraints](#Constraints_heaps)
+     - [methods](##Standard_methods_heaps)
+     - [implementations](##Efficient_Implementations_heaps)
+     - [example](#Example_implementation_heaps)
+     - [cool_article](https://medium.com/basecs/learning-to-love-heaps-cef2b273a238)
+  5. PRIORITY QUEUES
      [priority_queues](#priority_queues)
      - [constraints](#Constraints_P_queues)
      - [methods](##Standard_methods_P_queues)
      - [implementations](##Efficient_Implementations_P_queues)
      - [example](#Example_implementation_P_queues)
-  5. LISTS
+  6. LISTS
      [lists](#lists)
      - [linked_lists](##linked_lists)
        - [LLists_runtime](#runtime_ll)
      - [doubly_linked_lists](##douubly_linked_lists)
      - [Nodes](##Nodes)
-  6. ARRAYS
+  7. ARRAYS
      - [arrays](##arrays)
      - [array_runtimes](###array_runtimes)
      - [indirect_arrays](###indirect_arrays)
      - [direct_arrays/vectors](###direct_arrays/vectors)
      - [typed_arrays](###typed_arrays)
+- Recursion
+  [requirements](##requirements)
 - Divide and Conquer
+  [examples](##examples)
   [binary_search](##binary_search)
   [linear_search](##linear_search)
 - Big-O notation
@@ -96,6 +106,74 @@ It's like a stack of books. Add a book at the top, and remove from the top (last
 #### Example_implementation_stacks
 
 ```javascript
+// Using Linked List:
+
+/** Node: node for a stack. */
+
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
+
+/** Stack: chained-together nodes where you can
+ *  remove from the top or add to the top. */
+
+class Stack {
+  constructor() {
+    this.first = null;
+    this.last = null;
+    this.size = 0;
+  }
+
+  /** push(val): add new value to end of the stack. Returns undefined. */
+
+  push(val) {
+    let newNode = new Node(val);
+    if (this.first === null) this.first = newNode;
+    newNode.next = this.first;
+    this.first = newNode;
+    this.size++;
+    if (this.size < 2) this.last = this.first.next;
+  }
+
+  /** pop(): remove the node from the top of the stack
+   * and return its value. Should throw an error if the stack is empty. */
+
+  pop() {
+    if (this.size === 0) throw new Error('stack is empty');
+    let val = this.first.val;
+    this.first = this.first.next;
+    this.size--;
+    if (this.size < 2) this.last = this.first.next;
+    return val;
+  }
+
+  /** peek(): return the value of the first node in the stack. */
+
+  peek() {
+    if (this.size > 0) return this.first.val;
+  }
+
+  /** isEmpty(): return true if the stack is empty, otherwise false */
+
+  isEmpty() {
+    return true ? this.size === 0 : false;
+  }
+}
+
+module.exports = Stack;
+
+const books = new Stack();
+books.push('lole');
+books.push('sara');
+books.push('mina');
+console.log(books);
+books.pop();
+console.log(books);
+
+// --------------------------------------------------------------
 // using javascript array:
 
 const myMagazines = [];
@@ -157,6 +235,74 @@ myMagazines; // [vogue]
 ```javascript
 // Implement a queue data structure in Javascript
 
+/** Node: node for a queue. */
+
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
+
+/** Queue: chained-together nodes where you can
+ *  remove from the front or add to the back. */
+
+class Queue {
+  constructor() {
+    this.first = null;
+    this.last = null;
+    this.size = 0;
+  }
+
+  /** enqueue(val): add new value to end of the queue. Returns undefined. */
+
+  enqueue(val) {
+    let newNode = new Node(val);
+    if (this.first === null) this.first = newNode;
+    if (this.last !== null) this.last.next = newNode;
+    this.last = newNode;
+    this.size++;
+  }
+
+  /** dequeue(): remove the node from the start of the queue
+   * and return its value. Should throw an error if the queue is empty. */
+
+  dequeue() {
+    if (this.size === 0) throw new Error('queue is empty');
+    let val = this.first.val;
+    this.first = this.first.next;
+    this.size--;
+    if (this.size < 2) this.last = this.first;
+    return val;
+  }
+
+  /** peek(): return the value of the first node in the queue. */
+
+  peek() {
+    if (this.size > 0) return this.first.val;
+    return null;
+  }
+
+  /** isEmpty(): return true if the queue is empty, otherwise false */
+
+  isEmpty() {
+    if (this.size === 0) return true;
+    return false;
+  }
+}
+
+module.exports = Queue;
+
+const line = new Queue();
+console.log(line.enqueue('tito'));
+console.log(line.enqueue('carlo'));
+console.log(line.enqueue('beto'));
+console.log(line);
+// console.log(line.peek());
+// console.log(line.dequeue());
+
+// -------------------------------------------------
+// ALTERNATE APROACH
 class Node {
   constructor(val) {
     this.val = val;
@@ -175,9 +321,7 @@ class Queue {
   constructor() {
     this.data = new LinkedList();
   }
-  log() {
-    console.log(this);
-  }
+
   push(val) {
     let newNode = new Node(val);
     if (this.data.head === null) this.data.head = newNode;
@@ -251,6 +395,20 @@ Not provided today
 
 ---
 
+# heaps
+
+Efficient way of implementing a priority queue. As we insert a value, the heap reorganizes in the correct spot, ant it makes very easy to retrieve the highest value, which is always at the top or the bottom.
+
+# Constraints_heaps
+
+## Standard_methods_heap)
+
+## Efficient_Implementations_heap)
+
+# Example_implementation_heaps
+
+---
+
 # priority_queues
 
 It's an ADT for a collection.
@@ -260,9 +418,32 @@ It's an ADT for a collection.
 
 # Constraints_P_queues
 
+- Add item with priority
+- Remove item with highes priority first
+
 ## Standard_methods_P_queues
 
+- add(pri, item)
+  Add item to queue
+- poll()
+  Remove & return top-priority item
+- peek()
+  Return (don’t remove) top-priority item
+- isEmpty()
+  Are there items in queue?
+
 ## Efficient_Implementations_P_queues
+
+Two strategies:
+
+1. Keep sorted, add at right place, top priority is first.
+   - Array: no, add & poll would be O(n)
+   - Linked List: no, add would be O(n)
+   - Doubly Linked List: no, add would be O(n)
+2. Keep unsorted, add to end, find top priority on poll.
+   - Array: no, peek and poll would be O(n)
+   - Linked List: no, add would be O(n)
+   - Doubly linked list: no, peek & poll would be O(n)
 
 # Example_implementation_P_queues
 
@@ -625,10 +806,370 @@ It's a special kind of array. IT ONLY WORKS IF ITEMS ARE ALL THE SAME SIZE:
 Javascript typed arrays are more powerful when working with big loads of data. (numbers, music/video data, etc.)
 It's a javascript version of vectors. Used very rarely. They have restrictions on what can be stored in them. (checkout mdn for more)
 
+---
+
+# recursion
+
+Functions that calls themselves.
+“In order to understand recursion, one must first understand recursion."
+
+When you call a function, you “freeze” where you are until that function returns, and then continue where you left off.
+
+## examples
+
+```javascript
+/** Write a function called findFloor which accepts a sorted array and a value x,
+and returns the floor of x in the array. The floor of x in an array is the largest element
+in the array which is smaller than or equal to x. If the floor does not exist, return -1. */
+
+function findFloor(arr, num, low = 0, high = arr.length - 1) {
+  if (low > high) return -1;
+  if (num >= arr[high]) return arr[high];
+
+  let mid = Math.floor((low + high) / 2)
+
+  if (arr[mid] === num) return arr[mid];
+
+  if (mid > 0 && arr[mid - 1] <= num && num < arr[mid]) {
+    return arr[mid - 1];
+  }
+
+  if (num < arr[mid]) {
+    return findFloor(arr, num, low, mid - 1);
+  }
+
+  return findFloor(arr, num, mid + 1, high)
+}
+
+module.exports = findFloor
+// ---------------------------------------------------------
+// PRINT EVERY VALUE IN ARRAY, DOUBLED
+data = [ 1, [2, [3], 4], 5 ]
+
+function doubler(nums) {
+  for (let n of nums) {
+    if Array.isArray(n) {
+      doubler(n);
+    } else {
+      console.log(n * 2);
+    }
+  }
+}
+
+// -------------------------------------------------------------
+// SUM VALUES
+function sum(arr) {
+  //Base case
+  if (arr.length === 0) return 0;
+
+  //Normal case
+  return arr[0] + sum(arr.slice(1));
+}
+
+sum([1, 2, 3]); // 6
+```
+
+## requirements
+
+- Base Case (the point at which we return / stop the recursion, otherwise will produce a Stack Overflow)
+- Progress
+
+### explicit_base_case
+
+```javascript
+function count(n = 1) {
+  if (n > 3) return;
+
+  console.log(n);
+  count(n + 1);
+}
+```
+
+### hidden_base_case
+
+```javascript
+function count(n = 1) {
+  if (n <= 3) {
+    console.log(n);
+    count(n + 1);
+  }
+}
+// implicitly will return undefined if the condition is not meeted.
+```
+
+### degenerate_case
+
+degenerate case: A “degenerate case” is one that is so reduced that it’s fundamentallydifferent from the others and would need to be treated differently.
+
+```javascript
+// Consider counting up to 3 recursively:
+function count(n = 1) {
+  if (n > 3) return;
+  console.log(n);
+  count(n + 1);
+}
+/**
+ Here, our base case is “when we hit 3, don’t keep recursing”. This is a base case, but it’snot “degenerate” — we could keep counting up after 3; there’s nothing preventing us fromdoing so besides our goal to stop. Compare this with finding the length of a listrecursively:*/
+function lenlist(nums) {
+  if (nums[0] === undefined) return 0;
+  return 1 + lenlist(nums.slice(1));
+}
+/** Here, our base case is “the length of an empty list is 0, so return that and don’trecurse”. This base is “degenerate” — there’s no possible way for us to find the length of alist with -1 items in it! It wouldn’t even be possible for us to keep recursing; this basecase is a hard limit on what’s possible. Not all recursive problems have a degenerate basecase, but thinking about if one is possible is often helpful in figuring what your base caseis and how the recursion should work.*/
+```
+
+## recursion_vs_loops
+
+Any loop can replace recursion, any recursive implementation can be replaced by a loop. Performance differs and syntax simplicity.
+
+Count using recursion:
+
+```javascript
+function count(n = 1) {
+  if (n > 3) return; // Base Case. Returning clears the call stack one call at a time, top to bottom.
+
+  console.log(n);
+  count(n + 1); // recursion.
+  // this will be printed after the return:
+  console.log('lala')
+}
+}
+
+count();
+```
+
+Count using a loop:
+
+```javascript
+function count() {
+  let n = 1;
+
+  while (n <= 3) {
+    console.log(n);
+    n += 1;
+  }
+}
+
+count();
+```
+
+---
+
 # Divide-and-conquer-strategy
 
 A problem solving strategy, will apply it for searching algorithms, aiming to optimize time complexity.
 The genearl pattern is: given a data set, a divide and conquer algorithm removes a large fraction of the data set from consideration at each step. The data set must have some additional structure (e.g be sorted). Significantly improves time complexity, when it's applicable.
+
+## examples
+
+```javascript
+/**findRotatedIndex
+
+Write a function called findRotatedIndex which accepts a rotated array of sorted numbers and an integer. The function should return the index of num in the array. If the value is not found, return -1.
+
+Constraints:
+
+Time Complexity: O(log N) */
+
+function findRotatedIndex(arr, val) {
+  let middleIdx = findMiddleIdx(arr);
+  let highestValIdx = findHighestValIdx(arr);
+  const middleVal = arr[middleIdx];
+  if (middleVal === val) {
+    return middleIdx;
+  } else if (middleVal > val && arr[0] > val) {
+    return binarySearch(arr, highestValIdx + 1, arr.length - 1, val);
+  } else {
+    return binarySearch(arr, 0, highestValIdx, val);
+  }
+}
+
+function findMiddleIdx(arr, startIdx = 0, endIdx = arr.length - 1) {
+  return Math.floor((startIdx + endIdx) / 2);
+}
+
+function findHighestValIdx(arr) {
+  let start = 0;
+  let end = arr.length - 1;
+  while (start <= end) {
+    const middle = findMiddleIdx(arr, start, end);
+    if (arr[middle] > arr[middle + 1]) return middle;
+    else if (arr[start] <= arr[middle]) {
+      start = middle + 1;
+    } else {
+      end = middle - 1;
+    }
+  }
+}
+
+function binarySearch(arr, start, end, val) {
+  if (start >= 0 && end <= arr.length - 1) {
+    while (start <= end) {
+      let middleIdx = Math.floor((start + end) / 2);
+      if (arr[middleIdx] === val) {
+        return middleIdx;
+      } else if (val < arr[middleIdx]) {
+        end = middleIdx - 1;
+      } else {
+        start = middleIdx + 1;
+      }
+    }
+  }
+  return -1;
+}
+
+// findRotatedIndex([3,4,1,2],4)
+findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 8);
+// findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 8)
+// findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 3);
+// findRotatedIndex([37,44,66,102,10,22],14)
+// findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 12)
+
+// ------------------------------------------------------------
+/** findRotationCount
+
+Write a function called findRotationCount which accepts an array of distinct numbers sorted in increasing order. The array has been rotated counter-clockwise n number of times. Given such an array, find the value of n.
+
+Constraints:
+
+Time Complexity: O(log N)
+
+*/
+
+function findRotationCount(arr) {
+  if (arr[0] < arr[arr.length - 1]) return 0;
+
+  const highestValueIdx = findHighestValueIdx(arr);
+  return binaryCount(arr, 0, highestValueIdx);
+}
+
+function binaryCount(arr, start, end) {
+  let count = 0;
+  while (start < end) {
+    const middle = Math.floor((start + end) / 2);
+    console.log(middle);
+    count++;
+    end -= 1;
+  }
+  return count + 1;
+}
+
+function findHighestValueIdx(arr) {
+  let start = 0;
+  let end = arr.length - 1;
+  while (start <= end) {
+    let middle = Math.floor((start + end) / 2);
+    if (arr[middle] > arr[middle + 1]) return middle;
+    else if (arr[start] <= arr[middle]) {
+      start = middle + 1;
+    } else {
+      end = middle - 1;
+    }
+  }
+}
+
+/**
+   * SOLUTION:
+   function findRotationCount(arr, low = 0, high = arr.length - 1) {
+    if (high < low) return 0;
+    if (high === low) return low;
+    let mid = Math.floor((low + high) / 2)
+  
+    // Check if element (mid+1) is minimum element.
+    // Consider the cases like [3, 4, 5, 1, 2]
+    if (mid < high && arr[mid + 1] < arr[mid])
+      return mid + 1;
+  
+    // Check if mid itself is minimum element
+    if (mid > low && arr[mid] < arr[mid - 1]) {
+      return mid;
+    }
+  
+    // Decide whether we need to go to left half or
+    // right half
+    if (arr[high] > arr[mid]) {
+      return findRotationCount(arr, low, mid - 1);
+    }
+  
+    return findRotationCount(arr, mid + 1, high);
+  }
+  
+  // findRotationCount([15, 18, 2, 3, 6, 12]) 
+  findRotationCount([7, 9, 11, 12, 5]) 
+   */
+
+findRotationCount([15, 18, 2, 3, 6, 12]);
+// findRotationCount([7, 9, 11, 12, 5])
+// findRotationCount([7, 9, 11, 12, 15])
+
+// -----------------------------------------------------------
+/**Given an array of 1s and 0s which has all 1s first followed by all 0s, write a function called countZeroes, which returns the number of zeroes in the array. */
+
+function countZeroes(arr) {
+  let firstZero = findFirst(arr);
+  if (firstZero === -1) return 0;
+
+  return arr.length - firstZero;
+}
+
+function findFirst(arr, low = 0, high = arr.length - 1) {
+  if (high >= low) {
+    let mid = low + Math.floor((high - low) / 2);
+    if ((mid === 0 || arr[mid - 1] === 1) && arr[mid] === 0) {
+      return mid;
+    } else if (arr[mid] === 1) {
+      return findFirst(arr, mid + 1, high);
+    }
+    return findFirst(arr, low, mid - 1);
+  }
+  return -1;
+}
+
+module.exports = countZeroes;
+
+/**Given a sorted array and a number, write a function called sortedFrequency that counts the occurrences of the number in the array
+
+Constraints:
+
+Time Complexity: O(log N) */
+function sortedFrequency(arr, num) {
+  let firstIdx = findFirst(arr, num);
+  if (firstIdx == -1) return firstIdx;
+  let lastIdx = findLast(arr, num);
+  return lastIdx - firstIdx + 1;
+}
+
+function findFirst(arr, num, low = 0, high = arr.length - 1) {
+  if (high >= low) {
+    let mid = Math.floor((low + high) / 2);
+    if ((mid === 0 || num > arr[mid - 1]) && arr[mid] === num) {
+      return mid;
+    } else if (num > arr[mid]) {
+      return findFirst(arr, num, mid + 1, high);
+    } else {
+      return findFirst(arr, num, low, mid - 1);
+    }
+  }
+  return -1;
+}
+
+function findLast(arr, num, low = 0, high = arr.length - 1) {
+  if (high >= low) {
+    let mid = Math.floor((low + high) / 2);
+    if ((mid === arr.length - 1 || num < arr[mid + 1]) && arr[mid] === num) {
+      return mid;
+    } else if (num < arr[mid]) {
+      return findLast(arr, num, low, mid - 1);
+    } else {
+      return findLast(arr, num, mid + 1, high);
+    }
+  }
+  return -1;
+}
+
+module.exports = sortedFrequency;
+```
+
+More examples: /Users/xxx/projects/demos/ADS/divide-conquer
 
 ## binary_search
 
