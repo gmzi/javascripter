@@ -1,13 +1,42 @@
 - Abstract data types
-  [lists](#lists)
-  - [linked_lists](##linked_lists)
-    - [runtime_of_LLists](#runtime_ll)
-  - [doubly_linked_lists](##douubly_linked_lists)
-  - [Nodes](##Nodes)
-  - [arrays](##arrays)
-    - [indirect_arrays](###indirect_arrays)
-    - [direct_arrays/vectors](###direct_arrays/vectors)
-    - [typed_arrays](###typed_arrays)
+  1. STACKS
+     [stacks](#stacks)
+     - [constraints](#Constraints_stacks)
+     - [methods](##Standard_methods_stacks)
+     - [implementations](##Efficient_Implementations_stacks)
+     - [example](####Example_implementation_stacks)
+     - [cool_article](https://medium.com/basecs/stacks-and-overflows-dbcf7854dc67)
+  2. QUEUES
+     [queues](#queues)
+     - [constraints](#Constraints_queues)
+     - [methods](##Standard_methods_queues)
+     - [implementations](##Efficient_Implementations_queues)
+     - [example](#Example_implementation_queues)
+     - [cool_article](https://medium.com/basecs/to-queue-or-not-to-queue-2653bcde5b04)
+  3. DEQUES
+     [deques](#deques)
+     - [constraints](#Constraints_deques)
+     - [methods](##Standard_methods_deques)
+     - [implementations](##Efficient_Implementations_deques)
+     - [example](#Example_implementation_deques)
+  4. PRIORITY QUEUES
+     [priority_queues](#priority_queues)
+     - [constraints](#Constraints_P_queues)
+     - [methods](##Standard_methods_P_queues)
+     - [implementations](##Efficient_Implementations_P_queues)
+     - [example](#Example_implementation_P_queues)
+  5. LISTS
+     [lists](#lists)
+     - [linked_lists](##linked_lists)
+       - [LLists_runtime](#runtime_ll)
+     - [doubly_linked_lists](##douubly_linked_lists)
+     - [Nodes](##Nodes)
+  6. ARRAYS
+     - [arrays](##arrays)
+     - [array_runtimes](###array_runtimes)
+     - [indirect_arrays](###indirect_arrays)
+     - [direct_arrays/vectors](###direct_arrays/vectors)
+     - [typed_arrays](###typed_arrays)
 - Divide and Conquer
   [binary_search](##binary_search)
   [linear_search](##linear_search)
@@ -20,9 +49,230 @@
 
 # Abstract data types
 
+<a name="stacks"></a>
+
+# stacks
+
+Are a limited data structure. It does just two operations:
+
+- insert
+- remove
+
+It's like a stack of books. Add a book at the top, and remove from the top (last in firts out)
+
+<a name="Constraints_stacks"></a>
+
+## Constraints_stacks
+
+- Items added only by pushing them onto the top
+- Items removed only by popping them off the top
+  So newer items are near top of stack, older items are near the bottom
+- LIFO (Last-in, first-out)
+
+<a name="Standard_methods_stacks"></a>
+
+## Standard_methods_stacks
+
+- push(item)
+  Add to “top” of stack
+- pop()
+  Remove & return top item
+- peek()
+  Return (but don’t remove) top item
+- isEmpty()
+  Are there items in the stack?
+
+<a name="Efficient_Implementations_stacks"></a>
+
+## Efficient_Implementations_stacks
+
+- Array: yes, both push & pop are O(1)
+- Linked List: only adding to the beginning is O(1), don't touch the end, because removing from the end in a Linked List is O(n)
+- Doubly Linked List: yes, both push & pop are O(1)
+- Object: no, popping is O(n) (have to scan whole obj to find high key)
+
+<a name="Example_implementation_stacks"></a>
+
+#### Example_implementation_stacks
+
+```javascript
+// using javascript array:
+
+const myMagazines = [];
+
+myMagazines.push('vogue');
+myMagazines.push('el grafico');
+myMagazines.push('para ti');
+
+myMagazines; // ["vogue", "el grafico", "para ti"]
+
+myMagazines.pop(); // "para ti"
+myMagazines.pop(); // "el grafico"
+myMagazines; // [vogue]
+```
+
+---
+
+# queues
+
+- add at the end
+- remove from the begining
+
+<a name="Constraints_queues"></a>
+
+## Constraints_queues
+
+- Enqueueing: items are added to a queue ONLY at the end.
+- Dequeueing: items are removed ONLY at the front.
+  So newer items will always be at the back of the queue, and older items near the start.
+- FIFO data structure (first in first out)
+
+<a name="Standard_methods_queues"></a>
+
+## Standard_methods_queues
+
+- enqueue(item) / (sometimes called push)
+  add to end
+- dequeue(item) / (sometimes called pop)
+  remove & return first item
+- peek()
+  Return first item, don't remove it
+- isEmpty()
+  Are there items in queue?
+- .length()
+
+<a name="##Efficient_Implementations_queues"></a>
+
+## Efficient \_Implementations_queues
+
+- Linked List: yes, both enqueue & dequeue are O(1) (we can keep track of the head and the tail of the LL)
+- Doubly Linked List: yes, both enqueue & dequeue are O(1)
+- Array: no, dequeing would be O(n)
+- Object: no, dequeuing is O(n) (have to scan whole obj to find low key)
+
+<a name="Example_implementation_queues"></a>
+
+## Example_implementation_queues
+
+```javascript
+// Implement a queue data structure in Javascript
+
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+  }
+}
+
+class Queue {
+  constructor() {
+    this.data = new LinkedList();
+  }
+  log() {
+    console.log(this);
+  }
+  push(val) {
+    let newNode = new Node(val);
+    if (this.data.head === null) this.data.head = newNode;
+    if (this.data.tail !== null) this.data.tail.next = newNode;
+    this.data.tail = newNode;
+    this.data.length++;
+  }
+
+  pop() {
+    let val = this.data.head.val;
+    this.data.head = this.data.head.next;
+    this.data.length -= 1;
+    if (this.data.length < 2) this.data.tail = this.data.head;
+    return val;
+  }
+}
+
+const waitList = new Queue();
+waitList.log();
+waitList.push('Tom');
+waitList.push('Susan');
+console.log(waitList.pop()); //tom
+```
+
+---
+
+# deques
+
+Pronounce "decks"
+"Double Ended Queue".
+
+- push
+- pop
+- shift
+- unshift
+
+# Constraints_deques
+
+- Can add item to the beginning
+- Can remove from the beginning
+- Can add to the end
+- Can remove from the end
+
+## Standard_methods_deques
+
+- appendleft()
+  Add to beginning
+- appendright()
+  Add to end
+- popleft()
+  Remove & return from beginning
+- popright()
+  Remove & return from end
+- peekleft()
+  Return (don’t remove) beginning
+- peekright()
+  Return (don’t remove) end
+- isEmpty()
+  Are there items in the deque?
+
+## Efficient_Implementations_deques
+
+- Doubly Linked List: yes — everything is O(1)
+- Linked List: no, popright would be O(n)
+- Array: no, appendleft & popleft would be O(n)
+- Object: no, popleft & popright would be O(n)
+
+# Example_implementation_deques
+
+Not provided today
+
+---
+
+# priority_queues
+
+It's an ADT for a collection.
+
+- Add item (with priority)
+- Remove highest priority item.
+
+# Constraints_P_queues
+
+## Standard_methods_P_queues
+
+## Efficient_Implementations_P_queues
+
+# Example_implementation_P_queues
+
+---
+
 # lists
 
 Are an abstract data type accross languages that can:
+
+Constraints:
 
 - Keep multiple items
 - Can insert or delete items at any position
@@ -38,6 +288,13 @@ They have two implementations: arrays and linked lists.
 Not built in in Javascript, we have to implement it:
 
 ```javascript
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
+
 class LinkedList {
   constructor() {
     this.head = null;
@@ -51,16 +308,6 @@ class LinkedList {
     if (this.tail !== null) this.tail.next = newNode;
     this.tail = newNode;
     return this;
-  }
-
-  remove(val) {
-    /** if removing the only item in linked list
-            Don’t forget to update head and tail to null
-      if removing first item:
-          Don’t forget to update the head!
-      if removing the last item:
-          Don’t forget to update the tail!
-       */
   }
 
   find(val) {
@@ -97,6 +344,187 @@ insects.traverse(); // ant, bee, caterpillar, dragonfly
 
 insects.find('fly'); // false
 insects.find('bee'); // true
+
+// -----------------------------------------------------------------
+// MORE EQUIPPED EXAMPLE:
+
+/** Node: node for a singly linked list. */
+
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
+
+/** LinkedList: chained together nodes. */
+
+class LinkedList {
+  constructor(vals = []) {
+    this.head = null;
+    this.tail = null;
+    this.length = 0;
+
+    for (let val of vals) this.push(val);
+  }
+
+  /** push(val): add new value to end of list. */
+
+  push(val) {
+    let newNode = new Node(val);
+    if (this.head === null) this.head = newNode;
+    if (this.tail !== null) this.tail.next = newNode;
+    this.tail = newNode;
+    this.length++;
+  }
+
+  /** unshift(val): add new value to start of list. */
+
+  unshift(val) {
+    let newNode = new Node(val);
+    if (this.head === null) this.head = newNode;
+    newNode.next = this.head;
+    this.head = newNode;
+    if (this.tail === null) this.tail = this.head.next;
+    this.length++;
+  }
+
+  traverse() {
+    // prints val and next of each node
+    let current = this.head;
+    while (current !== null) {
+      console.log(current.val);
+      current = current.next;
+    }
+  }
+
+  /** pop(): return & remove last item. */
+
+  pop() {
+    return this.removeAt(this.length - 1);
+  }
+
+  /** shift(): return & remove first item. */
+
+  shift() {
+    return this.removeAt(0);
+  }
+
+  /** getAt(idx): get val at idx. */
+
+  getAt(idx) {
+    let cur = this.head;
+    let count = 0;
+    while (cur !== null && count <= idx) {
+      if (count === idx) {
+        return cur.val;
+      }
+      count++;
+      cur = cur.next;
+    }
+    return null;
+  }
+
+  /** setAt(idx, val): set val at idx to val */
+
+  setAt(idx, val) {
+    let cur = this.head;
+    let count = 0;
+    while (cur !== null && count <= idx) {
+      if (count === idx) {
+        cur.val = val;
+      }
+      count++;
+      cur = cur.next;
+    }
+  }
+
+  /** insertAt(idx, val): add node w/val before idx. */
+
+  insertAt(idx, val) {
+    const newNode = new Node(val);
+
+    if (idx > this.length || idx < 0) {
+      throw new Error('Invalid index.');
+    }
+
+    if (idx === 0) return this.unshift(val);
+    if (idx === this.length) return this.push(val);
+
+    let prev = this._get(idx - 1);
+
+    newNode.next = prev.next;
+    prev.next = newNode;
+
+    this.length += 1;
+  }
+
+  removeAt(idx) {
+    if (idx >= this.length || idx < 0) {
+      throw new Error('invalid index.');
+    }
+
+    // case remove first item:
+    if (idx === 0) {
+      let val = this.head.val;
+      this.head = this.head.next;
+      this.length -= 1;
+      if (this.length < 2) this.tail = this.head;
+      return val;
+    }
+
+    let prev = this._get(idx - 1);
+
+    // case remove tail:
+    if (idx === this.length - 1) {
+      let val = prev.next.val;
+      prev.next = null;
+      this.tail = prev;
+      this.length -= 1;
+      return val;
+    }
+
+    // case remove in the middle:
+    let val = prev.next.val;
+    prev.next = prev.next.next;
+    this.length -= 1;
+    return val;
+  }
+
+  /** average(): return an average of all values in the list */
+
+  average() {
+    if (this.length === 0) return 0;
+    let values = 0;
+    let cur = this.head;
+    while (cur !== null) {
+      values += cur.val;
+      cur = cur.next;
+    }
+    return values / this.length;
+  }
+
+  _get(idx) {
+    let cur = this.head;
+    let count = 0;
+
+    while (cur !== null && count != idx) {
+      count += 1;
+      cur = cur.next;
+    }
+    return cur;
+  }
+}
+
+// USE METHODS:
+const people = new LinkedList();
+people.push('tammy');
+people.push('sonia');
+people.push('peter');
+people.unshift('Rolo!!!');
+people.traverse();
+people.pop();
+console.log(people.average());
 ```
 
 Check steps in visualgo: https://visualgo.net/en/list
@@ -165,7 +593,7 @@ let antNode = new Node('ant', new Node('bee', new Node('caterpillar')));
 
 ## arrays
 
-Array runtimes:
+### array_runtimes
 
 - Retrieving by index: O(1)
 - Searching: O(n)
