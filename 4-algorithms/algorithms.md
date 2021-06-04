@@ -1,4 +1,8 @@
 - Abstract data types
+  1. MAPS
+     - [maps](##maps)
+  1. HASH TABLES (HASH MAPS)
+     - [hash_tables](#hash_tables)
   1. STACKS
      [stacks](#stacks)
      - [constraints](#Constraints_stacks)
@@ -6,39 +10,39 @@
      - [implementations](##Efficient_Implementations_stacks)
      - [example](####Example_implementation_stacks)
      - [cool_article](https://medium.com/basecs/stacks-and-overflows-dbcf7854dc67)
-  2. QUEUES
+  1. QUEUES
      [queues](#queues)
      - [constraints](#Constraints_queues)
      - [methods](##Standard_methods_queues)
      - [implementations](##Efficient_Implementations_queues)
      - [example](#Example_implementation_queues)
      - [cool_article](https://medium.com/basecs/to-queue-or-not-to-queue-2653bcde5b04)
-  3. DEQUES
+  1. DEQUES
      [deques](#deques)
      - [constraints](#Constraints_deques)
      - [methods](##Standard_methods_deques)
      - [implementations](##Efficient_Implementations_deques)
      - [example](#Example_implementation_deques)
-  4. HEAPS
+  1. HEAPS
      [heaps](#heaps)
      - [constraints](#Constraints_heaps)
      - [methods](##Standard_methods_heaps)
      - [implementations](##Efficient_Implementations_heaps)
      - [example](#Example_implementation_heaps)
      - [cool_article](https://medium.com/basecs/learning-to-love-heaps-cef2b273a238)
-  5. PRIORITY QUEUES
+  1. PRIORITY QUEUES
      [priority_queues](#priority_queues)
      - [constraints](#Constraints_P_queues)
      - [methods](##Standard_methods_P_queues)
      - [implementations](##Efficient_Implementations_P_queues)
      - [example](#Example_implementation_P_queues)
-  6. LISTS
+  1. LISTS
      [lists](#lists)
      - [linked_lists](##linked_lists)
        - [LLists_runtime](#runtime_ll)
      - [doubly_linked_lists](##douubly_linked_lists)
      - [Nodes](##Nodes)
-  7. ARRAYS
+  1. ARRAYS
      - [arrays](##arrays)
      - [array_runtimes](###array_runtimes)
      - [indirect_arrays](###indirect_arrays)
@@ -52,7 +56,7 @@
   [hidden_base_case](###hidden_base_case)
   [degenerate_case](###degenerate_case)
   [recursion_vs_loops](##recursion_vs_loops)
-- Divide and Conquer
+- Divide and Conquer Strategy
   [examples](##examples)
   [binary_search](##binary_search)
   [linear_search](##linear_search)
@@ -66,6 +70,79 @@
 # Abstract data types
 
 <a name="stacks"></a>
+
+## maps
+
+Are an abstract data type for mapping key -> value pairs. They are present in most langagues:
+
+Javascript: Map and Object {}
+Python: dict
+Ruby: Hash
+Java: HashMap
+Go: Map
+
+Javascript Objects store keys always as strings. Javascript Maps allows to store different data types as keys.
+
+## maps_standard_methods
+
+- set(key, val)
+  Sets key to val
+- get(key)
+  Retrieve values for key
+- delete(key)
+  Delete entry for key
+- has(key)
+  Is there an entry for key?
+- keys()
+  Iterable keys
+- values()
+  Iterable values
+- entries()
+  Iterable key/vaue pairs.
+
+## hash_tables
+
+Hash tables has two parts:
+
+1. an array (buckets to store the data)
+2. a mapping function / hash function (the function that will determine the sorting algorithm in which store the data and that will be used to retrieve the data). Take a key -> hash it -> store the value at hashed index.
+   MAPPING: stablish a relationship between two sets of data.
+
+We use them to implement our mapping in a very efficient way, we can search in O(1)!!! Because we don't have to loop over each item of the array, instead we run the hash function (that has always the same runtime), and that function will give us the array position at which the desired value is stored, and will also stablish the logic in which values will be distributed in the array.
+
+Hash function to store books in a bookshelf:
+
+```javascript
+function bookHashing(bookTitle, hashTableSize) {
+  // Remove any spaces from book title.
+  var strippedBookTitle = bookTitle.replace(/\s/g, '');
+  // Divide the length of the title by the hash table size.
+  // Return the remainder.
+  return strippedBookTitle.length % hashTableSize;
+}
+
+bookHashing('The Grapes of Wrath', 12);
+// 4
+bookHashing('The Sound and the Fury', 12);
+// 6
+```
+
+Hash function using Horner's method:
+
+```javascript
+function hash(key) {
+  // Prime number to use with Horner's method
+  const H_PRIME = 31;
+
+  let numKey = Array.from(key).reduce(
+    (accum, char) => accum * H_PRIME + char.charCodeAt(),
+    0
+  );
+  return numKey % array_len;
+}
+```
+
+---
 
 # stacks
 
