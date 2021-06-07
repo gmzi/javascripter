@@ -1,8 +1,21 @@
 - Abstract data types
+  1. TREES
+     - [trees](#trees)
+     - [trees_in_javascript](##trees_in_javascript)
+     - [binary_trees](##binary_trees)
+       BINARY SEARCH TREES
+     - [BSTs](##binary_search_trees)
+     - [javascript_implementation_BST](##javascript_implementation_BST)
   1. MAPS
-     - [maps](##maps)
+     - [maps](#maps)
   1. HASH TABLES (HASH MAPS)
      - [hash_tables](#hash_tables)
+     - [hash_tables_runtime](##hash_tables_runtime)
+     - [hashing](###hashing)
+     - [hash_runtime](###hash_runtime)
+     - [collisions](###collisions)
+     - [cool_article_tables](https://medium.com/basecs/taking-hash-tables-off-the-shelf-139cbf4752f0)
+     - [cool_article_hashing_functions](https://medium.com/basecs/hashing-out-hash-functions-ea5dd8beb4dd)
   1. STACKS
      [stacks](#stacks)
      - [constraints](#Constraints_stacks)
@@ -71,7 +84,419 @@
 
 <a name="stacks"></a>
 
-## maps
+# trees
+
+A main structure (root node) that branches in smaller branches till an end. A top node has child nodes, arranged in a hierarchical order, WITH ONE ROOT NODE AT THE TOP. EACH NODE CAN HAVE ONLY ONE PARENT.
+Tree elements:
+
+- Node (basic unit of the tree).
+- Children (nodes directly below a node)
+- Descendants (nodes below a node)
+- Parent (node that is directly above a node)
+- Ancestor (node that is above a node)
+- Root Node (node at the top of the tree)
+- Leaf Node (node without any children)
+
+![graphic](../images/trees.png)
+
+"n-ary tree": no constraints in how many children nodes can have.
+"binary tree": nodes can have 0, 1, or 2 children only.
+
+## trees_in_javascript
+
+Mind we implement the find methods on the Nodes, because each node is it's own tree.
+
+```javascript
+class Node {
+  constructor(val, children = []) {
+    this.val = val;
+    this.children = children;
+  }
+
+  // Depth First Search:
+  // transvers the tree in depth direction first, then in broadth.
+  // usses a stack (add at the top, remove from the top. the top of the stack is at the right of the array).
+  findDFS(val) {
+    const toVisitStack = [this]; // Node {val: "carlos", children: Array(2)} in our example.
+    while (toVisitStack.length) {
+      const current = toVisitStack.pop(); // remove from toVisitStack and store it in current
+      if (current.val === val) {
+        return current;
+      }
+      for (let child of current.children) {
+        // push the children in the toVisit stack
+        toVisitStack.push(child);
+      }
+    }
+  }
+
+  // Breadth First Search
+  // transverse the tree in broadth direction first, then in depth.
+  // uses a queue (first in first out, first element is at the left of array)
+  findBFS(val) {
+    const toVisitQueue = [this];
+    while (toVisitQueue.length) {
+      const current = toVisitQueue.shift();
+      if (current.val === val) {
+        return current;
+      }
+      for (let child of current.children) {
+        toVisitQueue.push(child);
+      }
+    }
+  }
+}
+
+let carlos = new Node('carlos', [new Node('tito'), new Node('pucho')]);
+/**
+ Node {val: "carlos", children: Array(2)}
+children: (2) [Node, Node]
+val: "carlos"
+ */
+
+carlos.findDFS('pucho'); // Node {val: "pucho", children: Array(0)}
+
+// Can use a class to store the root:
+
+class Tree {
+  constructor(root) {
+    this.root = root;
+  }
+
+  findInTreeDFS(val) {
+    return this.root.findDFS(val);
+  }
+
+  findInTreeBFS(val) {
+    return this.root.findBFS(val);
+  }
+}
+
+const players = new Tree('carlos');
+players.findInTreeDFS('tito');
+
+// -----------------------------------------------------------------
+// ALTERNATE SYNTAX:
+
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.children = [];
+  }
+}
+
+let amy = new Node('amy');
+let bob = new Node('bob');
+let barry = new Node('barry');
+
+amy.children.push(bob);
+amy.children.push(barry);
+// now we have a tree composed by 3 nodes:
+/**
+Node {val: "amy", children: Array(2)}
+children: (2) [Node, Node]
+val: "amy" */
+```
+
+## binary_trees
+
+A tree where a node can have 0, 1, or 2 children.
+
+![graphic](../images/binary-tree.png)
+
+Usually they're implemented with _left_ and _right_ properties, rather than children:
+
+```javascript
+/** BinaryTreeNode: node for a general tree. */
+
+class BinaryTreeNode {
+  constructor(val, left = null, right = null) {
+    this.val = val;
+    this.left = left;
+    this.right = right;
+  }
+}
+
+class BinaryTree {
+  constructor(root = null) {
+    this.root = root;
+  }
+
+  /** minDepth(): return the minimum depth of the tree -- that is,
+   * the length of the shortest path from the root to a leaf. */
+
+  minDepth() {
+    if (!this.root) return 0;
+
+    function minDepthHelper(node) {
+      if (node.left === null && node.right === null) return 1;
+      if (node.left === null) return minDepthHelper(node.right) + 1;
+      if (node.right === null) return minDepthHelper(node.left) + 1;
+      return (
+        Math.min(minDepthHelper(node.left), minDepthHelper(node.right)) + 1
+      );
+    }
+
+    return minDepthHelper(this.root);
+  }
+
+  /** maxDepth(): return the maximum depth of the tree -- that is,
+   * the length of the longest path from the root to a leaf. */
+
+  maxDepth() {
+    if (!this.root) return 0;
+
+    function maxDepthHelper(node) {
+      if (node.left === null && node.right === null) {
+        return 1;
+      }
+      if (node.left && node.right) {
+        return (
+          Math.max(maxDepthHelper(node.left), maxDepthHelper(node.right)) + 1
+        );
+      }
+    }
+
+    return maxDepthHelper(this.root);
+  }
+
+  /** maxSum(): return the maximum sum you can obtain by traveling along a path in the tree.
+   * The path doesn't need to start at the root, but you can't visit a node more than once. */
+
+  maxSum() {
+    if (!this.root) return 0;
+
+    let result = 0;
+
+    function sumHelper(node) {
+      if (node) {
+        result += node.val;
+        sumHelper(node.right);
+      } else {
+        return result;
+      }
+    }
+
+    sumHelper(this.root);
+    return result;
+  }
+
+  /** nextLarger(lowerBound): return the smallest value in the tree
+   * which is larger than lowerBound. Return null if no such value exists. */
+
+  nextLarger(lowerBound) {
+    if (!this.root) return null;
+
+    let queue = [this.root];
+    let closest = null;
+
+    while (queue.length) {
+      let currentNode = queue.shift();
+      let currentVal = currentNode.val;
+      let higherThanLowerBound = currentVal > lowerBound;
+      let shouldReassignClosest = currentVal < closest || closest === null;
+
+      if (higherThanLowerBound && shouldReassignClosest) {
+        closest = currentVal;
+      }
+
+      if (currentNode.left) queue.push(currentNode.left);
+      if (currentNode.right) queue.push(currentNode.right);
+    }
+
+    return closest;
+  }
+
+  /** Further study!
+   * areCousins(node1, node2): determine whether two nodes are cousins
+   * (i.e. are at the same level but have different parents. ) */
+
+  areCousins(node1, node2) {
+    if (node1 === this.root || node2 === this.root) return false;
+
+    function findLevelAndParent(
+      nodeToFind,
+      currentNode,
+      level = 0,
+      data = { level: 0, parent: null }
+    ) {
+      if (data.parent) return data;
+      if (currentNode.left === nodeToFind || currentNode.right === nodeToFind) {
+        data.level = level + 1;
+        data.parent = currentNode;
+      }
+      if (currentNode.left) {
+        findLevelAndParent(nodeToFind, currentNode.left, level + 1, data);
+      }
+      if (currentNode.right) {
+        findLevelAndParent(nodeToFind, currentNode.right, level + 1, data);
+      }
+      return data;
+    }
+
+    let node1Info = findLevelAndParent(node1, this.root);
+    let node2Info = findLevelAndParent(node2, this.root);
+
+    let sameLevel =
+      node1Info && node2Info && node1Info.level === node2Info.level;
+    let differentParents =
+      node1Info && node2Info && node1Info.parent !== node2Info.parent;
+    return sameLevel && differentParents;
+  }
+
+  /** Further study!
+   * serialize(tree): serialize the BinaryTree object tree into a string. */
+
+  static serialize(tree) {
+    const values = [];
+
+    function traverse(node) {
+      if (node) {
+        values.push(node.val);
+        traverse(node.left);
+        traverse(node.right);
+      } else {
+        values.push('#');
+      }
+    }
+
+    traverse(tree.root);
+    return values.join(' ');
+  }
+
+  /** Further study!
+   * deserialize(stringTree): deserialize stringTree into a BinaryTree object. */
+
+  static deserialize(stringTree) {
+    if (!stringTree) return null;
+
+    const values = stringTree.split(' ');
+
+    function buildTree() {
+      // building a tree starting from the beginning of the array
+      if (values.length) {
+        const currentVal = values.shift();
+
+        if (currentVal === '#') return null;
+
+        // remember to convert values back into numbers
+        let currentNode = new BinaryTreeNode(+currentVal);
+        currentNode.left = buildTree();
+        currentNode.right = buildTree();
+
+        return currentNode;
+      }
+    }
+
+    const root = buildTree();
+    return new BinaryTree(root);
+  }
+
+  /** Further study!
+   * lowestCommonAncestor(node1, node2): find the lowest common ancestor
+   * of two nodes in a binary tree. */
+
+  lowestCommonAncestor(node1, node2, currentNode = this.root) {
+    // base case 1: empty tree
+    if (currentNode === null) return null;
+
+    // base case 2: root is one of the target nodes
+    if (currentNode === node1 || currentNode === node2) return currentNode;
+
+    // recursively search the left sub-tree
+    const left = this.lowestCommonAncestor(node1, node2, currentNode.left);
+
+    // recursively search the right sub-tree
+    const right = this.lowestCommonAncestor(node1, node2, currentNode.right);
+
+    // if neither left nor right is null, currentNode is the ancestor
+    if (left !== null && right !== null) return currentNode;
+
+    // if one node is not null, return it
+    if (left !== null || right !== null) return left || right;
+
+    // left and right are both null, return null
+    if (left === null && right === null) return null;
+  }
+}
+
+let node6 = new BinaryTreeNode(1);
+let node5 = new BinaryTreeNode(1);
+let node4 = new BinaryTreeNode(2);
+let node3 = new BinaryTreeNode(3, node4, node6);
+let node2 = new BinaryTreeNode(5, node3, node5);
+let node1 = new BinaryTreeNode(5);
+let root = new BinaryTreeNode(6, node1, node2);
+largeTree = new BinaryTree(root);
+
+console.log(largeTree.nextLarger(2));
+
+module.exports = { BinaryTree, BinaryTreeNode };
+```
+
+## binary_search_trees
+
+BSTs
+
+It's a binary tree with one more constraint:
+
+- Nodes must be sorted. Sorting can be by number, alphabetical, etc. To the left lower, to the right higher:
+
+![graphic](../images/bsts.png)
+
+Super efficient for binary search.
+
+## javascript_implementation_BST
+
+```javascript
+class BinarySearchNode {
+  constructor(val, left = null, right = null) {
+    this.val = val;
+    this.left = left;
+    this.right = right;
+  }
+
+  search(sought) {
+    let currentNode = this;
+    while (currentNode) {
+      if (currentNode.val === sought) return currentNode;
+      if (currentNode.val > sought) {
+        currentNode = currentNode.left;
+      } else {
+        currentNode = currentNode.right;
+      }
+    }
+  }
+}
+
+class BinarySearchTree {
+  constructor(root = null) {
+    this.root = root;
+  }
+}
+
+const E = new BinarySearchNode('E');
+const A = new BinarySearchNode('A');
+const B = new BinarySearchNode('B');
+const C = new BinarySearchNode('C');
+const D = new BinarySearchNode('D');
+const F = new BinarySearchNode('F');
+const G = new BinarySearchNode('G');
+
+E.left = B;
+E.right = G;
+B.left = A;
+B.right = D;
+G.left = F;
+
+const josh = new BinarySearchTree(E);
+
+E.search('D'); // BinarySearchNode {val: "D", left: null, right: null}
+```
+
+---
+
+# maps
 
 Are an abstract data type for mapping key -> value pairs. They are present in most langagues:
 
@@ -100,15 +525,38 @@ Javascript Objects store keys always as strings. Javascript Maps allows to store
 - entries()
   Iterable key/vaue pairs.
 
-## hash_tables
+# hash_tables
+
+![hash-tables-in-languages](../images/hash-in-languages.png)
+
+Are a key->value pair structures implemented through a hash function.
 
 Hash tables has two parts:
 
 1. an array (buckets to store the data)
-2. a mapping function / hash function (the function that will determine the sorting algorithm in which store the data and that will be used to retrieve the data). Take a key -> hash it -> store the value at hashed index.
-   MAPPING: stablish a relationship between two sets of data.
+2. a mapping function / hash function (the function that will determine the sorting algorithm in which store the data and that will be used to retrieve the data). Take a string -> hash it all or a part of it -> get a numeric value from the hashing function, use this number as an index to store the string in the table.
+
+![graphic](../images/hash-table.png)
+MAPPING: stablish a relationship between two sets of data.
 
 We use them to implement our mapping in a very efficient way, we can search in O(1)!!! Because we don't have to loop over each item of the array, instead we run the hash function (that has always the same runtime), and that function will give us the array position at which the desired value is stored, and will also stablish the logic in which values will be distributed in the array.
+
+## hash_tables_runtime
+
+- Set O(1)
+- get, has mostly O(1)
+- delete mostly O(1)
+- keys, values, entries O(n)
+
+"Mostly" means that assuming there are no collisions, but collisions are unavoidable. The strategy to achieve most constant time as possible is
+
+- choosing array size large enough to minimoze collisions.
+- Choosing hash functions that spreads keys evenly in array.
+- Resizing. Array shrink/grow, often aiming to keep it ~75% occupied. This means that some .set() and .delete() calls will take longer. If shrink/grown by proportion (eg double/halve), will be "amortized O(1)".
+
+### hashing
+
+Can find perfect hashing function if you know the data you have to store.
 
 Hash function to store books in a bookshelf:
 
@@ -131,6 +579,7 @@ Hash function using Horner's method:
 
 ```javascript
 function hash(key) {
+  const arr_size = 7;
   // Prime number to use with Horner's method
   const H_PRIME = 31;
 
@@ -138,9 +587,39 @@ function hash(key) {
     (accum, char) => accum * H_PRIME + char.charCodeAt(),
     0
   );
-  return numKey % array_len;
+  return numKey % arr_size;
 }
+
+hash('lala'); // 3
 ```
+
+Hash function for hashing tables must:
+
+- Be deterministic. Return the same output if the input is the same.
+- Be fast. (Oposite to cryptologic hashes, like Bcrypt that is purposedly slow, because it prioritizes the difficulty of reversing output.) For hash tables, the hashing function has to be fast.
+- Must give a wide distribution of the values in the table, so we will have as few collisions as possible.
+
+### hash_runtime
+
+- The amount of work used to hash a key isn't related to the number of items in the map, instead, it's related to the size of the key we're passing in the hash function, so the runtime will be O(k), where 'k' is the number of characters-in-string. Usually they use part of string (eg first 100 characters), these then could be O(1).
+  Will be O(1) to find, set, etc.
+
+### collisions
+
+When the hashing function gives us the same index position for two different values, there's a collision, we're storing two things in the same bucket. To manage this, there are two different strategies:
+
+1. **Separate Chaining**
+   - Option a. : Each bin is an array of [key, value]:
+     ![separate_chaining](../images/separate-chaining.png)
+     Keep two or three arrays per bucket.
+   - Option b: Each bucket is a linked list: https://visualgo.net/en/hashtable
+2. **Open Addressing**
+   - We can make each bin just a single [key, value] pair
+   - If collision: look at the “next” place, this can be the next bin (this is _linear probing_)
+   - Or there are smarter algorithms to reduce clumping
+   - We should keep array size large enough to minimize when this happens
+   - If we do and we have a good hash function, we can get amortized O(1)
+3. **Double Hashing**
 
 ---
 
