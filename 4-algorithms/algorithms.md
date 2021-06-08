@@ -5,7 +5,10 @@
      - [binary_trees](##binary_trees)
        BINARY SEARCH TREES
      - [BSTs](##binary_search_trees)
+     - [BST_runtime](##BST_runtime)
      - [javascript_implementation_BST](##javascript_implementation_BST)
+     - [balance](##balance)
+     - [self_balancing_BST](##self_balancing_BST)
   1. MAPS
      - [maps](#maps)
   1. HASH TABLES (HASH MAPS)
@@ -444,7 +447,12 @@ It's a binary tree with one more constraint:
 
 ![graphic](../images/bsts.png)
 
-Super efficient for binary search.
+## BST_runtime
+
+Can search for exact value, or inequalities. Can search for ranges.
+
+- Search runtime: O(log n) (every search we reduce the search area by half)
+- add/delete O(log n)
 
 ## javascript_implementation_BST
 
@@ -473,6 +481,29 @@ class BinarySearchTree {
   constructor(root = null) {
     this.root = root;
   }
+
+  // traversal strategies, valid for all binary trees
+  //IN ORDER TRAVERSAL: "traverse left, myself, traverse right"
+  traverseInOrder(node = this.root) {
+    if (node.left) this.traverse(node.left);
+    console.log(node.val);
+    // do things here with the current node
+    if (node.right) this.traverse(node.right);
+  }
+
+  //PRE ORDER TRAVERSAL: "myself, traverse left, traverse right"
+  traversePreOrder(node = this.root) {
+    console.log(node.val);
+    if (node.left) this.traverse(node.left);
+    if (node.right) this.traverse(node.right);
+  }
+
+  //POST ORDER TRAVERSAL: "traverse left, traverse right, myself"
+  traversePostOrder(node = this.root) {
+    if (node.left) this.traverse(node.left);
+    if (node.right) this.traverse(node.right);
+    console.log(node.val);
+  }
 }
 
 const E = new BinarySearchNode('E');
@@ -492,9 +523,356 @@ G.left = F;
 const josh = new BinarySearchTree(E);
 
 E.search('D'); // BinarySearchNode {val: "D", left: null, right: null}
+
+josh.traverseInOrder(); // A B D E F G
+
+josh.traversePreOrder(); // E B A D G F
+
+josh.traversePostOrder(); // A D B F G E
+
+// _------------------------------------------------------------------------
+//MORE METHODS!!
+
+class Node {
+  constructor(val, left = null, right = null) {
+    this.val = val;
+    this.left = left;
+    this.right = right;
+  }
+}
+
+class BinarySearchTree {
+  constructor(root = null) {
+    this.root = root;
+  }
+
+  /** insert(val): insert a new node into the BST with value val.
+   * Returns the tree. Uses iteration. */
+
+  insert(val) {
+    const newNode = new Node(val);
+
+    if (this.root === null) {
+      this.root = newNode;
+      return this;
+    }
+
+    let current = this.root;
+    while (true) {
+      if (val < current.val) {
+        if (current.left === null) {
+          current.left = newNode;
+          return this;
+        } else {
+          current = current.left;
+        }
+      } else if (val > current.val) {
+        if (current.right === null) {
+          current.right = newNode;
+          return this;
+        } else {
+          current = current.right;
+        }
+      }
+    }
+  }
+
+  /** insertRecursively(val): insert a new node into the BST with value val.
+   * Returns the tree. Uses recursion. */
+
+  insertRecursively(val, node = this.root) {
+    const newNode = new Node(val);
+
+    if (this.root === null) {
+      this.root = newNode;
+      return this;
+    }
+
+    if (val < node.val) {
+      if (node.left === null) {
+        node.left = newNode;
+        return this;
+      }
+      return this.insertRecursively(val, node.left);
+    } else {
+      if (node.right === null) {
+        node.right = newNode;
+        return this;
+      }
+      return this.insertRecursively(val, node.right);
+    }
+  }
+
+  /** find(val): search the tree for a node with value val.
+   * return the node, if found; else undefined. Uses iteration. */
+
+  find(val) {
+    let currentNode = this.root;
+    let found = false;
+
+    if (val === currentNode.val) return currentNode;
+
+    while (currentNode && !found) {
+      if (val < currentNode.val) {
+        currentNode = currentNode.left;
+      } else if (val > currentNode.val) {
+        currentNode = currentNode.right;
+      } else {
+        found = true;
+      }
+    }
+    if (!found) return undefined;
+    return currentNode;
+  }
+
+  /** findRecursively(val): search the tree for a node with value val.
+   * return the node, if found; else undefined. Uses recursion. */
+
+  findRecursively(val, node = this.root) {
+    if (this.root === null) return undefined;
+
+    if (val < node.val) {
+      if (node.left === null) return undefined;
+      return this.findRecursively(val, node.left);
+    } else if (val > node.val) {
+      if (node.right === null) return undefined;
+      return this.findRecursively(val, node.right);
+    }
+    return node;
+  }
+
+  /** dfsPreOrder(): Traverse the array using pre-order DFS.
+   * Return an array of visited nodes. */
+
+  dfsPreOrder() {
+    const result = [];
+    const node = this.root;
+
+    function traverse(node) {
+      result.push(node.val);
+      node.left && traverse(node.left);
+      node.right && traverse(node.right);
+    }
+    traverse(node);
+    return result;
+  }
+
+  /** dfsInOrder(): Traverse the array using in-order DFS.
+   * Return an array of visited nodes. */
+
+  dfsInOrder() {
+    const result = [];
+    const node = this.root;
+
+    function traverse(node) {
+      node.left && traverse(node.left);
+      result.push(node.val);
+      node.right && traverse(node.right);
+    }
+    traverse(node);
+    return result;
+  }
+
+  dfsInOrderIterative() {
+    let cur = this.root;
+    let stack = [];
+    let dfs = [];
+    while (stack.length > 0 || cur) {
+      while (cur) {
+        stack.push(cur);
+        cur = cur.left;
+      }
+      cur = stack.pop();
+      if (cur) {
+        dfs.push(cur.val);
+        cur = cur.right;
+      }
+    }
+    return dfs;
+  }
+
+  /** dfsPostOrder(): Traverse the array using post-order DFS.
+   * Return an array of visited nodes. */
+
+  dfsPostOrder() {
+    const result = [];
+    const node = this.root;
+
+    function traverse(node) {
+      node.left && traverse(node.left);
+      node.right && traverse(node.right);
+      result.push(node.val);
+    }
+    traverse(node);
+    return result;
+  }
+
+  /** bfs(): Traverse the array using BFS.
+   * Return an array of visited nodes. */
+
+  bfs() {
+    const result = [];
+    const queue = [];
+    let node = this.root;
+
+    queue.push(node);
+
+    while (queue.length) {
+      node = queue.shift();
+      result.push(node.val);
+      if (node.left) {
+        queue.push(node.left);
+      }
+      if (node.right) {
+        queue.push(node.right);
+      }
+    }
+    return result;
+  }
+
+  /** Further Study!
+   * remove(val): Removes a node in the BST with the value val.
+   * Returns the removed node. */
+
+  remove(val) {
+    let nodeToRemove = this.root;
+    let parent;
+
+    while (nodeToRemove.val !== val) {
+      parent = nodeToRemove;
+      if (val < nodeToRemove.val) {
+        nodeToRemove = nodeToRemove.left;
+      } else {
+        nodeToRemove = nodeToRemove.right;
+      }
+    }
+
+    if (nodeToRemove !== this.root) {
+      if (nodeToRemove.left === null && nodeToRemove.right === null) {
+        if (parent.left === nodeToRemove) {
+          parent.left = null;
+        } else {
+          parent.right = null;
+        }
+      } else if (nodeToRemove.left !== null && nodeToRemove.right !== null) {
+        let rightParent = nodeToRemove;
+        let right = nodeToRemove.right;
+        if (right.left === null) {
+          right.left = nodeToRemove.left;
+          if (parent.left === nodeToRemove) {
+            parent.left = right;
+          } else {
+            parent.right = right;
+          }
+        } else {
+          while (right.left !== null) {
+            rightParent = right;
+            right = right.left;
+          }
+          if (parent.left === nodeToRemove) {
+            parent.left.val = right.val;
+          } else {
+            parent.right.val = right.val;
+          }
+          if (right.right !== null) {
+            rightParent.left = right.right;
+          } else {
+            rightParent.left = null;
+          }
+        }
+      } else {
+        if (parent.left === nodeToRemove) {
+          if (nodeToRemove.right === null) {
+            parent.left = nodeToRemove.left;
+          } else {
+            parent.left = nodeToRemove.right;
+          }
+        } else {
+          if (nodeToRemove.right === null) {
+            parent.right = nodeToRemove.left;
+          } else {
+            parent.right = nodeToRemove.right;
+          }
+        }
+      }
+    }
+    return nodeToRemove;
+  }
+
+  /** Further Study!
+   * isBalanced(): Returns true if the BST is balanced, false otherwise. */
+
+  isBalanced() {
+    if (current === null) return;
+    return maxDepth(current) - minDepth(current) <= 1;
+
+    function minDepth(current) {
+      if (current === null) return 0;
+      return 1 + Math.min(minDepth(current.left), minDepth(current.right));
+    }
+
+    function maxDepth(current) {
+      if (current === null) return 0;
+      return 1 + Math.max(maxDepth(current.left), maxDepth(current.right));
+    }
+  }
+
+  /** Further Study!
+   * findSecondHighest(): Find the second highest value in the BST, if it exists.
+   * Otherwise return undefined. */
+
+  findSecondHighest() {
+    // if the tree is too small, return
+    if (!this.root || (!this.root.left && !this.root.right)) return;
+
+    while (current) {
+      // Current is largest and has a left subtree and 2nd largest is the largest in that subtree
+      if (current.left && !current.right) {
+        return this.findSecondHighest(current.left);
+      }
+      // Current is parent of largest and largest has no children so current is 2nd largest
+      if (current.right && !current.right.left && !current.right.right) {
+        return current.val;
+      }
+      current = current.right;
+    }
+  }
+}
+
+module.exports = BinarySearchTree;
+
+let ver = new BinarySearchTree();
+ver.insertRecursively(15);
+ver.insertRecursively(20);
+ver.insertRecursively(10);
+ver.insertRecursively(12);
+ver.insertRecursively(2);
+console.log(ver.remove(12));
 ```
 
----
+## balance
+
+Strategies to balance a tree:
+
+- shuffle values for tree randomly, and then insert
+- sort values, then insert from the middle working out
+
+In order for the search to be efficient, the tree must be balanced, this means minimize the height of the tree.
+
+Bad balance:
+![bad_balance](../images/bad-balance.png)
+
+Minimize the height of the tree:
+
+Good balance:
+![good_balance](../images/good-balance.png)
+
+## self_balancing_BST
+
+1. AVL tree
+   Keeps balanced based on heights of tree, and keeps heights even right and left side. Simpler algorithm but slightly less efficient.
+2. Red/Black tree
+   Keeps “reasonably” balanced. Adds a color (red or black) to each node, and counts the colors to keep balance. More complex algorithm but can be more efficient.
 
 # maps
 
@@ -542,6 +920,8 @@ MAPPING: stablish a relationship between two sets of data.
 We use them to implement our mapping in a very efficient way, we can search in O(1)!!! Because we don't have to loop over each item of the array, instead we run the hash function (that has always the same runtime), and that function will give us the array position at which the desired value is stored, and will also stablish the logic in which values will be distributed in the array.
 
 ## hash_tables_runtime
+
+You need to know the key. No organization about the overall map. Can't search for value or related values. One value at a time search. No range.
 
 - Set O(1)
 - get, has mostly O(1)
