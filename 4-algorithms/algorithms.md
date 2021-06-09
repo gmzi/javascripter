@@ -46,19 +46,20 @@
      - [methods](##Standard_methods_deques)
      - [implementations](##Efficient_Implementations_deques)
      - [example](#Example_implementation_deques)
-  9. HEAPS
-     [heaps](#heaps)
-     - [constraints](#Constraints_heaps)
-     - [methods](##Standard_methods_heaps)
-     - [implementations](##Efficient_Implementations_heaps)
-     - [example](#Example_implementation_heaps)
-     - [cool_article](https://medium.com/basecs/learning-to-love-heaps-cef2b273a238)
-  10. PRIORITY QUEUES
-      [priority_queues](#priority_queues)
-      - [constraints](#Constraints_P_queues)
-      - [methods](##Standard_methods_P_queues)
-      - [implementations](##Efficient_Implementations_P_queues)
-      - [example](#Example_implementation_P_queues)
+  9. PRIORITY QUEUES
+     [priority_queues](#priority_queues)
+     - [constraints](#Constraints_P_queues)
+     - [methods](##Standard_methods_P_queues)
+     - [implementations](##Efficient_Implementations_P_queues)
+     - [example](#Example_implementation_P_queues)
+  10. HEAPS
+      [heaps](#heaps)
+      - [constraints](#Constraints_heaps)
+      - [methods](##Standard_methods_heaps)
+      - [runtime](##runtime_heaps)
+      - [implementations](##Efficient_Implementations_heaps)
+      - [example](#Example_implementation_heaps)
+      - [cool_article](https://medium.com/basecs/learning-to-love-heaps-cef2b273a238)
   11. LISTS
       [lists](#lists)
       - [linked_lists](##linked_lists)
@@ -1709,20 +1710,6 @@ Not provided today
 
 ---
 
-# heaps
-
-Efficient way of implementing a priority queue. As we insert a value, the heap reorganizes in the correct spot, ant it makes very easy to retrieve the highest value, which is always at the top or the bottom.
-
-# Constraints_heaps
-
-## Standard_methods_heap)
-
-## Efficient_Implementations_heap)
-
-# Example_implementation_heaps
-
----
-
 # priority_queues
 
 It's an ADT for a collection.
@@ -1760,6 +1747,184 @@ Two strategies:
    - Doubly linked list: no, peek & poll would be O(n)
 
 # Example_implementation_P_queues
+
+```javascript
+// CHECKOUT HEAPS UNIT FOR FULL IMPLEMENTATION
+
+class PriorityQueue {
+  constructor() {
+    this.data = [];
+  }
+  add(priority, value) {
+    this.data.push({ priority, value });
+  }
+  poll() {
+    let maxIdx = 0;
+    let maxPriority = this.data[0].priority;
+    for (let i = 1; i < this.data.length; i++) {
+      if (this.data[i].priority > maxPriority) {
+        maxPriority = this.data[i].priority;
+        maxIdx = i;
+      }
+    }
+    return this.data.splice(maxIdx, 1)[0].value;
+  }
+}
+
+const pq = new PriorityQueue();
+pq.add(8, 'broken leg');
+pq.add(6, 'dizziness');
+pq.add(10, 'heart attack');
+pq.add(2, 'tooth ache');
+```
+
+---
+
+# heaps
+
+Heap: montón, pila.
+
+It'a a tree with the "heap property":
+
+- max heap (the heap property is that for any given node, the children must always be less than the parent )
+- min heap (smallest value at the top)
+- any other heap rule
+
+Efficient way of implementing a priority queue. As we insert a value, the heap reorganizes in the correct spot, ant it makes very easy to retrieve the highest value, which is always at the top or the bottom.
+
+![graphic](../images/heap.png)
+
+# Constraints_heaps
+
+- Min or Max at the top.
+- Must keep themm compact (no adding levels in depth until its broad)
+- left or right doesn't matter
+
+## Standard_methods_heap)
+
+- Add item:
+  - Follow order Top to Bottom, left to right, add item at the first spot available. Then Swap upwards until correct position (bubble up process)
+- remove item:
+  - Remove top item. Take the bottom right node, put it at the top. Swap downwards until is in correct spot (sinking down process). To choose going down left or down right, choose the highest of both.
+
+## runtime_heaps
+
+- Add to bottom right: O(1);
+- Swapping top & bottom right: O(1)
+- Bubble up: O(log n) (depends on the height of the tree)
+- Sink down: O(log n) (depends on the height of the tree)
+- Peek: O(n)
+
+## Efficient_Implementations_heap)
+
+# Example_implementation_heaps
+
+A binary heap, represented by an array:
+![graphic](..images/implementation-heap.png)
+
+Implement a priority queue using a min heap:
+
+```javascript
+class PriorityQueue {
+  constructor() {
+    this.values = [];
+    // formula to find index in array:
+    // left child: 2 * i + 1
+    // right child: 2 * i + 2;
+  }
+  enqueue(val, priority) {
+    let newNode = new Node(val, priority);
+    // add to the end of array/bottom of heap:
+    this.values.push(newNode);
+    // bubble it up baby:
+    this.bubbleUp();
+  }
+
+  printQueue() {
+    console.log(this.values.map(({ val, priority }) => `${priority} - ${val}`));
+  }
+
+  // for min heap, lower value at the top.:
+  bubbleUp() {
+    let idx = this.values.length - 1;
+    const element = this.values[idx];
+    while (idx > 0) {
+      this.printQueue();
+      let parentIdx = Math.floor((idx - 1) / 2);
+      let parent = this.values[parentIdx];
+      if (element.priority >= parent.priority) break;
+      this.values[parentIdx] = element;
+      this.values[idx] = parent;
+      idx = parentIdx;
+    }
+  }
+
+  dequeue() {
+    const min = this.values[0];
+    const end = this.values.pop();
+    if (this.values.length > 0) {
+      this.values[0] = end;
+      this.sinkDown();
+    }
+    return min;
+  }
+
+  sinkDown() {
+    let idx = 0;
+    const length = this.values.length;
+    const element = this.values[0];
+    while (true) {
+      let leftChildIdx = 2 * idx + 1;
+      let rightChildIdx = 2 * idx + 2;
+      let leftChild, rightChild;
+      let swap = null;
+
+      if (leftChildIdx < length) {
+        leftChild = this.values[leftChildIdx];
+        if (leftChild.priority < element.priority) {
+          swap = leftChildIdx;
+        }
+      }
+      if (rightChildIdx < length) {
+        rightChild = this.values[rightChildIdx];
+        if (
+          (swap === null && rightChild.priority < element.priority) ||
+          (swap !== null && rightChild.priority < leftChild.priority)
+        ) {
+          swap = rightChildIdx;
+        }
+      }
+      if (swap === null) break;
+      this.values[idx] = this.values[swap];
+      this.values[swap] = element;
+      idx = swap;
+    }
+  }
+}
+
+class Node {
+  constructor(val, priority) {
+    this.val = val;
+    this.priority = priority;
+  }
+}
+
+// lowest value higher priority
+let ER = new PriorityQueue();
+ER.enqueue('common cold', 5); // not that urgent
+ER.enqueue('gunshot wound', 1); // very urgent
+ER.enqueue('high fever', 4);
+ER.enqueue('broken arm', 2);
+ER.enqueue('glass in foot', 3);
+
+ER.values; /**
+0: Node {val: "gunshot wound", priority: 1}
+1: Node {val: "broken arm", priority: 2}
+2: Node {val: "high fever", priority: 4}
+3: Node {val: "common cold", priority: 5}
+4: Node {val: "glass in foot", priority: 3}
+*/
+```
 
 ---
 
