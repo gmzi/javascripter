@@ -73,12 +73,9 @@
       - [typed_arrays](###typed_arrays)
 - Sorting Algorithms
   [sorting](#sorting)
-  Comparative sorting:
-  1. [adaptive_sorting_algorithms](##adaptive_sorting_algorithms)
-  2. [intermediate_sorting_algorithms](##intermediate_sorting_algorithms)
-     - [merge_sort](###merge_sort)
-  3. [quadratic_time_algorithms](##quadratic_time_algorithms)
-     - [bubble_sort](###bubble_sort)
+  - [insertion_selection_quick_radix_sorts](##insertion_selection_quick_radix_sorts)
+  - [merge_sort](###merge_sort)
+  - [bubble_sort](###bubble_sort)
 - Recursion
   [recursion](#recursion)
   [examples](##examples)
@@ -2146,9 +2143,112 @@ Python:
 
 - Timsort
 
-## intermediate_sorting_algorithms
+## insertion_selection_quick_radix_sorts
 
 O(n log n) is the best possible performance for a sorting algorithm.
+
+```javascript
+// INSERTION SORT
+function insertionSort(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    let currentValue = arr[i];
+
+    for (var j = i - 1; j > -1 && arr[j] > currentValue; j--) {
+      arr[j + 1] = arr[j];
+    }
+
+    arr[j + 1] = currentValue;
+  }
+
+  return arr;
+}
+
+// -------------------------------------------------------------------------
+// SELECTION SORT
+function selectionSort(arr) {
+  const swap = (arr, idx1, idx2) =>
+    ([arr[idx1], arr[idx2]] = [arr[idx2], arr[idx1]]);
+
+  for (let i = 0; i < arr.length; i++) {
+    let lowest = i;
+
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[lowest] > arr[j]) {
+        lowest = j;
+      }
+    }
+
+    if (i !== lowest) swap(arr, i, lowest);
+  }
+
+  return arr;
+}
+
+// -------------------------------------------------------------------------
+// QUICK SORT
+function pivot(arr, start = 0, end = arr.length - 1) {
+  const swap = (arr, idx1, idx2) => {
+    [arr[idx1], arr[idx2]] = [arr[idx2], arr[idx1]];
+  };
+
+  // We are assuming the pivot is always the first element
+  let pivot = arr[start];
+  let swapIdx = start;
+
+  for (let i = start + 1; i <= end; i++) {
+    if (pivot > arr[i]) {
+      swapIdx++;
+      swap(arr, swapIdx, i);
+    }
+  }
+
+  // Swap the pivot from the start the swapPoint
+  swap(arr, start, swapIdx);
+  return swapIdx;
+}
+
+function quickSort(arr, left = 0, right = arr.length - 1) {
+  if (left < right) {
+    let pivotIndex = pivot(arr, left, right);
+    quickSort(arr, left, pivotIndex - 1);
+    quickSort(arr, pivotIndex + 1, right);
+  }
+  return arr;
+}
+
+// -------------------------------------------------------------------------
+// RADIX SORT
+function getDigit(num, i) {
+  return Math.floor(Math.abs(num) / Math.pow(10, i)) % 10;
+}
+
+function digitCount(num) {
+  if (num === 0) return 1;
+  return Math.floor(Math.log10(Math.abs(num))) + 1;
+}
+
+function mostDigits(nums) {
+  let maxDigits = 0;
+  for (let i = 0; i < nums.length; i++) {
+    maxDigits = Math.max(maxDigits, digitCount(nums[i]));
+  }
+  return maxDigits;
+}
+
+function radixSort(nums) {
+  let maxDigitCount = mostDigits(nums);
+  for (let k = 0; k < maxDigitCount; k++) {
+    let digitBuckets = Array.from({ length: 10 }, () => []);
+    for (let i = 0; i < nums.length; i++) {
+      let num = nums[i];
+      let digit = getDigit(num, k);
+      digitBuckets[digit].push(num);
+    }
+    nums = [].concat(...digitBuckets);
+  }
+  return nums;
+}
+```
 
 ## merge_sort
 
@@ -2194,14 +2294,6 @@ mergeSort([12, 43, 543, 1, 54]); // [1, 12, 43, 54, 543]
 ```
 
 Combines merging and sorting. Exploits the fact that arrays of 0 or 1 element are always sorted. Strategy: Decompose array into smaller arrays of 0 or 1 elements. Build up a newly sorted array from those.
-
-## qudratic_time_algorithms
-
-They're O(n2)
-
-- Bubble sort
-- Insertion sort
-- Selection sort
 
 ### bubble_sort
 
