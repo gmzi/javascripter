@@ -71,6 +71,14 @@
       - [indirect_arrays](###indirect_arrays)
       - [direct_arrays/vectors](###direct_arrays/vectors)
       - [typed_arrays](###typed_arrays)
+- Sorting Algorithms
+  [sorting](#sorting)
+  Comparative sorting:
+  1. [adaptive_sorting_algorithms](##adaptive_sorting_algorithms)
+  2. [intermediate_sorting_algorithms](##intermediate_sorting_algorithms)
+     - [merge_sort](###merge_sort)
+  3. [quadratic_time_algorithms](##quadratic_time_algorithms)
+     - [bubble_sort](###bubble_sort)
 - Recursion
   [recursion](#recursion)
   [examples](##examples)
@@ -84,6 +92,7 @@
   [binary_search](##binary_search)
   [linear_search](##linear_search)
 - Big-O notation
+  [cheat_sheet](https://www.bigocheatsheet.com)
   [functions](##functions)
   [time_complexity](##time_complexity)
   [time_complexity](##space_complexity)
@@ -347,6 +356,39 @@ class Graph {
       }
     }
     return result;
+  }
+
+  shortestPath(start, end) {
+    if (start === end) {
+      return [start.value];
+    }
+    var queue = [start];
+    let visited = new Set();
+    let predecessors = {};
+    let path = [];
+
+    while (queue.length) {
+      let currentVertex = queue.shift();
+
+      if (currentVertex === end) {
+        let stop = predecessors[end.value];
+        while (stop) {
+          path.push(stop);
+          stop = predecessors[stop];
+        }
+        path.unshift(start.value);
+        path.reverse();
+        return path;
+      }
+
+      visited.add(currentVertex);
+      for (let vertex of currentVertex.adjacent) {
+        if (!visited.has(vertex)) {
+          predecessors[vertex.value] = currentVertex.value;
+          queue.push(vertex);
+        }
+      }
+    }
   }
 }
 
@@ -2080,6 +2122,153 @@ It's a special kind of array. IT ONLY WORKS IF ITEMS ARE ALL THE SAME SIZE:
 
 Javascript typed arrays are more powerful when working with big loads of data. (numbers, music/video data, etc.)
 It's a javascript version of vectors. Used very rarely. They have restrictions on what can be stored in them. (checkout mdn for more)
+
+---
+
+# sorting
+
+Sorting algorithms. Sort a data set with logic.
+
+## adaptive_sorting_algorithms
+
+Adaptive sorts examine input data, and can:
+
+- Choose underlying sorting algorithm to use
+- Switch between algorithms during same sort
+  Example: starting sorting with merge sort, switch to insertion sort once subarrays get small (typically faster than merge sorting all)
+
+Javascript:
+
+- chrome and Node uses "Timsort", an adaptive Merge Sort/Insertion sort.
+- firefox: Merge Sort
+
+Python:
+
+- Timsort
+
+## intermediate_sorting_algorithms
+
+O(n log n) is the best possible performance for a sorting algorithm.
+
+## merge_sort
+
+Should run in O(n + m) time/space and be pure ("pure"meaning it doesn't mutate the original array, it returns a new one). Takes a lot of space because it creates many arrays.
+
+```javascript
+function merge(arr1, arr2) {
+  const results = [];
+  let i = 0;
+  let j = 0;
+  while (i < arr1.length && j < arr2.length) {
+    if (arr1[i] < arr2[j]) {
+      results.push(arr1[i]);
+      i++;
+    } else {
+      results.push(arr2[j]);
+      j++;
+    }
+  }
+  while (i < arr1.length) {
+    results.push(arr1[i]);
+    i++;
+  }
+  while (j < arr2.length) {
+    results.push(arr2[j]);
+    j++;
+  }
+
+  return results;
+}
+
+function mergeSort(arr) {
+  // base case
+  if (arr.length <= 1) return arr;
+  // normal case
+  const mid = Math.floor(arr.length / 2);
+  const left = mergeSort(arr.slice(0, mid));
+  const right = mergeSort(arr.slice(mid));
+  return merge(left, right);
+}
+
+mergeSort([12, 43, 543, 1, 54]); // [1, 12, 43, 54, 543]
+```
+
+Combines merging and sorting. Exploits the fact that arrays of 0 or 1 element are always sorted. Strategy: Decompose array into smaller arrays of 0 or 1 elements. Build up a newly sorted array from those.
+
+## qudratic_time_algorithms
+
+They're O(n2)
+
+- Bubble sort
+- Insertion sort
+- Selection sort
+
+### bubble_sort
+
+Runtime:
+
+- O(n2) (quadratic)
+
+If data is nearly sorted, can perform better.
+
+```javascript
+// optimized!
+function bubbleSort3(arr) {
+  let count = 0;
+  for (let i = 0; i < arr.length; i++) {
+    let swapped = false;
+    for (let j = 0; j < arr.length - i; j++) {
+      count++;
+      if (arr[j] > arr[j + 1]) {
+        let temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+        swapped = true;
+      }
+    }
+    if (!swapped) break;
+  }
+  console.log('TOTAL COUNT:', count);
+  return arr;
+}
+
+function bubbleSort2(arr) {
+  let count = 0;
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr.length - i; j++) {
+      count++;
+      if (arr[j] > arr[j + 1]) {
+        let temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+      }
+    }
+  }
+  console.log('TOTAL COUNT:', count);
+  return arr;
+}
+
+function bubbleSort(arr) {
+  let count = 0;
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr.length; j++) {
+      count++;
+      if (arr[j] > arr[j + 1]) {
+        let temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+      }
+    }
+  }
+  console.log('TOTAL COUNT:', count);
+  return arr;
+}
+
+bubbleSort3([12, 432, 5435, 5, 23]); //  [5, 12, 23, 432, 5435]
+```
+
+The largest value bubbles up to the top or the end of array.
+Compare one element to the next, swap them (smaller first, larger last), repeat process until the larger value is at the end of the array:
 
 ---
 
