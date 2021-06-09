@@ -4,6 +4,7 @@
      - [implementation_graphs](##implementation_graphs)
      - [adjacency_lists](###adjacency_lists)
      - [adjacency_matrix](###adjacency_matrix)
+     - [path_finding](##path_finding)
      - [illustrations](##illustrations)
      - [graph_databases](##graph_databases)
   2. TREES
@@ -16,9 +17,13 @@
      - [javascript_implementation_BST](##javascript_implementation_BST)
      - [balance](##balance)
      - [self_balancing_BST](##self_balancing_BST)
-  4. MAPS
+  4. TRIES
+     - [tries](#tries)
+  5. BLOOM FILTERS
+     - [bloom_filters](#bloom_filters)
+  6. MAPS
      - [maps](#maps)
-  5. HASH TABLES (HASH MAPS)
+  7. HASH TABLES (HASH MAPS)
      - [hash_tables](#hash_tables)
      - [hash_tables_runtime](##hash_tables_runtime)
      - [hashing](###hashing)
@@ -26,33 +31,33 @@
      - [collisions](###collisions)
      - [cool_article_tables](https://medium.com/basecs/taking-hash-tables-off-the-shelf-139cbf4752f0)
      - [cool_article_hashing_functions](https://medium.com/basecs/hashing-out-hash-functions-ea5dd8beb4dd)
-  6. STACKS
+  8. STACKS
      [stacks](#stacks)
      - [constraints](#Constraints_stacks)
      - [methods](##Standard_methods_stacks)
      - [implementations](##Efficient_Implementations_stacks)
      - [example](####Example_implementation_stacks)
      - [cool_article](https://medium.com/basecs/stacks-and-overflows-dbcf7854dc67)
-  7. QUEUES
+  9. QUEUES
      [queues](#queues)
      - [constraints](#Constraints_queues)
      - [methods](##Standard_methods_queues)
      - [implementations](##Efficient_Implementations_queues)
      - [example](#Example_implementation_queues)
      - [cool_article](https://medium.com/basecs/to-queue-or-not-to-queue-2653bcde5b04)
-  8. DEQUES
-     [deques](#deques)
-     - [constraints](#Constraints_deques)
-     - [methods](##Standard_methods_deques)
-     - [implementations](##Efficient_Implementations_deques)
-     - [example](#Example_implementation_deques)
-  9. PRIORITY QUEUES
-     [priority_queues](#priority_queues)
-     - [constraints](#Constraints_P_queues)
-     - [methods](##Standard_methods_P_queues)
-     - [implementations](##Efficient_Implementations_P_queues)
-     - [example](#Example_implementation_P_queues)
-  10. HEAPS
+  10. DEQUES
+      [deques](#deques)
+      - [constraints](#Constraints_deques)
+      - [methods](##Standard_methods_deques)
+      - [implementations](##Efficient_Implementations_deques)
+      - [example](#Example_implementation_deques)
+  11. PRIORITY QUEUES
+      [priority_queues](#priority_queues)
+      - [constraints](#Constraints_P_queues)
+      - [methods](##Standard_methods_P_queues)
+      - [implementations](##Efficient_Implementations_P_queues)
+      - [example](#Example_implementation_P_queues)
+  12. HEAPS
       [heaps](#heaps)
       - [constraints](#Constraints_heaps)
       - [methods](##Standard_methods_heaps)
@@ -60,13 +65,13 @@
       - [implementations](##Efficient_Implementations_heaps)
       - [example](#Example_implementation_heaps)
       - [cool_article](https://medium.com/basecs/learning-to-love-heaps-cef2b273a238)
-  11. LISTS
+  13. LISTS
       [lists](#lists)
       - [linked_lists](##linked_lists)
         - [LLists_runtime](#runtime_ll)
       - [doubly_linked_lists](##douubly_linked_lists)
       - [Nodes](##Nodes)
-  12. ARRAYS
+  14. ARRAYS
       - [arrays](##arrays)
       - [array_runtimes](###array_runtimes)
       - [indirect_arrays](###indirect_arrays)
@@ -441,6 +446,13 @@ For each node, represent the nodes that is directly connected to:
 ### adjacency_matrix
 
 ![graphic](../images/adjacency-matrix.png)
+
+## path_finding
+
+Algorithms for finding the most efficient path in weighted graphs:
+
+- dijkstra's algorithm: https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+- A* algorithm: https://en.wikipedia.org/wiki/A*\_search_algorithm
 
 ## illustrations
 
@@ -1246,6 +1258,35 @@ Good balance:
    Keeps balanced based on heights of tree, and keeps heights even right and left side. Simpler algorithm but slightly less efficient.
 2. Red/Black tree
    Keeps “reasonably” balanced. Adds a color (red or black) to each node, and counts the colors to keep balance. More complex algorithm but can be more efficient.
+
+---
+
+# tries
+
+Name coming from "reTRIEval". Special kind of tree structure, also called "prefix tree". Used for autocomplete, autocorrect, predict word input.
+
+Red point at the end indicates that it's a complete word.
+
+![graphic](../images/tries.png)
+
+---
+
+# bloom_filters
+
+[demo](https://www.jasondavies.com/bloomfilter/)
+
+A data structure (similar to a Set), we use it to check if a value is in a given collection. Uses multiple hash functions to store bits.
+
+- Quickly answer questions like “Is particular item in a collection?”
+- Very rarely, it will say Yes when the answer is actually No
+- It will never say No, when the answer is actually Yes
+- The more space, the fewer false positives
+- Useful when you have tolerance for false negatives but not false positives
+- Caching
+- Recommendation Engines (has this person seen a particular article?)
+- Test if a URL has been visited for privacy / security concerns
+
+[implement_bloom_filter](https://willwhim.wpengine.com/2011/09/03/producing-n-hash-functions-by-hashing-only-once/)
 
 # maps
 
