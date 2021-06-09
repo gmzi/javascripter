@@ -1,17 +1,24 @@
 - Abstract data types
-  1. TREES
+  1. GRAPHS
+     - [graphs](#graphs)
+     - [implementation_graphs](##implementation_graphs)
+     - [adjacency_lists](###adjacency_lists)
+     - [adjacency_matrix](###adjacency_matrix)
+     - [illustrations](##illustrations)
+     - [graph_databases](##graph_databases)
+  2. TREES
      - [trees](#trees)
      - [trees_in_javascript](##trees_in_javascript)
      - [binary_trees](##binary_trees)
-       BINARY SEARCH TREES
+  3. BINARY SEARCH TREES
      - [BSTs](##binary_search_trees)
      - [BST_runtime](##BST_runtime)
      - [javascript_implementation_BST](##javascript_implementation_BST)
      - [balance](##balance)
      - [self_balancing_BST](##self_balancing_BST)
-  1. MAPS
+  4. MAPS
      - [maps](#maps)
-  1. HASH TABLES (HASH MAPS)
+  5. HASH TABLES (HASH MAPS)
      - [hash_tables](#hash_tables)
      - [hash_tables_runtime](##hash_tables_runtime)
      - [hashing](###hashing)
@@ -19,51 +26,51 @@
      - [collisions](###collisions)
      - [cool_article_tables](https://medium.com/basecs/taking-hash-tables-off-the-shelf-139cbf4752f0)
      - [cool_article_hashing_functions](https://medium.com/basecs/hashing-out-hash-functions-ea5dd8beb4dd)
-  1. STACKS
+  6. STACKS
      [stacks](#stacks)
      - [constraints](#Constraints_stacks)
      - [methods](##Standard_methods_stacks)
      - [implementations](##Efficient_Implementations_stacks)
      - [example](####Example_implementation_stacks)
      - [cool_article](https://medium.com/basecs/stacks-and-overflows-dbcf7854dc67)
-  1. QUEUES
+  7. QUEUES
      [queues](#queues)
      - [constraints](#Constraints_queues)
      - [methods](##Standard_methods_queues)
      - [implementations](##Efficient_Implementations_queues)
      - [example](#Example_implementation_queues)
      - [cool_article](https://medium.com/basecs/to-queue-or-not-to-queue-2653bcde5b04)
-  1. DEQUES
+  8. DEQUES
      [deques](#deques)
      - [constraints](#Constraints_deques)
      - [methods](##Standard_methods_deques)
      - [implementations](##Efficient_Implementations_deques)
      - [example](#Example_implementation_deques)
-  1. HEAPS
+  9. HEAPS
      [heaps](#heaps)
      - [constraints](#Constraints_heaps)
      - [methods](##Standard_methods_heaps)
      - [implementations](##Efficient_Implementations_heaps)
      - [example](#Example_implementation_heaps)
      - [cool_article](https://medium.com/basecs/learning-to-love-heaps-cef2b273a238)
-  1. PRIORITY QUEUES
-     [priority_queues](#priority_queues)
-     - [constraints](#Constraints_P_queues)
-     - [methods](##Standard_methods_P_queues)
-     - [implementations](##Efficient_Implementations_P_queues)
-     - [example](#Example_implementation_P_queues)
-  1. LISTS
-     [lists](#lists)
-     - [linked_lists](##linked_lists)
-       - [LLists_runtime](#runtime_ll)
-     - [doubly_linked_lists](##douubly_linked_lists)
-     - [Nodes](##Nodes)
-  1. ARRAYS
-     - [arrays](##arrays)
-     - [array_runtimes](###array_runtimes)
-     - [indirect_arrays](###indirect_arrays)
-     - [direct_arrays/vectors](###direct_arrays/vectors)
-     - [typed_arrays](###typed_arrays)
+  10. PRIORITY QUEUES
+      [priority_queues](#priority_queues)
+      - [constraints](#Constraints_P_queues)
+      - [methods](##Standard_methods_P_queues)
+      - [implementations](##Efficient_Implementations_P_queues)
+      - [example](#Example_implementation_P_queues)
+  11. LISTS
+      [lists](#lists)
+      - [linked_lists](##linked_lists)
+        - [LLists_runtime](#runtime_ll)
+      - [doubly_linked_lists](##douubly_linked_lists)
+      - [Nodes](##Nodes)
+  12. ARRAYS
+      - [arrays](##arrays)
+      - [array_runtimes](###array_runtimes)
+      - [indirect_arrays](###indirect_arrays)
+      - [direct_arrays/vectors](###direct_arrays/vectors)
+      - [typed_arrays](###typed_arrays)
 - Recursion
   [recursion](#recursion)
   [examples](##examples)
@@ -86,6 +93,332 @@
 # Abstract data types
 
 <a name="stacks"></a>
+
+# graphs
+
+Graphs are like trees, except they can contain loops ("cycles").
+The connections can be DIRECTED or UNDIRECTED
+
+- Vertex (basic unit) (AKA node)
+- Edge (connection between vertices)
+- Adjacent (vertices that share an edge)
+- Weight (optional)
+  Each edge can have a weight representing a value (cost of trip, distance between cities-vertices, etc.)
+
+G = (V, E)
+"A Graph (G) is a Set of vertices (V) linked through a Set of edges (AKA links) (E)
+![graphic](../images/graph.png)
+
+- Trees are graphs (directed and acyclic graphs). Trees have hierarchy, graphs don't.
+- Linked lists are graphs (directed, acyclic)
+
+## implementation_graphs
+
+let's implement this graph with JS:
+![graphic](../images/friends-graph.png)
+
+```javascript
+// Will use the Adjacency List approach to represent the friend nodes:
+class PersonNode {
+  constructor(name, adjacent = new Set()) {
+    this.name = name;
+    this.adjacent = adjacent;
+  }
+}
+
+class FriendGraph {
+  constructor() {
+    this.nodes = new Set();
+  }
+
+  // add single person
+  addPerson(node) {
+    this.nodes.add(node);
+  }
+
+  // add an array of people
+  addPeople(peopleList) {
+    for (let node of peopleList) {
+      this.addPerson(node);
+    }
+  }
+
+  // set adjacency
+  setFriends(person1, person2) {
+    person1.adjacent.add(person2);
+    person2.adjacent.add(person1);
+  }
+
+  // To traverse, since there are cycles, we need to make sure we don't visit the same vertice
+  // more than once, so we have to mark it as visited.
+
+  // BFS traversal
+  areConnectedBFS(person1, person2) {
+    const toVisitQueue = [person1];
+    const visited = new Set(toVisitQueue);
+
+    while (toVisitQueue.length) {
+      let currPerson = toVisitQueue.shift();
+
+      if (currPerson === person2) return true;
+
+      for (let edge of currPerson.adjacent) {
+        if (!visited.has(edge)) {
+          toVisitQueue.push(edge);
+          visited.add(edge); // add it to 'visited' in order to not visit it twice.
+        }
+      }
+    }
+    return false;
+  }
+
+  // DFS traversal (recursive)
+  areConnectedRecursive(person1, person2, visited = new Set([person1])) {
+    if (person1 === person2) return true;
+    for (let edge of person1.adjacent) {
+      if (!visited.has(edge)) {
+        visited.add(edge);
+        if (this.areConnectedRecursive(edge, person2, visited)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // DFS traversal (iterative)
+  areConnectedDFS(person1, person2) {
+    const toVisitStack = [person1];
+    const visited = new Set(toVisitStack);
+
+    while (toVisitStack.length) {
+      let currPerson = toVisitStack.pop();
+
+      if (currPerson === person2) return true;
+
+      for (let edge of currPerson.adjacent) {
+        if (!visited.has(edge)) {
+          toVisitStack.push(edge);
+          visited.add(edge);
+        }
+      }
+    }
+    return false;
+  }
+}
+
+// define nodes:
+const homer = new PersonNode('homer');
+const marge = new PersonNode('marge');
+const maggie = new PersonNode('maggie');
+const lisa = new PersonNode('lisa');
+const grampa = new PersonNode('grampa');
+
+const moe = new PersonNode('moe');
+const barney = new PersonNode('barney');
+const lenny = new PersonNode('lenny');
+
+// define graph:
+const friends = new FriendGraph();
+
+// add people to the graph:
+friends.addPeople([homer, marge, maggie, lisa, grampa]);
+
+friends.addPeople([moe, barney, lenny]);
+
+// define the adjacencies:
+friends.setFriends(homer, marge);
+friends.setFriends(homer, lisa);
+friends.setFriends(homer, maggie);
+friends.setFriends(marge, maggie);
+friends.setFriends(maggie, lisa);
+friends.setFriends(lisa, grampa);
+
+friends.setFriends(moe, barney);
+friends.setFriends(barney, lenny);
+
+// methods:
+friends.areConnectedRecursive(barney, lisa); // false
+friends.areConnectedBFS(homer, barney); //false
+friends.areConnectedDFS(homer, lisa); // true
+
+// --------------------------------------------------------------------------------
+// MORE METHODS:
+
+class Node {
+  constructor(value, adjacent = new Set()) {
+    this.value = value;
+    this.adjacent = adjacent;
+  }
+}
+
+class Graph {
+  constructor() {
+    this.nodes = new Set();
+  }
+
+  // this function accepts a Node instance and adds it to the nodes property on the graph
+  addVertex(vertex) {
+    this.nodes.add(vertex);
+  }
+
+  // this function accepts an array of Node instances and adds them to the nodes property on the graph
+  addVertices(vertexArray) {
+    for (let vertex of vertexArray) {
+      this.addVertex(vertex);
+    }
+  }
+
+  // this function accepts two vertices and updates their adjacent values to include the other vertex
+  addEdge(v1, v2) {
+    v1.adjacent.add(v2);
+    v2.adjacent.add(v1);
+  }
+
+  // this function accepts two vertices and updates their adjacent values to remove the other vertex
+  removeEdge(v1, v2) {
+    v1.adjacent.delete(v2);
+    v2.adjacent.delete(v1);
+  }
+
+  // This function should remove the node in the array of nodes and also remove all edges that the removed node previously contained.
+  removeVertex(vertex) {
+    for (let edge of vertex.adjacent) {
+      this.removeEdge(edge, vertex);
+    }
+    this.nodes.delete(vertex);
+    return this;
+  }
+
+  // this function returns an array of Node values using DFS
+
+  depthFirstSearch(start) {
+    const stack = [start];
+    const visited = new Set(stack);
+    const result = [];
+
+    while (stack.length) {
+      let curr = stack.pop();
+      result.push(curr.value);
+      for (let edge of curr.adjacent) {
+        if (!visited.has(edge)) {
+          stack.push(edge);
+          visited.add(edge);
+        }
+      }
+    }
+    return result;
+  }
+
+  // recursive version:
+  depthFirstSearchRecursive(
+    start,
+    visited = new Set([start]),
+    result = [start.value]
+  ) {
+    const stack = [start];
+    const curr = stack.pop();
+    for (let edge of curr.adjacent) {
+      if (!visited.has(edge)) {
+        visited.add(edge);
+        result.push(edge.value);
+        return this.depthFirstSearch(edge, visited, result);
+      }
+    }
+    return result;
+  }
+
+  // this function returns an array of Node values using BFS
+  breadthFirstSearch(start) {
+    const queue = [start];
+    const visited = new Set(queue);
+    const result = [];
+
+    while (queue.length) {
+      let curr = queue.shift();
+
+      result.push(curr.value);
+
+      for (let edge of curr.adjacent) {
+        if (!visited.has(edge)) {
+          queue.push(edge);
+          visited.add(edge);
+        }
+      }
+    }
+    return result;
+  }
+}
+
+module.exports = { Graph, Node };
+
+let graph = new Graph();
+let S = new Node('S');
+let P = new Node('P');
+let U = new Node('U');
+let X = new Node('X');
+let Q = new Node('Q');
+let Y = new Node('Y');
+let V = new Node('V');
+let R = new Node('R');
+let W = new Node('W');
+let T = new Node('T');
+
+graph.addVertices([S, P, U, X, Q, Y, V, R, W, T]);
+
+graph.addEdge(S, P);
+graph.addEdge(S, U);
+
+graph.addEdge(P, X);
+graph.addEdge(U, X);
+
+graph.addEdge(P, Q);
+graph.addEdge(U, V);
+
+graph.addEdge(X, Q);
+graph.addEdge(X, Y);
+graph.addEdge(X, V);
+
+graph.addEdge(Q, R);
+graph.addEdge(Y, R);
+
+graph.addEdge(Y, W);
+graph.addEdge(V, W);
+
+graph.addEdge(R, T);
+graph.addEdge(W, T);
+
+// this is one option:
+console.log(graph.depthFirstSearch(S)); // ["S", "P", "U", "X", "Q", "V", "Y", "R", "W", "T"]
+```
+
+### adjacency_lists
+
+For each node, represent the nodes that is directly connected to:
+
+![graphic](../images/adjacency-list.png)
+
+### adjacency_matrix
+
+![graphic](../images/adjacency-matrix.png)
+
+## illustrations
+
+Used to model Relationships between things.
+
+Directed graph:
+![example](../images/food-chain.png)
+Undirected
+![example](../images/fb-friends.png)
+![example](../images/recipe.png)
+![example](../images/markov-chains.png)
+Edges with weight:
+![example](../images/airline.png)
+![example](../images/carpooling.png)
+
+## graph_databases
+
+It's a no sql database. Instead of storing data in a tabular format (like in sql and others) we store it as nodes in a graph.
 
 # trees
 

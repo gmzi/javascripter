@@ -1,71 +1,123 @@
-class BinarySearchNode {
-  constructor(val, left = null, right = null) {
-    this.val = val;
-    this.left = left;
-    this.right = right;
+// Will use the Adjacency List approach to represent the friend nodes:
+class PersonNode {
+  constructor(name, adjacent = new Set()) {
+    this.name = name;
+    this.adjacent = adjacent;
+  }
+}
+
+class FriendGraph {
+  constructor() {
+    this.nodes = new Set();
   }
 
-  search(sought) {
-    let currentNode = this;
-    while (currentNode) {
-      if (currentNode.val === sought) return currentNode;
-      if (currentNode.val > sought) {
-        currentNode = currentNode.left;
-      } else {
-        currentNode = currentNode.right;
-      }
+  // add single person
+  addPerson(node) {
+    this.nodes.add(node);
+  }
+
+  // add an array of people
+  addPeople(peopleList) {
+    for (let node of peopleList) {
+      this.addPerson(node);
     }
   }
+
+  // set adjacency
+  setFriends(person1, person2) {
+    person1.adjacent.add(person2);
+    person2.adjacent.add(person1);
+  }
+
+  // To traverse, since there are cycles, we need to make sure we don't visit the same vertice
+  // more than once, so we have to mark it as visited.
+
+  // BFS traversal
+  areConnectedBFS(person1, person2) {
+    const toVisitQueue = [person1];
+    const visited = new Set(toVisitQueue);
+
+    while (toVisitQueue.length) {
+      let currPerson = toVisitQueue.shift();
+
+      if (currPerson === person2) return true;
+
+      for (let edge of currPerson.adjacent) {
+        if (!visited.has(edge)) {
+          toVisitQueue.push(edge);
+          visited.add(edge); // add it to 'visited' in order to not visit it twice.
+        }
+      }
+    }
+    return false;
+  }
+
+  // DFS traversal (recursive)
+  areConnectedRecursive(person1, person2, visited = new Set([person1])) {
+    if (person1 === person2) return true;
+    for (let edge of person1.adjacent) {
+      if (!visited.has(edge)) {
+        visited.add(edge);
+        if (this.areConnectedRecursive(edge, person2, visited)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // DFS traversal (iterative)
+  areConnectedDFS(person1, person2) {
+    const toVisitStack = [person1];
+    const visited = new Set(toVisitStack);
+
+    while (toVisitStack.length) {
+      let currPerson = toVisitStack.pop();
+
+      if (currPerson === person2) return true;
+
+      for (let edge of currPerson.adjacent) {
+        if (!visited.has(edge)) {
+          toVisitStack.push(edge);
+          visited.add(edge);
+        }
+      }
+    }
+    return false;
+  }
 }
 
-class BinarySearchTree {
-  constructor(root = null) {
-    this.root = root;
-  }
-  //IN ORDER TRAVERSAL: "traverse left, myself, traverse right"
-  traverseInOrder(node = this.root) {
-    if (node.left) this.traverse(node.left);
-    console.log(node.val);
-    if (node.right) this.traverse(node.right);
-  }
+// define nodes:
+const homer = new PersonNode('homer');
+const marge = new PersonNode('marge');
+const maggie = new PersonNode('maggie');
+const lisa = new PersonNode('lisa');
+const grampa = new PersonNode('grampa');
 
-  //PRE ORDER TRAVERSAL: "myself, traverse left, traverse right"
-  traversePreOrder(node = this.root) {
-    console.log(node.val);
-    if (node.left) this.traverse(node.left);
-    if (node.right) this.traverse(node.right);
-  }
+const moe = new PersonNode('moe');
+const barney = new PersonNode('barney');
+const lenny = new PersonNode('lenny');
 
-  //POST ORDER TRAVERSAL: "traverse left, traverse right, myself"
-  traversePostOrder(node = this.root) {
-    if (node.left) this.traverse(node.left);
-    if (node.right) this.traverse(node.right);
-    console.log(node.val);
-  }
-}
+// define graph:
+const friends = new FriendGraph();
 
-const E = new BinarySearchNode('E');
-const A = new BinarySearchNode('A');
-const B = new BinarySearchNode('B');
-const C = new BinarySearchNode('C');
-const D = new BinarySearchNode('D');
-const F = new BinarySearchNode('F');
-const G = new BinarySearchNode('G');
+// add people to the graph:
+friends.addPeople([homer, marge, maggie, lisa, grampa]);
 
-E.left = B;
-E.right = G;
-B.left = A;
-B.right = D;
-G.left = F;
+friends.addPeople([moe, barney, lenny]);
 
-const josh = new BinarySearchTree(E);
+// define the adjacencies:
+friends.setFriends(homer, marge);
+friends.setFriends(homer, lisa);
+friends.setFriends(homer, maggie);
+friends.setFriends(marge, maggie);
+friends.setFriends(maggie, lisa);
+friends.setFriends(lisa, grampa);
 
-E.search('D'); // BinarySearchNode {val: "D", left: null, right: null}
+friends.setFriends(moe, barney);
+friends.setFriends(barney, lenny);
 
-josh.traverseInOrder(); // A B D E F G
-
-josh.traversePreOrder(); // E B A D G F
-
-josh.traversePostOrder(); // A D B F G E
-
-
+// methods:
+friends.areConnectedRecursive(barney, lisa); // false
+friends.areConnectedBFS(homer, barney); //false
+friends.areConnectedDFS(homer, lisa); // true

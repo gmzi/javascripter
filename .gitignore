@@ -1,5 +1,5 @@
-images/
 mocks/
 apis.js
 .vscode/
 __pycache__/
+settings.json
