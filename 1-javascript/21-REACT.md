@@ -1767,7 +1767,7 @@ export default Counter;
 
 ## closure
 
-Closure is the ability of inner functions to remember variables defines in outer functions, long after the outer function has returned. Hooks use closure to store state, refs, and all kinds of data that we want to persist between function calls.
+Closure is the ability of inner functions to remember variables defined in outer functions, long after the outer function has returned. Hooks use closure to store state, refs, and all kinds of data that we want to persist between function calls.
 
 ```jsx
 // SCOPE

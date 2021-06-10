@@ -2,6 +2,8 @@
 
 ## Functions
 
+[frequency_counters_and_multiple_pointers](##frequency_counters_and_multiple_pointers)
+
 [binary_search](##binary_search)
 [linear_search](##linear_search)
 
@@ -12,6 +14,7 @@
 [array_to_string](###array_to_string)  
 [pangram](##pangram_check)  
 [isPalindrome](###isPalindrome)  
+[isValidAnagram](###isValidAnagram)
 [alphabetical](###alphabetical)  
 [first_letter_uppercase](###first_letter_uppercase)  
 [snake_to_camel](###snakeToCamelCase)
@@ -22,6 +25,7 @@
 [containsVowels](###containsVowels)  
 [str_letter_count](###str_letter_count)
 [letterCount](###letterCount)
+[character_count](###character_count)
 [grid_star](###grid_star)
 
 [swap_variables](###swap_variables)  
@@ -106,6 +110,314 @@
 
 [backgroundColorPicker](###backgroundColorPicker)
 [colorMaker](###colorMaker)
+
+## frequency_counters_and_multiple_pointers
+
+Problems applying frequency counters and multiple pointers
+
+```javascript
+/**
+ Write a function called averagePair. Given a sorted array of integers and a target average, 
+ determine if there is a pair of values in the array where the average of the pair equals the target average. 
+ There may be more than one pair that matches the average target.
+Constraints:
+Time Complexity: O(N)
+ */
+
+function averagePair(arr, target) {
+  let left = 0;
+  let right = arr.length - 1;
+
+  while (left < right) {
+    const avg = arr[left] + arr[right] / 2;
+    if (avg === target) {
+      console.log([arr[left], arr[right]]);
+      return true;
+    } else if (avg > target) {
+      right--;
+    } else {
+      left++;
+    }
+  }
+  return false;
+}
+
+// console.log(averagePair([1, 2, 3], 2.5)); // true
+// console.log(averagePair([1, 3, 3, 5, 6, 7, 10, 12, 19], 8)); // true
+// console.log(averagePair([-1, 0, 3, 4, 5, 6], 4.1)); // false
+console.log(averagePair([], 4)); // false
+
+module.exports = { averagePair };
+
+/**
+ * Write a function called constructNote, which accepts two strings, a message and some letters. 
+ * The function should return true if the message can be built with the letters that you are given; 
+ * otherwise, it should return false. Assume that there are only lowercase letters and no space or special characters 
+ * in both the message and the letters.
+Constraints:
+Time Complexity: O(M + N) - If M is the length of message and N is the length of letters:
+ */
+
+function constructNote(message, letters) {
+  if (!letters.length) return false;
+  const messageF = frequencyCounter(message);
+  const lettersF = frequencyCounter(letters);
+
+  for (let [key, value] of messageF) {
+    if (value > lettersF.get(key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function frequencyCounter(str) {
+  let frequencies = new Map();
+
+  for (let char of str) {
+    let charCount = frequencies.get(char) || 0;
+    frequencies.set(char, charCount + 1);
+  }
+  return frequencies;
+}
+
+module.exports = { constructNote };
+
+// console.log(constructNote('aa', 'abc')); // false
+// console.log(constructNote('abc', 'dcba')); // true
+// console.log(constructNote('aabbcc', 'bcabcaddff')); // true
+
+// Given an array of integers, and a number, find the number of pairs of integers in the array whose
+// sum is equal to the second parameter. You can assume that there will be no duplicate values in the array.
+//Constraints
+// Time Complexity - O(N * log(N))
+
+function countPairs(arr, target) {
+  arr.sort((a, b) => a - b);
+  let result = 0;
+  let left = 0;
+  let right = arr.length - 1;
+
+  while (left < right) {
+    const sum = arr[left] + arr[right];
+    if (sum === target) {
+      console.log(arr[left], arr[right]);
+      result++;
+      right--;
+      left++;
+    } else if (sum < target) {
+      left++;
+    } else {
+      right--;
+    }
+  }
+  return result;
+}
+
+module.exports = { countPairs };
+
+// // console.log(countPairs([10, 4, 8, 2, 6, 0], 10)); // 3 (2,8, 4,6,) 10,0)
+// // console.log(countPairs([3, 1, 5, 4, 2], 6)); // 2 (1,5 an)d 2,4)
+// // console.log(countPairs([4, 6, 2, 7], 10)); // 1 (4),6)
+// console.log(countPairs([1, 2, 3, 4, 5], 10)); // 0
+// console.log(countPairs([1, 2, 3, 4, 5], -3)); // 0
+// console.log(countPairs([0, -4], -4)); // 1
+console.log(countPairs([1, 2, 3, 0, -1, -2], 0)); // 2
+
+/**
+ * Write a function called isSubsequence which takes in two strings and checks whether the 
+ * characters in the first string form a subsequence of the characters in the second string. 
+ * In other words, the function should check whether the characters in the first string appear 
+ * somewhere in the second string, without their order changing.
+Constraints:
+Time Complexity - O(N + M)
+
+ */
+function isSubsequence(str1, str2) {
+  let idx1 = 0;
+  let idx2 = 0;
+
+  while (idx2 < str2.length) {
+    if (str2[idx2] === str1[idx1]) {
+      idx1++;
+    }
+    if (idx1 === str1.length) return true;
+    idx2++;
+  }
+  return false;
+}
+
+module.exports = { isSubsequence };
+
+// console.log(isSubsequence('hello', 'hello world')); // true
+// console.log(isSubsequence('sing', 'sting')); // true
+// console.log(isSubsequence('abc', 'abracadabra')); // true
+console.log(isSubsequence('abc', 'acb')); // fa)lse (order matters)
+
+// Write a function called sameFrequency. Given two positive integers, find out if the two numbers have the same frequency of digits.
+
+const { stringify } = require('jest-matcher-utils');
+
+function sameFrequency(num1, num2) {
+  const num1F = countFrequency(num1);
+  const num2F = countFrequency(num2);
+
+  for (let [key, value] of num1F) {
+    if (value !== num2F.get(key)) return false;
+  }
+  return true;
+}
+
+function countFrequency(num) {
+  const iterable = stringify(num);
+  let count = new Map();
+
+  for (let char of iterable) {
+    const countFreq = count.get(char) || 0;
+    count.set(char, countFreq + 1);
+  }
+  return count;
+}
+
+module.exports = { sameFrequency };
+
+// console.log(sameFrequency(182, 281)); // true
+console.log(sameFrequency(34, 14)); // false
+// console.log(sameFrequency(3589578, 5879385)); // true
+// console.log(sameFrequency(22, 222)); // false
+
+const { moduleExpression } = require('@babel/types');
+
+/**
+ * Write a function called separatePositive which accepts an array of non-zero integers. Separate the positive integers to
+ * the left and the negative integers to the right. The positive numbers and negative numbers need
+ * not be in sorted order. The problem should be done in place (in other words, do not build a copy of the input array).
+ */
+function separatePositive(arr) {
+  let left = 0;
+  let right = arr.length - 1;
+  while (left <= right) {
+    if (arr[left] < 0 && arr[right] > 0) {
+      // old swap:
+      //   let temp = arr[left];
+      //   arr[left] = arr[right];
+      //   arr[right] = temp;
+      // new swap:
+      [arr[left], arr[right]] = [arr[right], arr[left]];
+      left++;
+      right--;
+    } else if (arr[left] < 0 && arr[right] < 0) {
+      right--;
+    } else {
+      left++;
+    }
+  }
+  return arr;
+}
+
+module.exports = { separatePositive };
+
+console.log(separatePositive([2, -1, -3, 6, -8, 10])); // [2, 10, 6, 3, -1, -8]
+// console.log(separatePositive([5, 10, -15, 20, 25])); // [5,10, 25, 20, -15]
+// console.log(separatePositive([-5, 5])); // [5, -5]
+// console.log(separatePositive([1, 2, 3])); // [1, 2, 3]
+
+/**
+ * Write a function called twoArrayObject which accepts two arrays of varying lengths.The first
+ * array consists of keys and the second one consists of values. Your function should return an object
+ *  created from the keys and values. If there are not enough values, the rest of keys should have a
+ * value of null. If there not enough keys, just ignore the rest of values.
+ */
+function twoArrayObject(keys, values) {
+  const keysF = frequencyCounter(keys);
+
+  let idx = 0;
+  for (let key in keysF) {
+    if (idx < values.length) {
+      keysF[key] = values[idx];
+      idx++;
+    }
+  }
+  return keysF;
+}
+
+function frequencyCounter(arr) {
+  let frequencies = {};
+
+  for (let val of arr) {
+    let valCount = frequencies[val] || 0;
+    frequencies[val] = null;
+  }
+  return frequencies;
+}
+
+module.exports = { twoArrayObject };
+
+console.log(twoArrayObject(['a', 'b', 'c', 'd'], [1, 2, 3])); // {'a': 1, 'b': 2, 'c': 3, 'd': null}
+// console.log(twoArrayObject(['a', 'b', 'c'], [1, 2, 3, 4])); // {'a': 1, 'b': 2, 'c': 3}
+// console.log(twoArrayObject(['x', 'y', 'z'], [1, 2])); // {'x': 1, 'y': 2, 'z': null}
+
+/* 
+Write a function called pivotIndex which accepts an array of integers, and returns the pivot index where the sum of the items to the left equal to the sum of the items to the right. If there are more than one valid pivot index, return the smallest value.
+**/
+function pivotIndex(nums) {
+  let rightSum = nums.reduce((a, b) => a + b, 0);
+  let leftSum = 0;
+  let pivotIdx = -1;
+  for (let i = 0; i < nums.length; i++) {
+    leftSum += nums[i];
+    if (leftSum === rightSum) {
+      pivotIdx = i;
+      break;
+    }
+    rightSum -= nums[i];
+  }
+  return pivotIdx;
+}
+
+pivotIndex([1, 2, 1, 6, 3, 1]); // 3
+pivotIndex([5, 2, 7]); // -1  no valid pivot index
+pivotIndex([-1, 3, -3, 2]); // 1 valid pivot at 2: -1 + 3 = 2 however there is a smaller valid pivot at 1: -1 = -3 + 2
+
+/**
+ * Write a function called longestFall, which accepts
+ * an array of integers, and returns the length of the longest
+ * consecutive decrease of integers.
+ *
+ * For this function, we maintain a temporary count and a maximum count.
+ *  If any element is smaller than the previous element, we count it.
+ *  Then we compute the maximum each time the count increases.
+ */
+function longestFall(nums) {
+  let counter = 1;
+  let maxCounter = 0;
+
+  // quick fail case if the array is empty
+  if (nums.length === 0) {
+    return 0;
+  }
+
+  for (let i = 1; i < nums.length; i++) {
+    // if current number is smaller than the previous number
+    if (nums[i] < nums[i - 1]) {
+      counter++;
+      maxCounter = Math.max(counter, maxCounter);
+    } else {
+      counter = 1;
+    }
+  }
+
+  // 1 is the default value for a non-empty array
+  return maxCounter || 1;
+}
+
+longestFall([5, 3, 1, 3, 0]); // 3, 5-3-1 is the longest consecutive sequence of decreasing integers
+longestFall([2, 2, 1]); // 2, 2-1 is the longest consecutive sequence of decreasing integers
+longestFall([2, 2, 2]); // 1, 2 is the longest consecutive sequence of decreasing integers
+longestFall([5, 4, 4, 4, 3, 2]); // 3, 4-3-2 is the longest
+longestFall([9, 8, 7, 6, 5, 6, 4, 2, 1]); // 5, 9-8-7-6-5 is the longest
+longestFall([]); // 0
+```
 
 ## binary_search
 
@@ -274,6 +586,46 @@ function isPalindrome(str) {
 
 console.log(isPalindrome('No lemon, no melon')); // true
 console.log(isPalindrome('No lemon, no lemon')); // false
+```
+
+### isValidAnagram
+
+Time complexity O(n)
+
+```javascript
+function createFrequencyCounter(str) {
+  let frequencies = new Map();
+
+  for (let val of str) {
+    let valCount = frequencies.get(val) || 0;
+    frequencies.set(val, valCount + 1);
+  }
+  return frequencies;
+}
+
+function isValidAnagram(str1, str2) {
+  if (str1.length !== str2.length) return false;
+
+  let str1Freq = createFrequencyCounter(str1);
+  let str2Freq = createFrequencyCounter(str2);
+
+  if (str1Freq.size !== str2Freq.size) return false;
+
+  for (let [key, value] of str1Freq) {
+    if (value !== str2Freq.get(key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// console.log(isValidAnagram('', '')); // true
+// console.log(isValidAnagram('aaz', 'zza')); // false
+// console.log(isValidAnagram('anagram', 'nagaram')); // true
+console.log(isValidAnagram('rat', 'car')); // false
+// console.log(isValidAnagram('awesome', 'awesom')); // false
+// console.log(isValidAnagram('qwerty', 'qeywrt')); // true
+console.log(isValidAnagram('texttwisttime', 'timetwisttext')); // true
 ```
 
 ### alphabetical
@@ -1386,6 +1738,63 @@ function letterCount(str) {
 }
 
 letterCount(str); // {c: 2, a: 2}
+```
+
+### character_count
+
+```javascript
+function charCount(str) {
+  return str.split('').reduce((obj, char) => {
+    if (/[A-Z0-9]/i.test(char)) {
+      char = char.toLowerCase();
+      if (obj[char]) {
+        obj[char] += 1;
+      } else {
+        obj[char] = 1;
+      }
+    }
+    return obj;
+  }, {});
+}
+
+charCount('fsdfs, fdsfds 3443'); // {3: 2, 4: 2, f: 4, s: 4, d: 3}
+
+//-------------------------------------------------
+// Alternate version 1:
+
+function charCount(str) {
+  return str
+    .toLowerCase()
+    .split('')
+    .sort()
+    .join('')
+    .match(/([a-z0-9])\1*/g)
+    .reduce(function (prev, cur) {
+      return Object.assign(prev, { [cur[0]]: cur.length });
+    }, {});
+}
+charCount('fsdfs, fdsfds 3443'); // {3: 2, 4: 2, f: 4, s: 4, d: 3}
+
+//-------------------------------------------------
+// Alternate version 2:
+
+function charCount(str) {
+  const obj = {};
+
+  for (let char of str) {
+    if (/[A-Z0-9]/i.test(char)) {
+      char = char.toLowerCase();
+      if (obj[char]) {
+        obj[char] += 1;
+      } else {
+        obj[char] = 1;
+      }
+    }
+  }
+  return obj;
+}
+
+charCount('fsdfs, fdsfds 3443'); // {3: 2, 4: 2, f: 4, s: 4, d: 3}
 ```
 
 ### vowelCount

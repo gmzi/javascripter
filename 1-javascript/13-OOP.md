@@ -6,7 +6,7 @@ the world, because its used in the most front end and back ends of apps and webs
 
 ## OOP characteristics
 
-Data is structures into classes, and coded procedures manipulate data in objects. An array, for example, is an instance of
+Data is structured into classes, and coded procedures manipulate data in objects. An array, for example, is an instance of
 a class, and a method like filter is an instance of a procedure.
 Javascript wasn't originally designed as an Object-oriented language, but ES2015 made it more object-oriented.
 
