@@ -3,3 +3,6 @@ apis.js
 .vscode/
 __pycache__/
 settings.json
+node_modules/
+package-lock.json
+experiments.js
